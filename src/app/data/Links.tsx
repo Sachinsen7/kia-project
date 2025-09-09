@@ -62,8 +62,6 @@
 //   { id: "help", name: "Help and support", x: 90, y: 5, icon: LifeBuoy },
 // ];
 
-
-
 // video linkss
 
 import {
@@ -88,8 +86,8 @@ export type CityLink = {
 };
 
 export const links: CityLink[] = [
-  { id: "welcome", name: "Welcome to 2025 GOEF", x: 19, y: 19, icon: Home },
-  { id: "about", name: "About 2025 GOEF", x: 60, y: 8, icon: Info },
+  { id: "welcome", name: "Welcome to 2025 GOEF", x: 19, y: 25, icon: Home },
+  { id: "about", name: "About 2025 GOEF", x: 60, y: 12, icon: Info },
   {
     id: "strategy",
     name: "2026 Ownership strategy",
