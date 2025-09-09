@@ -21,7 +21,7 @@ export default function CityScene({ onSelect }: CitySceneProps) {
       <img
         src="/generated-image.png"
         alt=""
-        className="w-full h-full object-cover"
+        className="w-full h-full object-fill"
       />
 
       <div className="absolute inset-0 w-full h-full">
