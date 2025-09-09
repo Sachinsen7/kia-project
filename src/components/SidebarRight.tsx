@@ -2,21 +2,7 @@
 
 import { useState } from "react";
 import { links } from "@/app/data/Links";
-import {
-  X,
-  Menu,
-  MapPin,
-  Home,
-  Info,
-  Target,
-  BookOpen,
-  Users,
-  TrendingUp,
-  Archive,
-  MessageCircle,
-  Lightbulb,
-  LifeBuoy,
-} from "lucide-react";
+import { X, Menu } from "lucide-react";
 
 type SidebarRightProps = {
   onSelect: (id: string) => void;
@@ -30,15 +16,15 @@ export default function SidebarRight({ onSelect }: SidebarRightProps) {
       {/* Menu button (shows only when sidebar is closed) */}
       {!isOpen && (
         <Menu
-          className="absolute top-4 right-4 cursor-pointer text-white z-20 bg-black/50 p-2 rounded-full hover:bg-black/70 transition-colors"
-          size={24}
+          className="absolute top-20 right-4 cursor-pointer text-white z-20  p-2 rounded-full  transition-colors"
+          size={40}
           onClick={() => setIsOpen(true)}
         />
       )}
 
       {/* Sidebar */}
       {isOpen && (
-        <aside className="fixed top-0 right-0 h-full w-96 bg-white/95 backdrop-blur-sm text-black shadow-2xl z-10 transition-transform">
+        <aside className="fixed top-20 right-0 h-full w-[30%] p-10 bg-[#e7e5e6] backdrop-blur-sm text-black shadow-2xl z-10 transition-transform">
           {/* Close button */}
           <X
             className="absolute top-4 right-4 cursor-pointer p-1 hover:bg-gray-100 rounded-full transition-colors"
@@ -66,16 +52,16 @@ export default function SidebarRight({ onSelect }: SidebarRightProps) {
                     <button
                       key={link.id}
                       onClick={() => onSelect(link.id)}
-                      className="w-full text-left p-3 rounded-lg hover:bg-gray-100 transition-colors group"
+                      className="w-full text-left p-3 rounded-lg transition-colors group"
                     >
                       <div className="flex items-center space-x-3">
                         <div>
-                          <div className="font-medium text-gray-800">
+                          <div className="font-extrabold text-xl text-gray-800">
                             {link.name}
                           </div>
-                          <div className="text-sm text-gray-500">
+                          {/* <div className="text-sm text-gray-500">
                             {link.description}
-                          </div>
+                          </div> */}
                         </div>
                       </div>
                     </button>
