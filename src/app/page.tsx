@@ -1,4 +1,5 @@
 "use client";
+
 import { useState, useRef, useEffect } from "react";
 import SidebarLeft from "@/components/SidebarLeft";
 import SidebarRight from "@/components/SidebarRight";
@@ -8,7 +9,6 @@ export default function HomePage() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const sidebarRef = useRef<HTMLDivElement>(null);
 
-  // Close sidebar when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -30,12 +30,10 @@ export default function HomePage() {
 
   return (
     <div className="relative h-screen overflow-hidden">
-      {/* Main Content - Full Screen Video */}
       <main className="w-full h-full">
         <CityScene onSelect={setSelectedId} />
       </main>
 
-      {/* Left Sidebar - Slides in when link is clicked */}
       <div ref={sidebarRef}>
         <SidebarLeft
           selectedId={selectedId}
@@ -43,7 +41,6 @@ export default function HomePage() {
         />
       </div>
 
-      {/* Right Sidebar - Always visible with navigation */}
       <SidebarRight onSelect={setSelectedId} />
     </div>
   );
