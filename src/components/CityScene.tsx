@@ -9,12 +9,18 @@ type CitySceneProps = {
 export default function CityScene({ onSelect }: CitySceneProps) {
   return (
     <div className="relative w-full h-full bg-black overflow-hidden">
-      <video
+      {/* <video
         src="/city_scape.mp4"
         autoPlay
         loop
         muted
         playsInline
+        className="w-full h-full object-cover"
+      /> */}
+
+      <img
+        src="/generated-image.png"
+        alt=""
         className="w-full h-full object-cover"
       />
 
