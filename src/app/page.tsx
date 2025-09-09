@@ -6,6 +6,7 @@ import SidebarLeft from "@/components/SidebarLeft";
 import SidebarRight from "@/components/SidebarRight";
 import { CityContext } from "./context/CityContext";
 import { useContext } from "react";
+import Header from "@/components/Header";
 
 export default function Home() {
   const cityCtx = useContext(CityContext);
@@ -16,6 +17,7 @@ export default function Home() {
 
   return (
     <main className="flex h-screen">
+      <Header/>
       {/* Left sidebar shows details of selectedId */}
       <SidebarLeft selectedId={selectedId} />
 
