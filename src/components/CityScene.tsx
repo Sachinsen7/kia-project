@@ -1,5 +1,4 @@
-"use client";
-
+import Image from "next/image";
 import { links } from "@/app/data/Links";
 
 type CitySceneProps = {
@@ -9,10 +8,13 @@ type CitySceneProps = {
 export default function CityScene({ onSelect }: CitySceneProps) {
   return (
     <div className="relative w-full h-full bg-white overflow-hidden">
-      <img
+      {/* Background image with priority load */}
+      <Image
         src="/new-home-image.jpg"
-        alt=""
-        className="w-full h-full object-cover"
+        alt="City Scene"
+        fill
+        priority
+        className="object-cover"
       />
 
       <div className="absolute inset-0 w-full h-full">
@@ -29,7 +31,6 @@ export default function CityScene({ onSelect }: CitySceneProps) {
               }}
             >
               <div className="relative flex items-center justify-center w-[4rem] h-[4rem] md:w-16 md:h-16">
-                {/* Animate-ping only on hover */}
                 <span className="absolute inline-flex h-full w-full rounded-full bg-[#ff6c4c]/50 group-hover:animate-ping"></span>
 
                 <div
@@ -39,7 +40,6 @@ export default function CityScene({ onSelect }: CitySceneProps) {
                       "path('M32 0C49.673 0 64 14.327 64 32C64 51.2 32 64 32 64C32 64 0 51.2 0 32C0 14.327 14.327 0 32 0Z')",
                   }}
                 >
-                  {/* Animate-bounce only on hover */}
                   <div className="w-[2.5rem] h-[2.5rem] md:w-10 md:h-10 bg-[#ff6c4c] rounded-full flex items-center justify-center group-hover:animate-bounce">
                     <Icon className="text-white w-[1.25rem] h-[1.25rem] md:w-5 md:h-5" />
                   </div>
