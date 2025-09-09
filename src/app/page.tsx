@@ -29,7 +29,7 @@ export default function HomePage() {
   }, [selectedId]);
 
   return (
-    <div className="relative h-screen overflow-hidden">
+    <div className="relative h-screen overflow-hidden bg-white">
       <main className="w-full h-full">
         <CityScene onSelect={setSelectedId} />
       </main>
