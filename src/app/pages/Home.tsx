@@ -4,9 +4,6 @@ function Home() {
   return (
     <div className="relative w-full min-h-screen bg-white p-6 md:p-30">
       {/* Close Button */}
-      <button className="absolute top-4 right-4 text-3xl font-bold text-gray-700 hover:text-black">
-        ✕
-      </button>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
         {/* Left Content */}
@@ -35,7 +32,7 @@ function Home() {
 
         {/* Right Image */}
         <div className="flex justify-center md:justify-end">
-          <div className="w-[300px] h-[300px] border border-gray-400 flex items-center justify-center text-gray-500">
+          <div className="w-[400px] h-[300px] border border-gray-400 flex items-center justify-center text-gray-500">
             <img src="/home/tanya-barrow-R44XmoKobV4-unsplash.jpg" alt="" />
           </div>
         </div>
