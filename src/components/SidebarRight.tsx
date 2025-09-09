@@ -13,13 +13,18 @@ export default function SidebarRight({ onSelect }: SidebarRightProps) {
 
   return (
     <>
-      {/* Hamburger Menu Button */}
+      {/* Top-right controls (outside the sidebar) */}
       {!isOpen && (
-        <Menu
-          className="absolute top-5 right-4 cursor-pointer font-bold text-gray-900 bg-gray-300 z-50 p-2 rounded-lg hover:bg-gray-400 transition-colors sm:top-4 sm:right-3 sm:p-1"
-          size={36}
-          onClick={() => setIsOpen(true)}
-        />
+        <div className="absolute top-5 right-4 z-50 flex items-center gap-3 sm:top-4 sm:right-3">
+          <button className="bg-gray-900 text-white font-semibold px-4 py-2 rounded-lg hover:bg-black transition-colors sm:text-sm sm:px-3 sm:py-1.5">
+            Login
+          </button>
+          <Menu
+            className="cursor-pointer font-bold text-gray-900 bg-gray-300 p-2 rounded-lg hover:bg-gray-400 transition-colors sm:p-1"
+            size={36}
+            onClick={() => setIsOpen(true)}
+          />
+        </div>
       )}
 
       {/* Sidebar */}
@@ -41,12 +46,8 @@ export default function SidebarRight({ onSelect }: SidebarRightProps) {
         />
 
         <div className="flex flex-col h-full">
-          {/* Login Button */}
-          <div className="p-4 border-b border-gray-200">
-            <button className="bg-gray-800 text-white font-bold py-2 px-4 rounded-lg w-[70%] hover:bg-gray-900 transition-colors sm:py-1 sm:px-3">
-              Login
-            </button>
-          </div>
+          {/* Header spacer */}
+          <div className="p-4 border-b border-gray-200"></div>
 
           {/* Links */}
           <div className="flex-1 p-4 overflow-y-auto">
@@ -54,23 +55,25 @@ export default function SidebarRight({ onSelect }: SidebarRightProps) {
               Event Sections
             </h3>
             <div className="space-y-2">
-              {links.map((link) => (
-                <button
-                  key={link.id}
-                  onClick={() => {
-                    onSelect(link.id);
-                    setIsOpen(false); // close sidebar after click
-                  }}
-                  className="w-full text-left p-3 sm:p-2 rounded-lg transition-colors group hover:bg-gray-200"
-                >
-                  <div className="flex items-center space-x-3">
-                    {/* You can add Lucide icons here dynamically later */}
-                    <div className="font-bold sm:text-xl  text-base text-gray-800 group-hover:text-[#b5513f] transition-colors">
-                      {link.name}
+              {["welcome", "about", "strategy", "best-practices", "help"]
+                .map((id) => links.find((l) => l.id === id))
+                .filter(Boolean)
+                .map((link) => (
+                  <button
+                    key={link!.id}
+                    onClick={() => {
+                      onSelect(link!.id);
+                      setIsOpen(false);
+                    }}
+                    className="w-full text-left p-3 sm:p-2 rounded-lg transition-colors group hover:bg-gray-200"
+                  >
+                    <div className="flex items-center space-x-3">
+                      <div className="font-bold sm:text-xl  text-base text-gray-800 group-hover:text-[#b5513f] transition-colors">
+                        {link!.name}
+                      </div>
                     </div>
-                  </div>
-                </button>
-              ))}
+                  </button>
+                ))}
             </div>
           </div>
 
