@@ -21,7 +21,7 @@ function Ownership() {
         {/* Right Image */}
         <div className="flex justify-center md:justify-end">
           <div className="w-[400px] h-[300px] border border-gray-400 flex items-center justify-center text-gray-500">
-            <img src="home/chris-weiher-mbaV1bo-_l0-unsplash.jpg" alt="" />
+            {/* <img src="home/chris-weiher-mbaV1bo-_l0-unsplash.jpg" alt="" /> */}
           </div>
         </div>
       </div>

@@ -50,11 +50,12 @@ export default function SidebarRight({ onSelect }: SidebarRightProps) {
           <div className="p-4 border-b border-gray-200"></div>
 
           {/* Links */}
-          <div className="flex-1 p-4 overflow-y-auto">
-            <h3 className="text-lg sm:text-base font-semibold mb-4 text-gray-800">
-              Event Sections
-            </h3>
+          {/* Links */}
+          <div className="flex-1 p-4">
             <div className="space-y-2">
+              <h3 className="text-lg sm:text-base font-semibold pl-4 mb-4 text-gray-800 text-start">
+                Event Sections
+              </h3>
               {["welcome", "about", "strategy", "best-practices", "ask-kia"]
                 .map((id) => links.find((l) => l.id === id))
                 .filter(Boolean)
@@ -65,17 +66,16 @@ export default function SidebarRight({ onSelect }: SidebarRightProps) {
                       onSelect(link!.id);
                       setIsOpen(false);
                     }}
-                    className="w-full text-left p-3 sm:p-2 rounded-lg transition-colors group hover:bg-gray-200"
+                    className="w-full px-6 py-3 sm:px-4 sm:py-2 rounded-lg transition-colors group hover:bg-gray-200 flex items-center justify-between"
                   >
-                    <div className="flex items-center space-x-3">
-                      <div className="font-bold sm:text-xl  text-base text-gray-800 group-hover:text-[#b5513f] transition-colors">
-                        {link!.name}
-                      </div>
-                    </div>
+                    <span className="text-base sm:text-sm font-medium text-gray-800 group-hover:text-[#b5513f] transition-colors">
+                      {link!.name}
+                    </span>
                   </button>
                 ))}
             </div>
           </div>
+
 
           {/* Footer */}
           <div className="p-4 border-t border-gray-200 bg-gray-50">
