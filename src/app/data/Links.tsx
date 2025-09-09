@@ -1,12 +1,3 @@
-export type CityLink = {
-  id: string;
-  name: string;
-  description: string;
-  x: number; // percentage position from left
-  y: number; // percentage position from top
-  icon?: string; // icon name for future use
-};
-
 import {
   Home,
   Info,
@@ -20,85 +11,53 @@ import {
   LifeBuoy,
 } from "lucide-react";
 
+export type CityLink = {
+  id: string;
+  name: string;
+  x: number;
+  y: number;
+  icon: React.ElementType;
+};
+
 export const links: CityLink[] = [
+  { id: "welcome", name: "Welcome to 2025 GOEF", x: 20, y: 30, icon: Home },
+  { id: "about", name: "About 2025 GOEF", x: 40, y: 25, icon: Info },
   {
-    id: "headquarters",
-    name: "Headquarters",
-    description:
-      "Main corporate headquarters building with executive offices and meeting rooms",
-    x: 20,
-    y: 30,
-    icon: "home",
-  },
-  {
-    id: "park",
-    name: "Central Park",
-    description:
-      "Beautiful green space with walking trails, playgrounds, and picnic areas",
+    id: "strategy",
+    name: "2026 Ownership strategy",
     x: 60,
-    y: 25,
-    icon: "tree",
+    y: 35,
+    icon: Target,
   },
   {
-    id: "shopping",
-    name: "Shopping District",
-    description:
-      "Modern shopping center with retail stores, restaurants, and entertainment venues",
+    id: "track-a",
+    name: "Track A: Introduction to KDCCC",
     x: 75,
-    y: 45,
-    icon: "shopping",
-  },
-  {
-    id: "residential",
-    name: "Residential Area",
-    description: "Luxury residential complex with apartments and townhouses",
-    x: 15,
-    y: 60,
-    icon: "home",
-  },
-  {
-    id: "hospital",
-    name: "Medical Center",
-    description:
-      "State-of-the-art hospital with emergency services and specialized care",
-    x: 40,
-    y: 70,
-    icon: "hospital",
-  },
-  {
-    id: "school",
-    name: "University",
-    description:
-      "Prestigious educational institution with research facilities and student housing",
-    x: 80,
     y: 20,
-    icon: "graduation",
+    icon: BookOpen,
   },
   {
-    id: "stadium",
-    name: "Sports Stadium",
-    description:
-      "Multi-purpose stadium hosting sports events, concerts, and community gatherings",
-    x: 50,
-    y: 80,
-    icon: "stadium",
-  },
-  {
-    id: "transport",
-    name: "Transport Hub",
-    description:
-      "Central transportation station connecting buses, trains, and metro lines",
+    id: "track-b",
+    name: "Track B: Retention programs",
     x: 30,
-    y: 85,
-    icon: "train",
+    y: 50,
+    icon: Users,
   },
   {
-    id: "museum",
-    name: "Cultural Museum",
-    description:
-      "Art and history museum featuring local culture and international exhibitions",
-    x: 65,
-    y: 15,
-    icon: "museum",
+    id: "track-c",
+    name: "Track C: Capacity enhancement",
+    x: 55,
+    y: 60,
+    icon: TrendingUp,
   },
+  { id: "history", name: "History of GOEF", x: 15, y: 70, icon: Archive },
+  { id: "ask-kia", name: "Ask Kia (Q&A)", x: 45, y: 80, icon: MessageCircle },
+  {
+    id: "best-practices",
+    name: "Best practices",
+    x: 70,
+    y: 75,
+    icon: Lightbulb,
+  },
+  { id: "help", name: "Help and support", x: 85, y: 40, icon: LifeBuoy },
 ];
