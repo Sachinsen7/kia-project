@@ -54,23 +54,25 @@ export default function SidebarRight({ onSelect }: SidebarRightProps) {
               Event Sections
             </h3>
             <div className="space-y-2">
-              {links.map((link) => (
-                <button
-                  key={link.id}
-                  onClick={() => {
-                    onSelect(link.id);
-                    setIsOpen(false); // close sidebar after click
-                  }}
-                  className="w-full text-left p-3 sm:p-2 rounded-lg transition-colors group hover:bg-gray-200"
-                >
-                  <div className="flex items-center space-x-3">
-                    {/* You can add Lucide icons here dynamically later */}
-                    <div className="font-bold sm:text-xl  text-base text-gray-800 group-hover:text-[#b5513f] transition-colors">
-                      {link.name}
+              {["welcome", "about", "strategy", "best-practices", "help"]
+                .map((id) => links.find((l) => l.id === id))
+                .filter(Boolean)
+                .map((link) => (
+                  <button
+                    key={link!.id}
+                    onClick={() => {
+                      onSelect(link!.id);
+                      setIsOpen(false);
+                    }}
+                    className="w-full text-left p-3 sm:p-2 rounded-lg transition-colors group hover:bg-gray-200"
+                  >
+                    <div className="flex items-center space-x-3">
+                      <div className="font-bold sm:text-xl  text-base text-gray-800 group-hover:text-[#b5513f] transition-colors">
+                        {link!.name}
+                      </div>
                     </div>
-                  </div>
-                </button>
-              ))}
+                  </button>
+                ))}
             </div>
           </div>
 
