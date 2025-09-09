@@ -55,7 +55,7 @@ export default function SidebarRight({ onSelect }: SidebarRightProps) {
               Event Sections
             </h3>
             <div className="space-y-2">
-              {["welcome", "about", "strategy", "best-practices", "help"]
+              {["welcome", "about", "strategy", "best-practices", "ask-kia"]
                 .map((id) => links.find((l) => l.id === id))
                 .filter(Boolean)
                 .map((link) => (

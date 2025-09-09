@@ -3,8 +3,6 @@ import React from "react";
 function BestPractices() {
   return (
     <div className="relative w-full min-h-screen bg-white p-6 md:p-30">
-      {/* Close Button */}
-
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Left Content */}
         <div>

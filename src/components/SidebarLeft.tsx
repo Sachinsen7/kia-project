@@ -109,24 +109,32 @@ export default function SidebarLeft({ selectedId, onClose }: SidebarLeftProps) {
   if (!PageComponent && !detail) return null;
 
   return (
-    <aside className="fixed top-0 left-0 h-full w-[100%]  bg-white text-gray-900 shadow-2xl transition-transform duration-300 z-50 overflow-y-auto sidebar-slide-in border-r border-gray-200">
-      {/* Header */}
-      <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-gray-900">
-          {PageComponent ? "" : detail.name}
-        </h2>
-        <button
-          onClick={onClose}
-          className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-          aria-label="Close sidebar"
-        >
-          <X size={22} className="text-gray-500" />
-        </button>
-      </div>
+    <aside className="fixed top-0 left-0 h-full w-[90%]  bg-white text-gray-900 shadow-2xl transition-transform duration-300 z-50 overflow-y-auto sidebar-slide-in border-r border-gray-200">
+      {/* Header (only show when rendering fallback details) */}
+      {!PageComponent && (
+        <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+          <h2 className="text-2xl font-bold text-gray-900">{detail.name}</h2>
+          <button
+            onClick={onClose}
+            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            aria-label="Close sidebar"
+          >
+            <X size={22} className="text-gray-500" />
+          </button>
+        </div>
+      )}
 
       {/* Content */}
       {PageComponent ? (
-        <div className="px-0 py-0">
+        <div className="relative px-0 py-0">
+          {/* Unified close button overlay when rendering a page */}
+          <button
+            onClick={onClose}
+            className="absolute top-3 right-3 z-10 p-2 rounded-full hover:bg-gray-100"
+            aria-label="Close"
+          >
+            <X size={22} className="text-gray-600" />
+          </button>
           <PageComponent />
         </div>
       ) : (
