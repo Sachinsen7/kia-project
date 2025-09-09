@@ -1,33 +1,27 @@
 "use client";
-
-import Image from "next/image";
-import CityScene from "@/components/CityScene";
+import { useState } from "react";
 import SidebarLeft from "@/components/SidebarLeft";
 import SidebarRight from "@/components/SidebarRight";
-import { CityContext } from "./context/CityContext";
-import { useContext } from "react";
-import Header from "@/components/Header";
+import CityScene from "@/components/CityScene";
 
-export default function Home() {
-  const cityCtx = useContext(CityContext);
-
-  if (!cityCtx) return null;
-
-  const { selectedId, setSelectedId } = cityCtx;
+export default function HomePage() {
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   return (
-    <main className="flex h-screen">
-      <Header/>
-      {/* Left sidebar shows details of selectedId */}
-      <SidebarLeft selectedId={selectedId} />
-
-      {/* 3D City Scene (click to select items) */}
-      <div className="flex-1 relative">
+    <div className="relative h-screen overflow-hidden">
+      {/* Main Content - Full Screen Video */}
+      <main className="w-full h-full">
         <CityScene onSelect={setSelectedId} />
-      </div>
+      </main>
 
-      {/* Right sidebar with links to select */}
+      {/* Left Sidebar - Slides in when link is clicked */}
+      <SidebarLeft
+        selectedId={selectedId}
+        onClose={() => setSelectedId(null)}
+      />
+
+      {/* Right Sidebar - Always visible with navigation */}
       <SidebarRight onSelect={setSelectedId} />
-    </main>
+    </div>
   );
 }
