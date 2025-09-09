@@ -9,76 +9,74 @@ type SidebarRightProps = {
 };
 
 export default function SidebarRight({ onSelect }: SidebarRightProps) {
-  const [isOpen, setIsOpen] = useState(true); // sidebar open by default
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <>
-      {/* Menu button (shows only when sidebar is closed) */}
+      {/* Menu button */}
       {!isOpen && (
         <Menu
-          className="absolute top-20 right-4 cursor-pointer text-white z-20  p-2 rounded-full  transition-colors"
+          className="absolute top-5 right-4 cursor-pointer font-bold text-gray-900 bg-gray-300 z-20 p-2 rounded-lg hover:bg-gray-400 transition-colors"
           size={40}
           onClick={() => setIsOpen(true)}
         />
       )}
 
       {/* Sidebar */}
-      {isOpen && (
-        <aside className="fixed top-20 right-0 h-full w-[30%] p-10 bg-[#e7e5e6] backdrop-blur-sm text-black shadow-2xl z-10 transition-transform">
-          {/* Close button */}
-          <X
-            className="absolute top-4 right-4 cursor-pointer p-1 hover:bg-gray-100 rounded-full transition-colors"
-            size={40}
-            onClick={() => setIsOpen(false)}
-          />
+      <aside
+        className={`
+          fixed top-0 right-0 h-full w-[30%] p-10 bg-[#e7e5e6] backdrop-blur-sm text-black shadow-2xl z-30
+          transform transition-transform duration-300 ease-in-out
+          ${isOpen ? "translate-x-0" : "translate-x-full"}
+        `}
+      >
+        <X
+          className="absolute top-4 right-4 cursor-pointer p-1 hover:bg-gray-100 rounded-full transition-colors"
+          size={40}
+          onClick={() => setIsOpen(false)}
+        />
 
-          {/* Content */}
-          <div className="flex flex-col h-full">
-            {/* Header */}
-            <div className="p-4 border-b border-gray-200">
-              <button className="bg-gray-800 text-white font-bold py-2 px-4 rounded-lg w-[70%] hover:bg-gray-900 transition-colors">
-                Login
-              </button>
-            </div>
+        <div className="flex flex-col h-full">
+          {/* Login button */}
+          <div className="p-4 border-b border-gray-200">
+            <button className="bg-gray-800 text-white font-bold py-2 px-4 rounded-lg w-[70%] hover:bg-gray-900 transition-colors">
+              Login
+            </button>
+          </div>
 
-            {/* Navigation Links */}
-            <div className="flex-1 p-4 overflow-y-auto">
-              <h3 className="text-lg font-semibold mb-4 text-gray-800">
-                Event Sections
-              </h3>
-              <div className="space-y-2">
-                {links.map((link) => {
-                  return (
-                    <button
-                      key={link.id}
-                      onClick={() => onSelect(link.id)}
-                      className="w-full text-left p-3 rounded-lg transition-colors group"
-                    >
-                      <div className="flex items-center space-x-3">
-                        <div>
-                          <div className="font-extrabold text-xl text-gray-800">
-                            {link.name}
-                          </div>
-                          {/* <div className="text-sm text-gray-500">
-                            {link.description}
-                          </div> */}
-                        </div>
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Footer */}
-            <div className="p-4 border-t border-gray-200 bg-gray-50">
-              <p className="text-xs text-gray-500 text-center">
-                Click on any section to learn more
-              </p>
+          {/* Links */}
+          <div className="flex-1 p-4 overflow-y-auto">
+            <h3 className="text-lg font-semibold mb-4 text-gray-800">
+              Event Sections
+            </h3>
+            <div className="space-y-2">
+              {links.map((link) => (
+                <button
+                  key={link.id}
+                  onClick={() => {
+                    onSelect(link.id);
+                    setIsOpen(false); // close sidebar after click
+                  }}
+                  className="w-full text-left p-3 rounded-lg transition-colors group hover:bg-gray-200"
+                >
+                  <div className="flex items-center space-x-3">
+                    <div className="font-extrabold text-xl text-gray-800 group-hover:text-[#b5513f] transition-colors">
+                      {link.name}
+                    </div>
+                  </div>
+                </button>
+              ))}
             </div>
           </div>
-        </aside>
-      )}
+
+          {/* Footer */}
+          <div className="p-4 border-t border-gray-200 bg-gray-50">
+            <p className="text-xs text-gray-500 text-center">
+              Click on any section to learn more
+            </p>
+          </div>
+        </div>
+      </aside>
     </>
   );
 }

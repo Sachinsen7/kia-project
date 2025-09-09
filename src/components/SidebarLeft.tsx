@@ -13,7 +13,7 @@ export default function SidebarLeft({ selectedId, onClose }: SidebarLeftProps) {
   if (!detail) return null;
 
   return (
-    <aside className="fixed top-0 left-0 h-full w-[80%] bg-white text-black shadow-2xl transition-transform duration-300 z-50 overflow-y-auto sidebar-slide-in">
+    <aside className="fixed top-0 left-0 h-full w-80 bg-white text-black shadow-2xl transition-transform duration-300 z-50 overflow-y-auto sidebar-slide-in">
       {/* Header */}
       <div className="sticky top-0 bg-white border-b border-gray-200 p-4 flex items-center justify-between">
         <h2 className="text-xl font-bold text-gray-800">{detail.name}</h2>

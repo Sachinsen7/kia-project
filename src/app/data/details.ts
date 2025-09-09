@@ -38,24 +38,24 @@ export const cityDetails: Record<string, CityDetail> = {
     features: ["Strategic goals", "Ownership models", "Key milestones"],
     icon: "target",
   },
-  trackA: {
-    id: "trackA",
+  "track-a": {
+    id: "track-a",
     name: "Track A: Introduction to KDCCC",
     description:
       "Foundational overview of KDCCC, its programs, and impact on global communities.",
     features: ["Introduction to KDCCC", "Key programs", "Impact stories"],
     icon: "book",
   },
-  trackB: {
-    id: "trackB",
+  "track-b": {
+    id: "track-b",
     name: "Track B: Retention Programs",
     description:
       "Programs and initiatives designed to improve member retention and engagement.",
     features: ["Retention strategies", "Community engagement", "Case studies"],
     icon: "users",
   },
-  trackC: {
-    id: "trackC",
+  "track-c": {
+    id: "track-c",
     name: "Track C: Capacity Enhancement",
     description:
       "Workshops and strategies focused on expanding organizational capacity.",
@@ -70,16 +70,16 @@ export const cityDetails: Record<string, CityDetail> = {
     features: ["Timeline", "Milestones", "Leadership history"],
     icon: "archive",
   },
-  askKia: {
-    id: "askKia",
+  "ask-kia": {
+    id: "ask-kia",
     name: "Ask Kia (Q&A)",
     description:
       "Interactive Q&A sessions where participants can directly engage with Kia experts.",
     features: ["Live Q&A", "Expert panel", "Discussion forums"],
     icon: "message",
   },
-  practices: {
-    id: "practices",
+  "best-practices": {
+    id: "best-practices",
     name: "Best Practices",
     description:
       "Sharing of successful case studies and best practices across industries.",
