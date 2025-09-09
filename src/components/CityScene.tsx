@@ -8,20 +8,14 @@ type CitySceneProps = {
 
 export default function CityScene({ onSelect }: CitySceneProps) {
   return (
-    <div className="relative w-full h-full bg-black overflow-hidden">
-      {/* <video
-        src="/city_scape.mp4"
+    <div className="relative w-full h-full bg-white overflow-hidden">
+      <video
+        src="/AI.mp4"
         autoPlay
         loop
         muted
         playsInline
         className="w-full h-full object-cover"
-      /> */}
-
-      <img
-        src="/generated-image.png"
-        alt=""
-        className="w-full h-full object-fill"
       />
 
       <div className="absolute inset-0 w-full h-full">
@@ -38,7 +32,8 @@ export default function CityScene({ onSelect }: CitySceneProps) {
               }}
             >
               <div className="relative flex items-center justify-center w-[4rem] h-[4rem] md:w-16 md:h-16">
-                <span className="absolute inline-flex h-full w-full rounded-full bg-[#ff6c4c]/50 animate-ping"></span>
+                {/* Animate-ping only on hover */}
+                <span className="absolute inline-flex h-full w-full rounded-full bg-[#ff6c4c]/50 group-hover:animate-ping"></span>
 
                 <div
                   className="absolute w-[4rem] h-[4rem] md:w-16 md:h-16 bg-white flex items-center justify-center shadow-lg transition-transform duration-300 group-hover:scale-110"
@@ -47,8 +42,9 @@ export default function CityScene({ onSelect }: CitySceneProps) {
                       "path('M32 0C49.673 0 64 14.327 64 32C64 51.2 32 64 32 64C32 64 0 51.2 0 32C0 14.327 14.327 0 32 0Z')",
                   }}
                 >
-                  <div className="w-[2.5rem] h-[2.5rem] md:w-10 md:h-10 bg-[#ff6c4c] rounded-full flex items-center justify-center">
-                    <Icon className="text-white w-[1.25rem] h-[1.25rem] md:w-5 md:h-5 animate-bounce" />
+                  {/* Animate-bounce only on hover */}
+                  <div className="w-[2.5rem] h-[2.5rem] md:w-10 md:h-10 bg-[#ff6c4c] rounded-full flex items-center justify-center group-hover:animate-bounce">
+                    <Icon className="text-white w-[1.25rem] h-[1.25rem] md:w-5 md:h-5" />
                   </div>
                 </div>
 
