@@ -2,11 +2,8 @@ import React from "react";
 
 function BestPractices() {
   return (
-    <div className="relative w-full min-h-screen bg-white p-6 md:p-12">
+    <div className="relative w-full min-h-screen bg-white p-6 md:p-30">
       {/* Close Button */}
-      <button className="absolute top-4 right-4 text-3xl font-bold text-gray-700 hover:text-black">
-        ✕
-      </button>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Left Content */}
@@ -23,10 +20,10 @@ function BestPractices() {
           </p>
 
           {/* Divider */}
-          <div className="h-1 w-12 bg-black mb-6"></div>
+          <div className="h-1 w-12 bg-black mb-6 mt-20"></div>
 
           {/* KMX Case */}
-          <div className="flex items-start gap-4">
+          <div className="flex items-start gap-4 mt-32">
             {/* Thumbnail */}
             <div className="w-24 h-24 border border-gray-400 flex items-center justify-center text-gray-500">
               Thumbnail
@@ -49,8 +46,8 @@ function BestPractices() {
 
         {/* Right Image */}
         <div className="flex justify-center md:justify-end">
-          <div className="w-48 h-48 border border-gray-400 flex items-center justify-center text-gray-500">
-            Image
+          <div className="w-[400px] h-[300px] border border-gray-400 flex items-center justify-center text-gray-500">
+            <img src="home/mikhail-benitez-5TEwXBhklwc-unsplash.jpg" alt="" />
           </div>
         </div>
       </div>
