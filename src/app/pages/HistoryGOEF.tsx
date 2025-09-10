@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import React from "react";
 
 function HistoryGOEF() {
@@ -50,7 +52,7 @@ function HistoryGOEF() {
         <div className="text-center">
           <h2 className="text-lg font-medium mb-4">Gallery</h2>
           <div className="w-full max-w-2xl mx-auto">
-            <img
+            <Image
               src="/images/gallery1.jpg" // replace with your image path
               alt="GOEF Gallery"
               className="w-full rounded-md shadow-md"
