@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { links } from "@/app/data/Links";
 import { X, Menu } from "lucide-react";
+import Link from "next/link";
 
 type SidebarRightProps = {
   onSelect: (id: string) => void;
@@ -16,9 +17,12 @@ export default function SidebarRight({ onSelect }: SidebarRightProps) {
       {/* Top-right controls (outside the sidebar) */}
       {!isOpen && (
         <div className="absolute top-5 right-4 z-50 flex items-center gap-3 sm:top-4 sm:right-3">
-          <button className="bg-gray-900 text-white font-semibold px-4 py-2 rounded-lg hover:bg-black transition-colors sm:text-sm sm:px-3 sm:py-1.5">
-            Login
-          </button>
+          <Link href={"/login"}>
+            <button className="bg-gray-900 cursor-pointer text-white font-semibold px-4 py-2 rounded-lg hover:bg-black transition-colors sm:text-sm sm:px-3 sm:py-1.5">
+              Login
+            </button>
+          </Link>
+
           <Menu
             className="cursor-pointer font-bold text-gray-900 bg-gray-300 p-2 rounded-lg hover:bg-gray-400 transition-colors sm:p-1"
             size={36}
