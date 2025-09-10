@@ -8,6 +8,7 @@ import BestPractices from "@/app/pages/BestPractices";
 import AskKia from "@/app/pages/AskKia";
 import HelpSupport from "@/app/pages/HelpSupport";
 import HistoryGOEF from "@/app/pages/HistoryGOEF";
+import Dashboard from "@/app/pages/Dashboard";
 
 type SidebarLeftProps = {
   selectedId: string | null;
@@ -25,6 +26,7 @@ export default function SidebarLeft({ selectedId, onClose }: SidebarLeftProps) {
     "ask-kia": AskKia,
     "help-support": HelpSupport,
     "history-goef": HistoryGOEF,
+    dashboard: Dashboard,
   };
 
   const PageComponent = pageMap[selectedId];
@@ -32,7 +34,7 @@ export default function SidebarLeft({ selectedId, onClose }: SidebarLeftProps) {
   if (!PageComponent && !detail) return null;
 
   return (
-    <aside className="fixed top-0 left-0 h-full w-[90%]  bg-white text-gray-900 shadow-2xl transition-transform duration-300 z-50 overflow-y-auto sidebar-slide-in border-r border-gray-200">
+    <aside className="fixed top-0 left-0 h-full w-[70%]  bg-white text-gray-900 shadow-2xl transition-transform duration-300 z-50 overflow-y-auto sidebar-slide-in border-r border-gray-200">
       {!PageComponent && (
         <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
           <h2 className="text-2xl font-bold text-gray-900">{detail.name}</h2>
@@ -55,7 +57,11 @@ export default function SidebarLeft({ selectedId, onClose }: SidebarLeftProps) {
           >
             <X size={22} className="text-gray-600" />
           </button>
-          <PageComponent />
+          {PageComponent === Dashboard ? (
+            <Dashboard onClose={onClose} />
+          ) : (
+            <PageComponent />
+          )}
         </div>
       ) : (
         <div className="px-6 py-6 space-y-7">

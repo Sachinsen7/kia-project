@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { links } from "@/app/data/Links";
 import { X, Menu } from "lucide-react";
+import Dashboard from "@/app/pages/Dashboard";
 
 type SidebarRightProps = {
   onSelect: (id: string) => void;
@@ -10,14 +11,21 @@ type SidebarRightProps = {
 
 export default function SidebarRight({ onSelect }: SidebarRightProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [showDashboard, setShowDashboard] = useState(false);
 
   return (
     <>
-      {!isOpen && (
+      {/* Top Buttons */}
+      {!isOpen && !showDashboard && (
         <div className="absolute top-5 right-4 z-50 flex items-center gap-3 sm:top-4 sm:right-3">
+          {/* Dashboard Button */}
+
+          {/* Login Button */}
           <button className="bg-gray-900 text-white font-semibold px-4 py-2 rounded-lg hover:bg-black transition-colors sm:text-sm sm:px-3 sm:py-1.5">
             Login
           </button>
+
+          {/* Sidebar Menu */}
           <Menu
             className="cursor-pointer font-bold text-gray-900 bg-gray-300 p-2 rounded-lg hover:bg-gray-400 transition-colors sm:p-1"
             size={36}
@@ -26,6 +34,7 @@ export default function SidebarRight({ onSelect }: SidebarRightProps) {
         </div>
       )}
 
+      {/* Sidebar Navigation */}
       <aside
         className={`
           fixed top-0 right-0 h-full
@@ -58,6 +67,7 @@ export default function SidebarRight({ onSelect }: SidebarRightProps) {
                 "ask-kia",
                 "help-support",
                 "history-goef",
+                "dashboard",
               ]
                 .map((id) => links.find((l) => l.id === id))
                 .filter(Boolean)
@@ -80,12 +90,26 @@ export default function SidebarRight({ onSelect }: SidebarRightProps) {
 
           {/* Footer */}
           <div className="p-4 border-t border-gray-200 bg-gray-50">
-            <p className="text-xs sm:text-[10px] text-gray-500 text-center">
-              Click on any section to learn more
-            </p>
+            <div className="flex items-center justify-between">
+              <p className="text-xs sm:text-[10px] text-gray-500">
+                Click on any section to learn more
+              </p>
+              <button
+                className="text-sm sm:text-xs font-semibold text-gray-800 hover:text-[#b5513f] underline"
+                onClick={() => {
+                  setIsOpen(false);
+                  setShowDashboard(true);
+                }}
+              >
+                Event Dashboard
+              </button>
+            </div>
           </div>
         </div>
       </aside>
+
+      {/* Dashboard Page */}
+      {showDashboard && <Dashboard onClose={() => setShowDashboard(false)} />}
     </>
   );
 }
