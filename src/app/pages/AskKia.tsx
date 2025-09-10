@@ -137,7 +137,7 @@ const AskKia: React.FC = () => {
         <p className="text-gray-700 text-sm mb-2">
           The GOEF event is where the future of Kia takes shape, and we want
           your voice to be a part of it. Feel free to ask any questions you,ve
-          been curious about regarding Kia HQ. We're always listening to your
+          been curious about regarding Kia HQ. We are always listening to your
           valuable input.
         </p>
         <br />
@@ -148,7 +148,7 @@ const AskKia: React.FC = () => {
           the comments below.
         </p>
         <p className="text-gray-700 text-sm mb-2">
-          <strong>Get Your Answer:</strong> We,ll select questions to be
+          <strong>Get Your Answer:</strong> We will select questions to be
           answered directly on-site during the GOEF event.
         </p>
         <br />
