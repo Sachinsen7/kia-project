@@ -2,12 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { X } from "lucide-react";
+import Image from "next/image";
 
 type DashboardProps = {
   onClose?: () => void;
 };
-
-import Image from "next/image";
 
 export default function Dashboard({ onClose }: DashboardProps) {
   const [images, setImages] = useState<File[]>([]);
@@ -19,39 +18,6 @@ export default function Dashboard({ onClose }: DashboardProps) {
   const [newVideo, setNewVideo] = useState("");
   const [newTeamLink, setNewTeamLink] = useState("");
 
-  // Handle Image Upload
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const uploaded = Array.from(e.target.files);
-      setImages([...images, ...uploaded]);
-    }
-  };
-
-  const handleDeleteImage = (index: number) => {
-    setImages(images.filter((_, i) => i !== index));
-  };
-
-  // Handle Video
-  const handleAddVideo = () => {
-    if (newVideo.trim() === "") return;
-    setVideos([...videos, newVideo]);
-    setNewVideo("");
-  };
-  const handleDeleteVideo = (index: number) => {
-    setVideos(videos.filter((_, i) => i !== index));
-  };
-
-  // Handle Team Links
-  const handleAddTeam = () => {
-    if (newTeamLink.trim() === "") return;
-    setTeamLinks([...teamLinks, newTeamLink]);
-    setNewTeamLink("");
-  };
-  const handleDeleteTeam = (index: number) => {
-    setTeamLinks(teamLinks.filter((_, i) => i !== index));
-  };
-
-  // Metrics: visitors and content views
   useEffect(() => {
     try {
       const v = Number(localStorage.getItem("dashboard_visitors") || "0") + 1;
@@ -71,61 +37,97 @@ export default function Dashboard({ onClose }: DashboardProps) {
     } catch {}
   };
 
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const uploaded = Array.from(e.target.files);
+      setImages((prev) => [...prev, ...uploaded]);
+    }
+  };
+
+  const handleDeleteImage = (index: number) =>
+    setImages((prev) => prev.filter((_, i) => i !== index));
+
+  const handleAddVideo = () => {
+    if (!newVideo.trim()) return;
+    setVideos((prev) => [...prev, newVideo.trim()]);
+    setNewVideo("");
+  };
+
+  const handleDeleteVideo = (index: number) =>
+    setVideos((prev) => prev.filter((_, i) => i !== index));
+
+  const handleAddTeam = () => {
+    if (!newTeamLink.trim()) return;
+    setTeamLinks((prev) => [...prev, newTeamLink.trim()]);
+    setNewTeamLink("");
+  };
+
+  const handleDeleteTeam = (index: number) =>
+    setTeamLinks((prev) => prev.filter((_, i) => i !== index));
+
   return (
-    <div className="fixed top-0 left-0 h-full w-[90%]  bg-white text-gray-900 shadow-2xl transition-transform duration-300 z-50 overflow-y-auto sidebar-slide-in border-r border-gray-200 p-6 md:p-30">
-      {/* Close Button */}
+    <div className="fixed top-0 left-0 h-full w-[90%] bg-white text-gray-900 shadow-2xl transition-transform duration-300 z-50 overflow-y-auto sidebar-slide-in border-r border-gray-200 p-6 md:p-10">
       {onClose && (
         <X
-          className="absolute top-4 right-4 cursor-pointer p-1 hover:bg-gray-100 rounded-full transition-colors sm:top-3 sm:right-3 text-black"
+          className="absolute top-4 right-4 cursor-pointer p-1 hover:bg-gray-100 rounded-full text-black"
           size={36}
           onClick={onClose}
         />
       )}
 
-      <h1 className="text-2xl text-black font-bold mb-2">Content Management</h1>
-      <div className="mb-6 flex items-center gap-4 text-sm text-gray-700">
-        <span className="px-3 py-1 rounded bg-gray-100">
+      <h1 className="text-2xl font-bold mb-4 text-black">Content Management</h1>
+
+      <div className="mb-6 flex gap-4 text-sm text-gray-700">
+        <span className="px-3 py-1 bg-gray-100 rounded">
           Visitors: {visitorCount}
         </span>
-        <span className="px-3 py-1 rounded bg-gray-100">
+        <span className="px-3 py-1 bg-gray-100 rounded">
           Content views: {contentViews}
         </span>
       </div>
 
-      {/* Images Section */}
       <section className="mb-10">
         <h2 className="text-xl font-semibold mb-4 text-black">Images</h2>
-        <input
-          type="file"
-          accept="image/*"
-          multiple
-          onChange={handleImageUpload}
-          className="mb-4"
-        />
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-          {images.map((file, index) => (
-            <div
-              key={index}
-              className="relative border rounded-lg overflow-hidden"
-            >
-              <Image
-                src={URL.createObjectURL(file)}
-                alt="uploaded"
-                className="w-full h-32 object-cover"
-                onClick={incrementContentViews}
-              />
-              <button
-                onClick={() => handleDeleteImage(index)}
-                className="absolute top-2 right-2 bg-red-500 text-white rounded-full px-2 py-1 text-xs hover:bg-red-600"
+
+        <label className="flex items-center justify-center cursor-pointer border-2 border-dashed border-gray-300 rounded-lg h-32 bg-gray-50 hover:bg-gray-100 transition">
+          <span className="text-gray-500">Click to upload images</span>
+          <input
+            type="file"
+            accept="image/*"
+            multiple
+            className="hidden"
+            onChange={handleImageUpload}
+          />
+        </label>
+
+        {images.length > 0 && (
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mt-4">
+            {images.map((file, index) => (
+              <div
+                key={index}
+                className="relative group border rounded-lg overflow-hidden shadow-sm"
               >
-                X
-              </button>
-            </div>
-          ))}
-        </div>
+                <Image
+                  src={URL.createObjectURL(file)}
+                  alt="uploaded"
+                  className="w-full h-32 object-cover"
+                  width={150}
+                  height={150}
+                  onClick={incrementContentViews}
+                />
+
+                <button
+                  onClick={() => handleDeleteImage(index)}
+                  className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition"
+                >
+                  Delete
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
       </section>
 
-      {/* Videos Section */}
       <section className="mb-10">
         <h2 className="text-xl font-semibold mb-4 text-black">Videos</h2>
         <div className="flex gap-3 mb-4">
@@ -133,14 +135,14 @@ export default function Dashboard({ onClose }: DashboardProps) {
             type="text"
             value={newVideo}
             onChange={(e) => setNewVideo(e.target.value)}
-            placeholder="Enter video link..."
-            className="flex-1 border border-gray-300 rounded-lg px-4 py-2 text-black"
+            placeholder="https://example.com/video"
+            className="flex-1 border border-gray-300 rounded-lg px-4 py-2"
           />
           <button
             onClick={handleAddVideo}
             className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
           >
-            Add
+            + Add Video
           </button>
         </div>
         <ul className="space-y-3">
@@ -169,7 +171,6 @@ export default function Dashboard({ onClose }: DashboardProps) {
         </ul>
       </section>
 
-      {/* Team Links Section */}
       <section className="mb-10">
         <h2 className="text-xl font-semibold mb-4 text-black">Team Links</h2>
         <div className="flex gap-3 mb-4">
@@ -177,14 +178,14 @@ export default function Dashboard({ onClose }: DashboardProps) {
             type="text"
             value={newTeamLink}
             onChange={(e) => setNewTeamLink(e.target.value)}
-            placeholder="Enter team link..."
-            className="flex-1 border border-gray-300 rounded-lg px-4 py-2 text-black"
+            placeholder="https://example.com/team"
+            className="flex-1 border border-gray-300 rounded-lg px-4 py-2"
           />
           <button
             onClick={handleAddTeam}
             className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition"
           >
-            Add
+            + Add Link
           </button>
         </div>
         <ul className="space-y-3">

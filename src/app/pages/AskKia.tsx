@@ -129,15 +129,44 @@ const AskKia: React.FC = () => {
   if (!mounted) return null;
 
   return (
-    <div className="h-full border-l border-gray-400 shadow-xl overflow-y-auto z-50 p-6 md:p-10">
-      <h1 className="text-2xl md:text-3xl font-bold mb-4">Ask Kia (Q&amp;A)</h1>
-      <hr className="my-4 border-gray-300" />
+    <div className="h-full border-l overflow-y-auto z-50 p-6 md:p-10">
+      {/* Professional Intro Text */}
+      <section className="mb-6 p-4 rounded-lg ">
+        <h1 className="text-2xl font-bold mb-3">Ask Kia (Q&amp;A)</h1>
+        <br />
+        <p className="text-gray-700 text-sm mb-2">
+          The GOEF event is where the future of Kia takes shape, and we want
+          your voice to be a part of it. Feel free to ask any questions you’ve
+          been curious about regarding Kia HQ. We're always listening to your
+          valuable input.
+        </p>
+        <br />
 
-      <p className="text-gray-800 text-sm mb-2">
-        The Q&amp;A session will discuss the future of Kia (sales, design, and
-        new retail). Feel free to ask any questions you’ve been curious about.
-      </p>
+        <h2 className="font-semibold text-gray-800 mb-1">How to Participate</h2>
+        <p className="text-gray-700 text-sm mb-2">
+          <strong>Submit Your Question:</strong> Please leave your questions in
+          the comments below.
+        </p>
+        <p className="text-gray-700 text-sm mb-2">
+          <strong>Get Your Answer:</strong> We'll select questions to be
+          answered directly on-site during the GOEF event.
+        </p>
+        <br />
 
+        <h2 className="font-semibold text-gray-800 mb-1">
+          For Unanswered Questions
+        </h2>
+        <p className="text-gray-700 text-sm">
+          We appreciate your understanding that we may not be able to answer all
+          questions immediately due to the nature of the live event. If your
+          question is not answered on the spot, a dedicated team member will
+          review it after the event and provide a thorough response.
+          <br />
+          Thank you for your active participation and interest!
+        </p>
+      </section>
+
+      {/* Question Input */}
       <div className="mb-4 flex justify-end">
         {!showInput ? (
           <button
@@ -191,6 +220,7 @@ const AskKia: React.FC = () => {
         )}
       </div>
 
+      {/* Questions List */}
       {questions.map((q) => (
         <div
           key={q.id}
