@@ -73,7 +73,7 @@ export default function SidebarRight({ onSelect }: SidebarRightProps) {
                   onSelect(link!.id);
                   setIsOpen(false);
                 }}
-                className="w-full text-left text-xl px-6 py-3 rounded-lg font-extrabold text-gray-800 hover:bg-gray-300 transition"
+                className="w-full text-left text-l px-6 py-3 rounded-lg font-extrabold text-gray-800 hover:bg-gray-300 transition"
               >
                 {link!.name}
               </button>
