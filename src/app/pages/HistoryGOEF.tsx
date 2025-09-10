@@ -19,9 +19,9 @@ function HistoryGOEF() {
           <p>
             After being held online due to the COVID-19 pandemic, the forum
             returned to an in-person, three-day event in Seoul last year, 2024.
-            Under the slogan "Vision to Reality," it was a meaningful occasion
-            where HQ and NSC ownership leaders came together to strengthen their
-            network.
+            Under the slogan &quot;Vision to Reality,&quot; it was a meaningful
+            occasion... where HQ and NSC ownership leaders came together to
+            strengthen their network.
           </p>
           <p>
             Most importantly, it was a significant event that provided a chance
