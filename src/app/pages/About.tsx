@@ -31,7 +31,7 @@ function About() {
 
         <div className="flex justify-center md:justify-end">
           <div className="w-[400px] h-[300px] border border-gray-400 flex items-center justify-center text-gray-500">
-            <img src="home/mike-hindle-AaWLB3r_hrg-unsplash.jpg" alt="" />
+            {/* <img src="home/mike-hindle-AaWLB3r_hrg-unsplash.jpg" alt="" /> */}
           </div>
         </div>
       </div>
