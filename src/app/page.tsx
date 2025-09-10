@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import SidebarLeft from "@/components/SidebarLeft";
 import SidebarRight from "@/components/SidebarRight";
 import CityScene from "@/components/CityScene";
+import Login from "@/app/login/page";
 
 export default function HomePage() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -32,6 +33,7 @@ export default function HomePage() {
     <div className="relative h-screen overflow-hidden bg-white">
       <main className="w-full h-full">
         <CityScene onSelect={setSelectedId} />
+      <Login />
       </main>
 
       <div ref={sidebarRef}>
