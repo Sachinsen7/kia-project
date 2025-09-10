@@ -1,11 +1,10 @@
-"use client"; // Mark as client-side component
+"use client";
 
 import React, { useState, useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
 import { Heart, MessageSquare } from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
 
-// Define types
 type Comment = {
   id: string;
   user: string;
@@ -25,7 +24,6 @@ type Question = {
   showCommentInput: boolean;
 };
 
-// Dynamically import the editor component
 const EditorComponent = dynamic(
   () => import("./EditorComponent").then((mod) => mod.default),
   { ssr: false }
@@ -36,7 +34,13 @@ const AskKia: React.FC = () => {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [showInput, setShowInput] = useState(false);
   const [newQuestionText, setNewQuestionText] = useState("");
-  const [countries] = useState(["Select country", "USA", "UK", "Canada", "India"]);
+  const [countries] = useState([
+    "Select country",
+    "USA",
+    "UK",
+    "Canada",
+    "India",
+  ]);
   const [commentEditorContent, setCommentEditorContent] = useState("");
   const editorRef = useRef<HTMLDivElement>(null);
   const commentEditorRef = useRef<HTMLDivElement>(null);
@@ -76,6 +80,7 @@ const AskKia: React.FC = () => {
 
     setQuestions([newQ, ...questions]);
     setShowInput(false);
+    setNewQuestionText("");
   };
 
   const handleLike = (id: string) => {
@@ -187,10 +192,15 @@ const AskKia: React.FC = () => {
       </div>
 
       {questions.map((q) => (
-        <div key={q.id} className="border border-gray-300 rounded bg-white mb-4">
+        <div
+          key={q.id}
+          className="border border-gray-300 rounded bg-white mb-4"
+        >
           <div className="flex items-center px-4 py-3">
             <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center mr-3">
-              <span className="text-gray-500 font-bold">{q.user.charAt(0)}</span>
+              <span className="text-gray-500 font-bold">
+                {q.user.charAt(0)}
+              </span>
             </div>
             <div>
               <span className="font-semibold text-gray-900 text-sm">
