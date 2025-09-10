@@ -53,8 +53,10 @@ function HistoryGOEF() {
           <h2 className="text-lg font-medium mb-4">Gallery</h2>
           <div className="w-full max-w-2xl mx-auto">
             <Image
-              src="/images/gallery1.jpg" // replace with your image path
+              src="/images/gallery1.jpg"
               alt="GOEF Gallery"
+              width={800}
+              height={600}
               className="w-full rounded-md shadow-md"
             />
             {/* Add slider controls if needed */}

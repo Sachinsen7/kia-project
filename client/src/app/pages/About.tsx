@@ -37,8 +37,10 @@ function About() {
         </h2>
         <div className="flex justify-center">
           <Image
-            src="/images/diagram.png" // replace with your diagram image
+            src="/images/diagram.png"
             alt="Vision Diagram"
+            width={400}
+            height={300}
             className="w-80 md:w-[400px] object-contain"
           />
         </div>
