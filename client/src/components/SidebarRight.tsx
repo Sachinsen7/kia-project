@@ -16,7 +16,7 @@ export default function SidebarRight({ onSelect }: SidebarRightProps) {
 
   return (
     <>
-      {/* Sidebar Menu Button */}
+      {/* Sidebar Menu Toggle Button */}
       {!isOpen && !showDashboard && (
         <div className="absolute top-5 right-4 z-50">
           <Menu
@@ -27,37 +27,32 @@ export default function SidebarRight({ onSelect }: SidebarRightProps) {
         </div>
       )}
 
-      {/* Sidebar Navigation */}
+      {/* Sidebar */}
       <aside
         className={`
           fixed top-0 right-0 h-full
-          w-[80%] sm:w-[60%] md:w-[40%] lg:w-[30%]
+          w-[80%] sm:w-[60%] md:w-[40%] lg:w-[25%]
           p-6 sm:p-8 md:p-10
           bg-[#e7e5e6] backdrop-blur-sm text-black shadow-2xl z-40
           transform transition-transform duration-300 ease-in-out
           ${isOpen ? "translate-x-0" : "translate-x-full"}
         `}
       >
+        {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <X
-            className="cursor-pointer text-gray-900 hover:bg-gray-100 p-2 rounded-lg transition-colors"
-            size={36}
+            className="cursor-pointer text-gray-900 stroke-3 hover:bg-gray-100 p-2 rounded-lg transition-colors"
+            size={50}
             onClick={() => setIsOpen(false)}
           />
-          <div className="flex gap-4">
-            <Link href={"/login"}>
-              <button className="bg-gray-900 text-white font-bold px-4 py-2 rounded hover:bg-black transition">
-                Login
-              </button>
-            </Link>
-            <button className="bg-gray-900 text-white font-bold px-4 py-2 rounded hover:bg-black transition">
-              Logout
+          <Link href="/login">
+            <button className="bg-gray-900 text-white font-bold px-10 cursor-pointer py-2 rounded-full hover:bg-black transition">
+              Login
             </button>
-          </div>
+          </Link>
         </div>
 
-        <h3 className="text-xl font-bold mb-6">Event Sections</h3>
-
+        {/* Navigation */}
         <div className="flex flex-col gap-3">
           {[
             "welcome",
@@ -78,17 +73,11 @@ export default function SidebarRight({ onSelect }: SidebarRightProps) {
                   onSelect(link!.id);
                   setIsOpen(false);
                 }}
-                className="w-full text-left px-6 py-3 rounded-lg font-bold text-gray-800 hover:bg-gray-300 transition"
+                className="w-full text-left text-xl px-6 py-3 rounded-lg font-extrabold text-gray-800 hover:bg-gray-300 transition"
               >
                 {link!.name}
               </button>
             ))}
-        </div>
-
-        <div className="mt-auto pt-6 border-t border-gray-300">
-          <p className="text-sm text-gray-500">
-            Click on any section to learn more
-          </p>
         </div>
       </aside>
 
