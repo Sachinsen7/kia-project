@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { links } from "@/app/data/Links";
 import { X, Menu } from "lucide-react";
+import Link from "next/link";
 import Dashboard from "@/app/pages/Dashboard";
 
 type SidebarRightProps = {
@@ -19,11 +20,19 @@ export default function SidebarRight({ onSelect }: SidebarRightProps) {
       {!isOpen && !showDashboard && (
         <div className="absolute top-5 right-4 z-50 flex items-center gap-3 sm:top-4 sm:right-3">
           {/* Dashboard Button */}
+          <button
+            className="bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors sm:text-sm sm:px-3 sm:py-1.5"
+            onClick={() => setShowDashboard(true)}
+          >
+            Dashboard
+          </button>
 
           {/* Login Button */}
-          <button className="bg-gray-900 text-white font-semibold px-4 py-2 rounded-lg hover:bg-black transition-colors sm:text-sm sm:px-3 sm:py-1.5">
-            Login
-          </button>
+          <Link href={"/login"}>
+            <button className="bg-gray-900 text-white font-semibold px-4 py-2 rounded-lg hover:bg-black transition-colors sm:text-sm sm:px-3 sm:py-1.5">
+              Login
+            </button>
+          </Link>
 
           {/* Sidebar Menu */}
           <Menu

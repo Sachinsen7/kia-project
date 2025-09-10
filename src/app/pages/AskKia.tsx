@@ -1,85 +1,284 @@
-import React from "react";
+"use client"; // Mark as client-side component
 
-function AskKia() {
+import React, { useState, useEffect, useRef } from "react";
+import dynamic from "next/dynamic";
+import { Heart, MessageSquare } from "lucide-react";
+import { v4 as uuidv4 } from "uuid";
+
+// Define types
+type Comment = {
+  id: string;
+  user: string;
+  text: string;
+  time: string;
+};
+
+type Question = {
+  id: string;
+  user: string;
+  dept: string;
+  date: string;
+  text: string;
+  likes: number;
+  comments: number;
+  commentList: Comment[];
+  showCommentInput: boolean;
+};
+
+// Dynamically import the editor component
+const EditorComponent = dynamic(
+  () => import("./EditorComponent").then((mod) => mod.default),
+  { ssr: false }
+);
+
+const AskKia: React.FC = () => {
+  const [mounted, setMounted] = useState(false);
+  const [questions, setQuestions] = useState<Question[]>([]);
+  const [showInput, setShowInput] = useState(false);
+  const [newQuestionText, setNewQuestionText] = useState("");
+  const [countries] = useState(["Select country", "USA", "UK", "Canada", "India"]);
+  const [commentEditorContent, setCommentEditorContent] = useState("");
+  const editorRef = useRef<HTMLDivElement>(null);
+  const commentEditorRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setMounted(true);
+    setQuestions([
+      {
+        id: uuidv4(),
+        user: "John Doe",
+        dept: "KUS",
+        date: new Date().toISOString().slice(0, 10),
+        text: "Where can I get a KIDCC guidebook pdf version?",
+        likes: 24,
+        comments: 0,
+        commentList: [],
+        showCommentInput: false,
+      },
+    ]);
+  }, []);
+
+  const handleAddQuestion = () => {
+    const text = newQuestionText.trim();
+    if (!text) return;
+
+    const newQ: Question = {
+      id: uuidv4(),
+      user: "You",
+      dept: "GUEST",
+      date: new Date().toISOString().slice(0, 10),
+      text,
+      likes: 0,
+      comments: 0,
+      commentList: [],
+      showCommentInput: false,
+    };
+
+    setQuestions([newQ, ...questions]);
+    setShowInput(false);
+  };
+
+  const handleLike = (id: string) => {
+    setQuestions((prev) =>
+      prev.map((q) => (q.id === id ? { ...q, likes: q.likes + 1 } : q))
+    );
+  };
+
+  const toggleCommentInput = (id: string) => {
+    setQuestions((prev) =>
+      prev.map((q) =>
+        q.id === id ? { ...q, showCommentInput: !q.showCommentInput } : q
+      )
+    );
+  };
+
+  const handleAddComment = (id: string) => {
+    const commentText = commentEditorContent.trim();
+    if (!commentText) return;
+
+    const newComment: Comment = {
+      id: uuidv4(),
+      user: "You",
+      text: commentText,
+      time: new Date().toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+    };
+
+    setQuestions((prev) =>
+      prev.map((q) =>
+        q.id === id
+          ? {
+              ...q,
+              comments: q.comments + 1,
+              commentList: [...q.commentList, newComment],
+              showCommentInput: false,
+            }
+          : q
+      )
+    );
+    setCommentEditorContent("");
+  };
+
+  if (!mounted) return null;
+
   return (
-    <div className="relative w-full min-h-screen bg-white p-6 md:p-30">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div>
-          <h1 className="text-2xl md:text-3xl font-bold mb-4">
-            Ask Kia (Q&amp;A)
-          </h1>
-          <p className="text-gray-700 leading-relaxed mb-6">
-            (텍스트 추후 구체화) Lorem ipsum dolor sit amet, consectetur
-            adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-            dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-            exercitation ullamco laboris nisi ut aliquip ex ea commodo
-            consequat.
-          </p>
+    <div className="h-full border-l border-gray-400 shadow-xl overflow-y-auto z-50 p-6 md:p-10">
+      <h1 className="text-2xl md:text-3xl font-bold mb-4">Ask Kia (Q&amp;A)</h1>
+      <hr className="my-4 border-gray-300" />
 
-          <form className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium mb-1">Title</label>
+      <p className="text-gray-800 text-sm mb-2">
+        The Q&amp;A session will discuss the future of Kia (sales, design, and
+        new retail). Feel free to ask any questions you’ve been curious about.
+      </p>
+
+      <div className="mb-4 flex justify-end">
+        {!showInput ? (
+          <button
+            onClick={() => setShowInput(true)}
+            className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800 text-sm font-semibold"
+          >
+            Create a question
+          </button>
+        ) : (
+          <div className="w-full" ref={editorRef}>
+            <div className="mb-2">
+              <select
+                className="w-full border border-gray-300 rounded p-2 text-sm"
+                defaultValue="Select country"
+              >
+                {countries.map((country) => (
+                  <option key={country} value={country}>
+                    {country}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="mb-2">
               <input
                 type="text"
-                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-black focus:outline-none"
+                placeholder="Heading"
+                className="w-full border border-gray-300 rounded p-2 text-sm"
               />
             </div>
+            <div className="mb-2 editor-container">
+              <EditorComponent
+                onUpdate={setNewQuestionText}
+                initialContent={newQuestionText}
+              />
+            </div>
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={() => setShowInput(false)}
+                className="px-4 py-1 border rounded text-sm"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleAddQuestion}
+                className="bg-black text-white px-4 py-1 rounded hover:bg-gray-800 text-sm"
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium mb-1">Name</label>
-                <input
-                  type="text"
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-black focus:outline-none"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">
-                  Country
-                </label>
-                <select className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-black focus:outline-none">
-                  <option>Select Country</option>
-                  <option>India</option>
-                  <option>USA</option>
-                  <option>UK</option>
-                  <option>Germany</option>
+      {questions.map((q) => (
+        <div key={q.id} className="border border-gray-300 rounded bg-white mb-4">
+          <div className="flex items-center px-4 py-3">
+            <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center mr-3">
+              <span className="text-gray-500 font-bold">{q.user.charAt(0)}</span>
+            </div>
+            <div>
+              <span className="font-semibold text-gray-900 text-sm">
+                {q.user}
+              </span>
+              <span className="mx-2 text-xs text-gray-500">/ {q.dept}</span>
+              <span className="text-xs text-gray-400">{q.date}</span>
+            </div>
+          </div>
+
+          <div
+            className="px-4 pb-3 text-gray-800 text-sm"
+            dangerouslySetInnerHTML={{ __html: q.text }}
+          />
+
+          <div className="px-4 pb-3 flex items-center gap-6 text-xs text-gray-500">
+            <button
+              onClick={() => handleLike(q.id)}
+              className="flex items-center gap-1 hover:text-red-600 transition"
+            >
+              <Heart size={14} /> {q.likes}
+            </button>
+            <button
+              onClick={() => toggleCommentInput(q.id)}
+              className="flex items-center gap-1 hover:text-blue-600 transition"
+            >
+              <MessageSquare size={14} /> {q.comments}
+            </button>
+          </div>
+
+          {q.showCommentInput && (
+            <div className="px-4 pb-3" ref={commentEditorRef}>
+              <div className="mb-2">
+                <select
+                  className="w-full border border-gray-300 rounded p-2 text-sm"
+                  defaultValue="Select country"
+                >
+                  {countries.map((country) => (
+                    <option key={country} value={country}>
+                      {country}
+                    </option>
+                  ))}
                 </select>
               </div>
+              <div className="mb-2">
+                <input
+                  type="text"
+                  placeholder="Heading"
+                  className="w-full border border-gray-300 rounded p-2 text-sm"
+                />
+              </div>
+              <div className="mb-2 editor-container">
+                <EditorComponent
+                  onUpdate={setCommentEditorContent}
+                  initialContent={commentEditorContent}
+                />
+              </div>
+              <div className="flex justify-end gap-2 mt-2">
+                <button
+                  onClick={() => toggleCommentInput(q.id)}
+                  className="px-4 py-1 border rounded text-sm"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => handleAddComment(q.id)}
+                  className="bg-black text-white px-4 py-1 rounded hover:bg-gray-800 text-sm"
+                >
+                  Post
+                </button>
+              </div>
+              {q.commentList.length > 0 && (
+                <div className="mt-2 space-y-1">
+                  {q.commentList.map((c) => (
+                    <p
+                      key={c.id}
+                      className="text-xs text-gray-700 bg-gray-100 rounded px-2 py-1 flex justify-between"
+                      dangerouslySetInnerHTML={{ __html: c.text }}
+                    />
+                  ))}
+                </div>
+              )}
             </div>
-
-            <div>
-              <label className="block text-sm font-medium mb-1">Email</label>
-              <input
-                type="email"
-                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-black focus:outline-none"
-              />
-            </div>
-
-            <div>
-              <textarea
-                rows={4}
-                placeholder="Write your message..."
-                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-black focus:outline-none"
-              ></textarea>
-            </div>
-
-            <button
-              type="submit"
-              className="px-6 py-2 bg-black text-white rounded-md hover:bg-gray-800"
-            >
-              Submit
-            </button>
-          </form>
+          )}
         </div>
-
-        <div className="flex justify-center md:justify-end">
-          <div className="w-[400px] h-[300px] border border-gray-400 flex items-center justify-center text-gray-500">
-            {/* <img src="home/aleksandr-manukha-L_CYz3PEOiw-unsplash.jpg" alt="" /> */}
-          </div>
-        </div>
-      </div>
+      ))}
     </div>
   );
-}
+};
 
 export default AskKia;
