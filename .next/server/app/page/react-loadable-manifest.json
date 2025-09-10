@@ -1,0 +1,10 @@
+{
+  "[project]/src/app/pages/EditorComponent.tsx [app-client] (ecmascript, next/dynamic entry)": {
+    "id": "[project]/src/app/pages/EditorComponent.tsx [app-client] (ecmascript, next/dynamic entry)",
+    "files": [
+      "static/chunks/node_modules_5702efef._.js",
+      "static/chunks/src_app_pages_EditorComponent_tsx_a74ba99b._.js",
+      "static/chunks/src_app_pages_EditorComponent_tsx_b6a82abd._.js"
+    ]
+  }
+}
