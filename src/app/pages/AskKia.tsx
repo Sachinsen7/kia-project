@@ -4,7 +4,6 @@ function AskKia() {
   return (
     <div className="relative w-full min-h-screen bg-white p-6 md:p-30">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Left Content */}
         <div>
           <h1 className="text-2xl md:text-3xl font-bold mb-4">
             Ask Kia (Q&amp;A)
@@ -17,9 +16,7 @@ function AskKia() {
             consequat.
           </p>
 
-          {/* Form */}
           <form className="space-y-4">
-            {/* Title */}
             <div>
               <label className="block text-sm font-medium mb-1">Title</label>
               <input
@@ -28,7 +25,6 @@ function AskKia() {
               />
             </div>
 
-            {/* Name + Country */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium mb-1">Name</label>
@@ -51,7 +47,6 @@ function AskKia() {
               </div>
             </div>
 
-            {/* Email */}
             <div>
               <label className="block text-sm font-medium mb-1">Email</label>
               <input
@@ -60,7 +55,6 @@ function AskKia() {
               />
             </div>
 
-            {/* Message */}
             <div>
               <textarea
                 rows={4}
@@ -69,7 +63,6 @@ function AskKia() {
               ></textarea>
             </div>
 
-            {/* Submit */}
             <button
               type="submit"
               className="px-6 py-2 bg-black text-white rounded-md hover:bg-gray-800"
@@ -79,7 +72,6 @@ function AskKia() {
           </form>
         </div>
 
-        {/* Right Image */}
         <div className="flex justify-center md:justify-end">
           <div className="w-[400px] h-[300px] border border-gray-400 flex items-center justify-center text-gray-500">
             <img src="home/aleksandr-manukha-L_CYz3PEOiw-unsplash.jpg" alt="" />
