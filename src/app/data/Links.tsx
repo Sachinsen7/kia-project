@@ -75,6 +75,7 @@ import {
   MessageCircle,
   Lightbulb,
   LifeBuoy,
+  LayoutDashboard,
 } from "lucide-react";
 
 export type CityLink = {
@@ -116,7 +117,7 @@ export const links: CityLink[] = [
     y: 52,
     icon: TrendingUp,
   },
-  { id: "history", name: "History of GOEF", x: 23, y: 52, icon: Archive },
+  { id: "history-goef", name: "History of GOEF", x: 23, y: 52, icon: Archive },
   { id: "ask-kia", name: "Ask Kia (Q&A)", x: 37, y: 75, icon: MessageCircle },
   {
     id: "best-practices",
@@ -125,5 +126,18 @@ export const links: CityLink[] = [
     y: 75,
     icon: Lightbulb,
   },
-  { id: "help", name: "Help and support", x: 65, y: 63, icon: LifeBuoy },
+  {
+    id: "help-support",
+    name: "Help and support",
+    x: 65,
+    y: 63,
+    icon: LifeBuoy,
+  },
+  {
+    id: "dashboard",
+    name: "Event Dashboard",
+    x: 65,
+    y: 63,
+    icon: LayoutDashboard,
+  },
 ];

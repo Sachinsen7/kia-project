@@ -26,7 +26,10 @@ type Question = {
 };
 
 // Dynamically import the editor component
-const EditorComponent = dynamic(() => import("./EditorComponent").then(mod => mod.default), { ssr: false });
+const EditorComponent = dynamic(
+  () => import("./EditorComponent").then((mod) => mod.default),
+  { ssr: false }
+);
 
 const AskKia: React.FC = () => {
   const [mounted, setMounted] = useState(false);
@@ -57,7 +60,7 @@ const AskKia: React.FC = () => {
 
   const handleAddQuestion = () => {
     const text = newQuestionText.trim();
-    if (!text) return; // EditorComponent handles its own state
+    if (!text) return;
 
     const newQ: Question = {
       id: uuidv4(),

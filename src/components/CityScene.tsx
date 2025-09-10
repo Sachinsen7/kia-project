@@ -82,9 +82,7 @@ export default function CityScene({ onSelect }: CitySceneProps) {
 
       {/* Only render icons after image is ready */}
       {isImageLoaded && (
-        <div className="absolute inset-0 w-full h-full">
-          {memoizedIcons}
-        </div>
+        <div className="absolute inset-0 w-full h-full">{memoizedIcons}</div>
       )}
     </div>
   );
