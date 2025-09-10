@@ -13,7 +13,6 @@ export default function SidebarRight({ onSelect }: SidebarRightProps) {
 
   return (
     <>
-      {/* Top-right controls (outside the sidebar) */}
       {!isOpen && (
         <div className="absolute top-5 right-4 z-50 flex items-center gap-3 sm:top-4 sm:right-3">
           <button className="bg-gray-900 text-white font-semibold px-4 py-2 rounded-lg hover:bg-black transition-colors sm:text-sm sm:px-3 sm:py-1.5">
@@ -27,7 +26,6 @@ export default function SidebarRight({ onSelect }: SidebarRightProps) {
         </div>
       )}
 
-      {/* Sidebar */}
       <aside
         className={`
           fixed top-0 right-0 h-full
@@ -38,7 +36,6 @@ export default function SidebarRight({ onSelect }: SidebarRightProps) {
           ${isOpen ? "translate-x-0" : "translate-x-full"}
         `}
       >
-        {/* Close Button */}
         <X
           className="absolute top-4 right-4 cursor-pointer p-1 hover:bg-gray-100 rounded-full transition-colors sm:top-3 sm:right-3"
           size={36}
@@ -46,16 +43,22 @@ export default function SidebarRight({ onSelect }: SidebarRightProps) {
         />
 
         <div className="flex flex-col h-full">
-          {/* Header spacer */}
           <div className="p-4 border-b border-gray-200"></div>
 
-          {/* Links */}
           <div className="flex-1 p-4 overflow-y-auto">
             <h3 className="text-lg sm:text-base font-semibold mb-4 text-gray-800">
               Event Sections
             </h3>
             <div className="space-y-2">
-              {["welcome", "about", "strategy", "best-practices", "ask-kia"]
+              {[
+                "welcome",
+                "about",
+                "strategy",
+                "best-practices",
+                "ask-kia",
+                "help-support",
+                "history-goef",
+              ]
                 .map((id) => links.find((l) => l.id === id))
                 .filter(Boolean)
                 .map((link) => (
@@ -77,7 +80,6 @@ export default function SidebarRight({ onSelect }: SidebarRightProps) {
             </div>
           </div>
 
-          {/* Footer */}
           <div className="p-4 border-t border-gray-200 bg-gray-50">
             <p className="text-xs sm:text-[10px] text-gray-500 text-center">
               Click on any section to learn more
