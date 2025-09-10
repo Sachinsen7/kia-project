@@ -66,3 +66,11 @@ body {
 .link-pulse {
   animation: pulse 2s infinite;
 }
+
+.editor-container .ProseMirror {
+  min-height: 150px;
+}
+
+.ProseMirror {
+  min-height: 150px;
+}
