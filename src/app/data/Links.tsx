@@ -75,6 +75,7 @@ import {
   MessageCircle,
   Lightbulb,
   LifeBuoy,
+  LayoutDashboard,
 } from "lucide-react";
 
 export type CityLink = {
@@ -131,5 +132,12 @@ export const links: CityLink[] = [
     x: 65,
     y: 63,
     icon: LifeBuoy,
+  },
+  {
+    id: "dashboard",
+    name: "Event Dashboard",
+    x: 65,
+    y: 63,
+    icon: LayoutDashboard,
   },
 ];
