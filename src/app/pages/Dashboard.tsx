@@ -7,6 +7,8 @@ type DashboardProps = {
   onClose?: () => void;
 };
 
+import Image from "next/image";
+
 export default function Dashboard({ onClose }: DashboardProps) {
   const [images, setImages] = useState<File[]>([]);
   const [videos, setVideos] = useState<string[]>([]);
@@ -106,7 +108,7 @@ export default function Dashboard({ onClose }: DashboardProps) {
               key={index}
               className="relative border rounded-lg overflow-hidden"
             >
-              <img
+              <Image
                 src={URL.createObjectURL(file)}
                 alt="uploaded"
                 className="w-full h-32 object-cover"

@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 
 function About() {
   return (
@@ -35,7 +36,7 @@ function About() {
           <span className="italic">“Synergy in Action”</span>
         </h2>
         <div className="flex justify-center">
-          <img
+          <Image
             src="/images/diagram.png" // replace with your diagram image
             alt="Vision Diagram"
             className="w-80 md:w-[400px] object-contain"
