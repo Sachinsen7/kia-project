@@ -1,3 +1,5 @@
+"use client";
+
 import { cityDetails } from "@/app/data/details";
 import { X, Clock, Phone, MapPin } from "lucide-react";
 import type { ComponentType } from "react";
