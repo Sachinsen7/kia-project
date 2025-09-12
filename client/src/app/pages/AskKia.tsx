@@ -160,7 +160,6 @@ const AskKia: React.FC = () => {
         review it after the event and provide a thorough response.
       </section>
 
-      {/* Question Input */}
       <div className="mb-4 flex justify-end">
         {!showInput ? (
           <button
@@ -214,7 +213,6 @@ const AskKia: React.FC = () => {
         )}
       </div>
 
-      {/* Questions List */}
       {questions.map((q) => (
         <div
           key={q.id}
