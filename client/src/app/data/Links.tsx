@@ -5,6 +5,7 @@ import {
   MessageCircle,
   LifeBuoy,
   LayoutDashboard,
+  Calendar,
 } from "lucide-react";
 
 export type CityLink = {
@@ -30,15 +31,15 @@ export const links: CityLink[] = [
   {
     id: "event",
     name: "2025 GOEF Event",
-    x: 72,
-    y: 63,
-    icon: LayoutDashboard,
+    x: 47,
+    y: 45,
+    icon: Calendar,
   },
   {
     id: "dashboard",
     name: "Upload Your Contents",
-    x: 78,
-    y: 63,
+    x: 82,
+    y: 73,
     icon: LayoutDashboard,
   },
 ];

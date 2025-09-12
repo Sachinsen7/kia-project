@@ -29,7 +29,7 @@ const EditorComponent = dynamic(
   { ssr: false }
 );
 
-const GoefEvent: React.FC = () => {
+const AskKia: React.FC = () => {
   const [mounted, setMounted] = useState(false);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [showInput, setShowInput] = useState(false);
@@ -53,7 +53,7 @@ const GoefEvent: React.FC = () => {
         user: "John Doe",
         dept: "KUS",
         date: new Date().toISOString().slice(0, 10),
-        text: "Where can I get a KIDCC guidebook pdf version?",
+        text: "Ownership, in my opinion, is not just a service. It's the excellent experience a customer has at our workshop, combined with a truly differentiated vehicle experience in their daily lives.",
         likes: 24,
         comments: 0,
         commentList: [],
@@ -115,11 +115,11 @@ const GoefEvent: React.FC = () => {
       prev.map((q) =>
         q.id === id
           ? {
-              ...q,
-              comments: q.comments + 1,
-              commentList: [...q.commentList, newComment],
-              showCommentInput: false,
-            }
+            ...q,
+            comments: q.comments + 1,
+            commentList: [...q.commentList, newComment],
+            showCommentInput: false,
+          }
           : q
       )
     );
@@ -131,35 +131,24 @@ const GoefEvent: React.FC = () => {
   return (
     <div className="h-full border-l overflow-y-auto z-50 p-6 md:p-10">
       <section className="mb-6 p-4 rounded-lg ">
-        <h1 className="text-2xl font-bold mb-3">Ask Kia (Q&amp;A)</h1>
+        <h1 className="text-2xl font-bold mb-3"> 2025 GOEF Event </h1>
         <br />
         <p className="text-gray-700 text-sm mb-2">
-          The GOEF event is where the future of Kia takes shape, and we want
-          your voice to be a part of it. Feel free to ask any questions
-          you&apos;ve been curious about regarding Kia HQ. We are always
-          listening to your valuable input.
+          We&apos;re hosting a forum with your active participation at this year&apos;s GOEF, and we have a special event planned. Please share your thoughts on &quot;What does ownership mean to you?&quot; in the comments below!
         </p>
         <br />
-        <h2 className="font-semibold text-gray-800 mb-1">How to Participate</h2>
+
         <p className="text-gray-700 text-sm mb-2">
-          <strong>Submit Your Question:</strong> Please leave your questions in
-          the comments below.
-        </p>
-        <p className="text-gray-700 text-sm mb-2">
-          <strong>Get Your Answer:</strong> We will select questions to be
-          answered directly on-site during the GOEF event.
+          We&apos;ll select the best submissions and award them with a prize during the live stream on the day of the GOEF. We look forward to your active participation.
         </p>
         <br />
-        <h2 className="font-semibold text-gray-800 mb-1">
-          For Unanswered Questions
-        </h2>
-        We appreciate your understanding that we may not be able to answer all
-        questions immediately due to the nature of the live event. If your
-        question isn&apos;t answered on the spot, a dedicated team member will
-        review it after the event and provide a thorough response.
+        <br />       
       </section>
 
-      <div className="mb-4 flex justify-end">
+      <div className="mb-4 flex justify-between">
+        <h2 className="font-semibold text-gray-800 mb-1">
+          What does ownership mean to you?
+        </h2>
         {!showInput ? (
           <button
             onClick={() => setShowInput(true)}
@@ -314,4 +303,4 @@ const GoefEvent: React.FC = () => {
   );
 };
 
-export default GoefEvent;
+export default AskKia;
