@@ -115,11 +115,11 @@ const AskKia: React.FC = () => {
       prev.map((q) =>
         q.id === id
           ? {
-            ...q,
-            comments: q.comments + 1,
-            commentList: [...q.commentList, newComment],
-            showCommentInput: false,
-          }
+              ...q,
+              comments: q.comments + 1,
+              commentList: [...q.commentList, newComment],
+              showCommentInput: false,
+            }
           : q
       )
     );
@@ -134,15 +134,20 @@ const AskKia: React.FC = () => {
         <h1 className="text-2xl font-bold mb-3"> 2025 GOEF Event </h1>
         <br />
         <p className="text-gray-700 text-sm mb-2">
-          We&apos;re hosting a forum with your active participation at this year&apos;s GOEF, and we have a special event planned. Please share your thoughts on &quot;What does ownership mean to you?&quot; in the comments below!
+          We&apos;re hosting a forum with your active participation at this
+          year&apos;s GOEF, and we have a special event planned. Please share
+          your thoughts on &quot;What does ownership mean to you?&quot; in the
+          comments below!
         </p>
         <br />
 
         <p className="text-gray-700 text-sm mb-2">
-          We&apos;ll select the best submissions and award them with a prize during the live stream on the day of the GOEF. We look forward to your active participation.
+          We&apos;ll select the best submissions and award them with a prize
+          during the live stream on the day of the GOEF. We look forward to your
+          active participation.
         </p>
         <br />
-        <br />       
+        <br />
       </section>
 
       <div className="mb-4 flex justify-between">
