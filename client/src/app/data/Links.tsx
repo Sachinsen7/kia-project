@@ -89,43 +89,8 @@ export type CityLink = {
 export const links: CityLink[] = [
   { id: "welcome", name: "Welcome to 2025 GOEF", x: 60, y: 12, icon: Home },
   { id: "about", name: "About 2025 GOEF", x: 18, y: 18, icon: Info },
-  {
-    id: "strategy",
-    name: "2026 Ownership strategy",
-    x: 47,
-    y: 43,
-    icon: Target,
-  },
-  {
-    id: "track-a",
-    name: "Track A: Introduction to KDCCC",
-    x: 75,
-    y: 30,
-    icon: BookOpen,
-  },
-  {
-    id: "track-b",
-    name: "Track B: Retention programs",
-    x: 34,
-    y: 10,
-    icon: Users,
-  },
-  {
-    id: "track-c",
-    name: "Track C: Capacity enhancement",
-    x: 76,
-    y: 52,
-    icon: TrendingUp,
-  },
   { id: "history-goef", name: "History of GOEF", x: 23, y: 52, icon: Archive },
   { id: "ask-kia", name: "Ask Kia (Q&A)", x: 37, y: 75, icon: MessageCircle },
-  {
-    id: "best-practices",
-    name: "Best practices",
-    x: 84,
-    y: 75,
-    icon: Lightbulb,
-  },
   {
     id: "help-support",
     name: "Help and support",
@@ -135,7 +100,7 @@ export const links: CityLink[] = [
   },
   {
     id: "dashboard",
-    name: "Event Dashboard",
+    name: "Upload Your Contents",
     x: 65,
     y: 63,
     icon: LayoutDashboard,
