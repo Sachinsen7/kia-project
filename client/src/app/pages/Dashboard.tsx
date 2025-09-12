@@ -15,6 +15,7 @@ export default function Dashboard({ onClose }: DashboardProps) {
   const [contentViews, setContentViews] = useState<number>(0);
 
   const [newVideo, setNewVideo] = useState("");
+  const [videoFiles, setVideoFiles] = useState<File[]>([]);
 
   useEffect(() => {
     try {
@@ -54,9 +55,19 @@ export default function Dashboard({ onClose }: DashboardProps) {
   const handleDeleteVideo = (index: number) =>
     setVideos((prev) => prev.filter((_, i) => i !== index));
 
+  const handleVideoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const uploaded = Array.from(e.target.files);
+      setVideoFiles((prev) => [...prev, ...uploaded]);
+    }
+  };
+
+  const handleDeleteVideoFile = (index: number) =>
+    setVideoFiles((prev) => prev.filter((_, i) => i !== index));
+
   return (
     <div className="relative h-full mx-16 bg-white text-gray-900p-6 md:p-10">
-      
+
 
       <h1 className="text-2xl font-extrabold mb-4 text-black">Upload Your Contents</h1>
 
@@ -139,37 +150,33 @@ export default function Dashboard({ onClose }: DashboardProps) {
         <h2 className="text-lg font-semibold mb-2 text-black">Greeting Videos</h2>
 
         <label className="flex items-center justify-center cursor-pointer border border-gray-300 rounded-lg bg-gray-100 hover:bg-gray-50 transition h-16 shadow-sm mb-4">
-          <span className="text-gray-700 font-medium">Click to upload content</span>
+          <span className="text-gray-700 font-medium">Click to upload video</span>
           <input
-            type="text"
-            value={newVideo}
-            onChange={(e) => setNewVideo(e.target.value)}
-            placeholder="Paste video link"
+            type="file"
+            accept="video/*"
+            multiple
             className="hidden"
+            onChange={handleVideoUpload}
           />
         </label>
 
-                <div className="h-0.5 bg-gray-300 my-4"></div>
-
+        <div className="h-0.5 bg-gray-300 my-4"></div>
 
         <ul className="space-y-3">
-          {videos.map((video, index) => (
+          {videoFiles.map((file, index) => (
             <li
               key={index}
               className="flex items-center justify-between bg-gray-100 px-4 py-2 rounded-lg"
             >
-              <a
-                href={video}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-600 hover:underline"
+              <video
+                src={URL.createObjectURL(file)}
+                controls
+                className="w-40 h-24 object-cover rounded"
                 onClick={incrementContentViews}
-              >
-                {video}
-              </a>
+              />
               <button
-                onClick={() => handleDeleteVideo(index)}
-                className="text-red-600 hover:text-red-800 font-semibold"
+                onClick={() => handleDeleteVideoFile(index)}
+                className="text-red-600 hover:text-red-800 font-semibold ml-4"
               >
                 Delete
               </button>
