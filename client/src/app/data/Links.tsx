@@ -30,14 +30,14 @@ export const links: CityLink[] = [
   {
     id: "event",
     name: "2025 GOEF Event",
-    x: 65,
+    x: 72,
     y: 63,
     icon: LayoutDashboard,
   },
   {
     id: "dashboard",
     name: "Upload Your Contents",
-    x: 65,
+    x: 78,
     y: 63,
     icon: LayoutDashboard,
   },
