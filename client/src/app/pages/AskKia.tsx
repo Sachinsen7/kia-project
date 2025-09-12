@@ -115,11 +115,11 @@ const AskKia: React.FC = () => {
       prev.map((q) =>
         q.id === id
           ? {
-              ...q,
-              comments: q.comments + 1,
-              commentList: [...q.commentList, newComment],
-              showCommentInput: false,
-            }
+            ...q,
+            comments: q.comments + 1,
+            commentList: [...q.commentList, newComment],
+            showCommentInput: false,
+          }
           : q
       )
     );
@@ -172,6 +172,7 @@ const AskKia: React.FC = () => {
           <div className="w-full" ref={editorRef}>
             <div className="mb-2">
               <select
+                title="Country"
                 className="w-full border border-gray-300 rounded p-2 text-sm"
                 defaultValue="Select country"
               >
@@ -257,6 +258,7 @@ const AskKia: React.FC = () => {
             <div className="px-4 pb-3" ref={commentEditorRef}>
               <div className="mb-2">
                 <select
+                  title="Country"
                   className="w-full border border-gray-300 rounded p-2 text-sm"
                   defaultValue="Select country"
                 >
