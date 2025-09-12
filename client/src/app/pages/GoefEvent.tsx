@@ -130,7 +130,6 @@ const AskKia: React.FC = () => {
 
   return (
     <div className="h-full border-l overflow-y-auto z-50 p-6 md:p-10">
-      {/* Professional Intro Text */}
       <section className="mb-6 p-4 rounded-lg ">
         <h1 className="text-2xl font-bold mb-3">Ask Kia (Q&amp;A)</h1>
         <br />
