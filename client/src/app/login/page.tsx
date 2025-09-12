@@ -7,9 +7,6 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex flex-col justify-between bg-white">
-      {/* Header */}
-
-      {/* Main Content */}
       <main className="flex flex-col items-center flex-1 ">
         <div className="w-full max-w-4xl mt-6 px-4">
           <img
@@ -47,8 +44,12 @@ export default function Login() {
       <footer className="w-full flex flex-col items-center mt-8 mb-4">
         <div className="w-full max-w-3xl text-center text-gray-500 text-xs border-t pt-4">
           © 2016 Kia Dealer Academy. All rights reserved. &nbsp;
-          <a href="#" className="underline mx-1">Terms of Use</a>
-          <a href="#" className="underline mx-1">Privacy Policy</a>
+          <a href="#" className="underline mx-1">
+            Terms of Use
+          </a>
+          <a href="#" className="underline mx-1">
+            Privacy Policy
+          </a>
         </div>
       </footer>
     </div>
