@@ -16,7 +16,6 @@ export default function SidebarRight({ onSelect }: SidebarRightProps) {
 
   return (
     <>
-      {/* Sidebar Menu Toggle Button */}
       {!isOpen && !showDashboard && (
         <div className="absolute top-5 right-4 z-50">
           <Menu
@@ -27,7 +26,6 @@ export default function SidebarRight({ onSelect }: SidebarRightProps) {
         </div>
       )}
 
-      {/* Sidebar */}
       <aside
         className={`
           fixed top-0 right-0 h-full
@@ -38,7 +36,6 @@ export default function SidebarRight({ onSelect }: SidebarRightProps) {
           ${isOpen ? "translate-x-0" : "translate-x-full"}
         `}
       >
-        {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <X
             className="cursor-pointer text-gray-900 stroke-3 hover:bg-gray-100 p-2 rounded-lg transition-colors"
