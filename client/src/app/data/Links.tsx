@@ -28,6 +28,13 @@ export const links: CityLink[] = [
     icon: LifeBuoy,
   },
   {
+    id: "event",
+    name: "2025 GOEF Event",
+    x: 65,
+    y: 63,
+    icon: LayoutDashboard,
+  },
+  {
     id: "dashboard",
     name: "Upload Your Contents",
     x: 65,

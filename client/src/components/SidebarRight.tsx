@@ -62,6 +62,7 @@ export default function SidebarRight({ onSelect }: SidebarRightProps) {
             "ask-kia",
             "help-support",
             "history-goef",
+            "event",
             "dashboard",
           ]
             .map((id) => links.find((l) => l.id === id))

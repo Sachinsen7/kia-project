@@ -29,6 +29,7 @@ export default function SidebarLeft({ selectedId, onClose }: SidebarLeftProps) {
     "help-support": HelpSupport,
     "history-goef": HistoryGOEF,
     dashboard: Dashboard,
+    event: Dashboard,
   };
 
   const PageComponent = pageMap[selectedId];
