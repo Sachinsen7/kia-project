@@ -40,7 +40,6 @@ export default function Login() {
         </div>
       </main>
 
-      {/* Footer */}
       <footer className="w-full flex flex-col items-center mt-8 mb-4">
         <div className="w-full max-w-3xl text-center text-gray-500 text-xs border-t pt-4">
           © 2016 Kia Dealer Academy. All rights reserved. &nbsp;
