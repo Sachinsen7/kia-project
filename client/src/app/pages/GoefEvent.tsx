@@ -159,7 +159,7 @@ const AskKia: React.FC = () => {
             onClick={() => setShowInput(true)}
             className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800 text-sm font-semibold"
           >
-            Create a question
+            Share Your Thoughts
           </button>
         ) : (
           <div className="w-full" ref={editorRef}>
