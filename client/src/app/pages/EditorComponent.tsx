@@ -52,18 +52,6 @@ const EditorComponent: React.FC<EditorComponentProps> = ({
         >
           U
         </button>
-        {/* <button
-          onClick={() => editor.chain().focus().toggleBulletList().run()}
-          className="px-2 py-1 border rounded"
-        >
-          *
-        </button> */}
-        {/* <button
-          onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          className="px-2 py-1 border rounded"
-        >
-          123
-        </button> */}
       </div>
 
       <EditorContent

@@ -11,7 +11,6 @@ type CitySceneProps = {
 export default function CityScene({ onSelect }: CitySceneProps) {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
 
-  // Memoize the icon buttons to prevent re-creation on every render
   const memoizedIcons = useMemo(() => {
     return links.map((link) => {
       const Icon = link.icon;
@@ -26,7 +25,6 @@ export default function CityScene({ onSelect }: CitySceneProps) {
           }}
         >
           <div className="relative flex items-center justify-center w-[4rem] h-[4rem] md:w-16 md:h-16">
-            {/* Lighter ping on hover only */}
             <span className="absolute inline-flex h-full w-full rounded-full bg-[#ff6c4c]/50 opacity-0 group-hover:opacity-100 group-hover:animate-ping transition-opacity"></span>
 
             <div
@@ -36,7 +34,6 @@ export default function CityScene({ onSelect }: CitySceneProps) {
                   "path('M32 0C49.673 0 64 14.327 64 32C64 51.2 32 64 32 64C32 64 0 51.2 0 32C0 14.327 14.327 0 32 0Z')",
               }}
             >
-              {/* Bounce on hover only, with shorter duration */}
               <div className="w-[2.5rem] h-[2.5rem] md:w-10 md:h-10 bg-[#ff6c4c] rounded-full flex items-center justify-center transition-transform group-hover:animate-bounce duration-200">
                 <Icon className="text-white w-[1.25rem] h-[1.25rem] md:w-5 md:h-5" />
               </div>
@@ -55,11 +52,10 @@ export default function CityScene({ onSelect }: CitySceneProps) {
         </button>
       );
     });
-  }, []); // Empty dep array since links is static
+  }, []);
 
   return (
     <div className="relative w-full h-full bg-white overflow-hidden">
-      {/* Background image */}
       <Image
         src="/new-home-image.jpg"
         alt="City Scene"
@@ -67,12 +63,11 @@ export default function CityScene({ onSelect }: CitySceneProps) {
         priority
         className="object-cover transition-opacity duration-500"
         onLoadingComplete={() => {
-          console.timeEnd("imageLoadToIcons"); // Debug: Measure time from image complete to icons render
+          console.timeEnd("imageLoadToIcons");
           setIsImageLoaded(true);
         }}
       />
 
-      {/* Hidden pre-render of icons to preload them (off-screen, zero opacity) */}
       <div className="absolute top-[-9999px] opacity-0">
         {links.map((link) => {
           const Icon = link.icon;
@@ -80,7 +75,6 @@ export default function CityScene({ onSelect }: CitySceneProps) {
         })}
       </div>
 
-      {/* Only render icons after image is ready */}
       {isImageLoaded && (
         <div className="absolute inset-0 w-full h-full">{memoizedIcons}</div>
       )}
