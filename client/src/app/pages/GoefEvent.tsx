@@ -130,7 +130,6 @@ const GoefEvent: React.FC = () => {
 
   return (
     <div className="h-full border-l overflow-y-auto z-50 p-6 md:p-10">
-      {/* Professional Intro Text */}
       <section className="mb-6 p-4 rounded-lg ">
         <h1 className="text-2xl font-bold mb-3">Ask Kia (Q&amp;A)</h1>
         <br />
@@ -258,7 +257,7 @@ const GoefEvent: React.FC = () => {
             <div className="px-4 pb-3" ref={commentEditorRef}>
               <div className="mb-2">
                 <select
-                title="Country"
+                  title="Country"
                   className="w-full border border-gray-300 rounded p-2 text-sm"
                   defaultValue="Select country"
                 >

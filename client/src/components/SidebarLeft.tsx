@@ -11,6 +11,7 @@ import AskKia from "@/app/pages/AskKia";
 import HelpSupport from "@/app/pages/HelpSupport";
 import HistoryGOEF from "@/app/pages/HistoryGOEF";
 import Dashboard from "@/app/pages/Dashboard";
+import GoefEvent from "@/app/pages/GoefEvent";
 
 type SidebarLeftProps = {
   selectedId: string | null;
@@ -29,7 +30,7 @@ export default function SidebarLeft({ selectedId, onClose }: SidebarLeftProps) {
     "help-support": HelpSupport,
     "history-goef": HistoryGOEF,
     dashboard: Dashboard,
-    event: Dashboard,
+    event: GoefEvent,
   };
 
   const PageComponent = pageMap[selectedId];
