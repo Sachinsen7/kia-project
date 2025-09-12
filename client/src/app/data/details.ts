@@ -6,7 +6,7 @@ export type CityDetail = {
   hours?: string;
   contact?: string;
   image?: string;
-  icon: string; // lucide icon key
+  icon: string;
 };
 
 export const cityDetails: Record<string, CityDetail> = {
@@ -47,7 +47,6 @@ export const cityDetails: Record<string, CityDetail> = {
     features: ["Live Q&A", "Expert panel", "Discussion forums"],
     icon: "message",
   },
-
   help: {
     id: "help",
     name: "Help and Support",
