@@ -29,7 +29,7 @@ const EditorComponent = dynamic(
   { ssr: false }
 );
 
-const AskKia: React.FC = () => {
+const GoefEvent: React.FC = () => {
   const [mounted, setMounted] = useState(false);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [showInput, setShowInput] = useState(false);
@@ -115,11 +115,11 @@ const AskKia: React.FC = () => {
       prev.map((q) =>
         q.id === id
           ? {
-            ...q,
-            comments: q.comments + 1,
-            commentList: [...q.commentList, newComment],
-            showCommentInput: false,
-          }
+              ...q,
+              comments: q.comments + 1,
+              commentList: [...q.commentList, newComment],
+              showCommentInput: false,
+            }
           : q
       )
     );
@@ -258,7 +258,7 @@ const AskKia: React.FC = () => {
             <div className="px-4 pb-3" ref={commentEditorRef}>
               <div className="mb-2">
                 <select
-                  title="Country"
+                title="Country"
                   className="w-full border border-gray-300 rounded p-2 text-sm"
                   defaultValue="Select country"
                 >
@@ -315,4 +315,4 @@ const AskKia: React.FC = () => {
   );
 };
 
-export default AskKia;
+export default GoefEvent;
