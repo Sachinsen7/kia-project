@@ -5,37 +5,37 @@ import { CreateUserDto } from './dto/create-user.dto';
 
 @Injectable()
 export class UserService {
-    constructor(private prisma: PrismaService,
+    constructor(
+        private prisma: PrismaService,
         private hashService: HashService
     ){}
 
-    async createUser(dto: CreateUserDto) {
-    const existingUser = await this.prisma.user.findUnique({
-      where: { username: dto.userName },
-    });
-
-    if (existingUser) {
-      throw new ConflictException('Username already taken');
+    async create(dto: CreateUserDto){
+      const hashed = await this.hashService.hashPassword(dto.password);
+      return this.prisma.user.create({
+        data:{
+          email: dto.email,
+          password: hashed,
+          title: dto.title,
+          firstName: dto.firstName,
+          lastName: dto.lastName,
+          region: dto.region,
+          country: dto.country,
+          nationality: dto.nationality,
+          privacyPolicy: dto.privacyPolicy,
+          cookiesPolicy: dto.cookiesPolicy,
+        },
+      });
     }
 
-    const hashedPassword = await this.hashService.hashPassword(dto.password);
-
-    return this.prisma.user.create({
-      data: {
-        username: dto.userName,
-        password: hashedPassword,
-      },
-    });
-  }
-
-  async findByUserName(userName: string) {
+  async findByEmail(email: string) {
     const user = await this.prisma.user.findUnique({
         where: {
-            username: userName,
+            email: email,
         }
     })
 
-    if(!user) throw new NotFoundException('Id witht eh said userName does not exist');
+    if(!user) throw new NotFoundException('Id witht the said userName does not exist');
 
     return user;
   }
