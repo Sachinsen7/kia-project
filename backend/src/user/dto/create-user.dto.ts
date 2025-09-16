@@ -17,7 +17,7 @@ export class CreateUserDto{
 
     @IsString()
     @IsNotEmpty()
-    lastNamt: string;
+    lastName: string;
 
     @IsString()
     region: string;
