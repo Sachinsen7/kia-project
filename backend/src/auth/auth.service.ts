@@ -24,4 +24,27 @@ export class AuthService {
       return user;
     }
 
+    async login(dto: LoginDto){
+      const user = await this.validateUser(dto.email, dto.password);
+
+      const payload = {
+        sub: user.id,
+        email: user.email,
+        role: user.role,
+        approved: user.approved,
+      };
+
+      return {
+        access_token: this.jwtService.sign(payload),
+        user:{
+          id: user.id,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          approved: user.approved,
+          role: user.role,
+        },
+      };
+    }
+
   }
