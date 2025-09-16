@@ -12,27 +12,39 @@ export class AuthService {
         private hashService: HashService
     ) {}
 
-    async validateUser(username: string, password: string){
-        const user = await this.userService.findByUserName(username);
-        if(!user) throw new NotFoundException('User not found');
+    async validateUser(email: string, password: string){
+      const user = await this.userService.findByEmail(email);
 
-        const isPasswordValid = await this.hashService.verifyPassword(user.password, password);
-    if (!isPasswordValid) throw new UnauthorizedException('Invalid credentials');
+      if(!user) throw new NotFoundException('Invalid credentials');
 
-    return user;
+      const isPasswordValid = await this.hashService.verifyPassword(user.password, password);
+
+      if(!isPasswordValid)  throw new UnauthorizedException('Invalid credentials');
+
+      return user;
     }
 
-    async login(dto: LoginDto) {
-    const user = await this.validateUser(dto.userName, dto.password);
+    async login(dto: LoginDto){
+      const user = await this.validateUser(dto.email, dto.password);
 
-    const payload = { sub: user.id, username: user.username };
-    return {
-      access_token: this.jwtService.sign(payload),
-      user: {
-        id: user.id,
-        username: user.username,
-        createdAt: user.createdAt,
-      },
-    };
+      const payload = {
+        sub: user.id,
+        email: user.email,
+        role: user.role,
+        approved: user.approved,
+      };
+
+      return {
+        access_token: this.jwtService.sign(payload),
+        user:{
+          id: user.id,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          approved: user.approved,
+          role: user.role,
+        },
+      };
+    }
+
   }
-}

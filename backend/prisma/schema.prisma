@@ -1,69 +1,97 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
-generator client {
-  provider = "prisma-client-js"
-}
-
+// prisma/schema.prisma
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-model User{
-  id              String                @id @default(uuid())
-  username        String                @unique
-  password        String
-  createdAt       DateTime              @default(now())
-  updatedAt       DateTime              @updatedAt
-
-
-  questions       Qna[]
-  comments        Comment[]
-  likes           Like[]
+generator client {
+  provider = "prisma-client-js"
 }
 
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  password      String
+  title         String?
+  firstName     String   
+  lastName      String   
+  region        String   
+  country       String   
+  nationality   String   
+  privacyPolicy Boolean  @default(false)
+  cookiesPolicy Boolean  @default(false)
+  role          String   @default("participant")
+  approved      Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt()
 
-model Qna{
-  id              String                @id @default(uuid())
-  country         String                
-  heading         String
-  description     String
-  likesCount      Int                   @default(0)
-  createdAt       DateTime              @default(now())
-  updatedAt       DateTime              @updatedAt
-
-  userId          String
-  user            User                  @relation(fields: [userId], references: [id])
-  comment         Comment[]
-  likes           Like[]
+  questions Qna[]
+  comments  Comment[]
+  likes     Like[]
+  uploads   Upload[]
+  pageViews PageView[] // 👈 added opposite relation
 }
 
-model Comment{
-  id              String                @id @default(uuid())
-  heading         String
-  description     String
-  createdAt       DateTime              @default(now())
-  updatedAt       DateTime              @updatedAt
+model Qna {
+  id          String   @id @default(uuid())
+  country     String
+  heading     String
+  description String
+  likesCount  Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  userID          String
-  user            User                  @relation(fields: [userID], references: [id])
-
-  qnaId           String
-  qna             Qna                   @relation(fields: [qnaId], references: [id])
+  userId   String
+  user     User      @relation(fields: [userId], references: [id])
+  comments Comment[]
+  likes    Like[]
 }
 
-model Like{
-  id              String              @id @default(uuid())
-  userId          String
-  qnaId           String
-  createdAt       DateTime            @default(now())
+model Comment {
+  id          String   @id @default(uuid())
+  heading     String
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  user            User                @relation(fields: [userId], references: [id])
-  qna             Qna                 @relation(fields: [qnaId], references: [id])
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
 
-  @@unique([userId, qnaId]) // one like per user per qna
+  qnaId String
+  qna   Qna    @relation(fields: [qnaId], references: [id])
+}
+
+model Like {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  qnaId String
+  qna   Qna    @relation(fields: [qnaId], references: [id])
+
+  @@unique([userId, qnaId])
+}
+
+model Upload {
+  id        String   @id @default(uuid())
+  filename  String
+  url       String
+  mimetype  String
+  size      Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+}
+
+model PageView {
+  id        String   @id @default(uuid())
+  path      String
+  ip        String? // optional
+  userId    String? // optional (visitors might be anonymous)
+  user      User?    @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
 }
