@@ -4,11 +4,21 @@ import { CreateUserDto } from './dto/create-user.dto';
 
 @Controller('user')
 export class UserController {
-    constructor(private userService: UserService) {}
+    constructor(
+        private userService: UserService
+    ) {}
 
     @Post('register')
     @HttpCode(HttpStatus.CREATED)
     async register(@Body() dto: CreateUserDto){
-        return this.userService.createUser(dto);
+        const user= await this.userService.create(dto);
+        return{
+            id: user.id,
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            approved: user.approved,
+            role: user.role,
+        }
     }
 }

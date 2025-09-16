@@ -7,10 +7,8 @@ import { PrismaModule } from './prisma/prisma.module';
 import { CommonModule } from './common/common.module';
 import { AuthModule } from './auth/auth.module';
 import { QnaModule } from './qna/qna.module';
-import { SparshController } from './sparsh/sparsh.controller';
 
 @Module({
   imports: [UserModule, AuthModule, PrismaModule, CommonModule, QnaModule],
-  controllers: [SparshController],
 })
 export class AppModule {}
