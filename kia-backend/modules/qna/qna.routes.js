@@ -1,5 +1,5 @@
 const express = require("express");
-const router = express.Router;
+const router = express.Router();
 const {createQna, deleteQna, getAllQna, toggleLike} = require("./qna.controller");
 
 
