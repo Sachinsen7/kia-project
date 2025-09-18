@@ -51,3 +51,14 @@ exports.toggleLike = async (req, res) => {
         res.status(500).json({message: "Server error"});
     }
 }
+
+exports.deleteQna = async(req, res) => {
+    try{
+        const qna = await Qna.findByIdAndDelete(req.params.id);
+        if(!qna) return res.status(400).json({message: "Qna not found"});
+        res.json({message: "Qna deleetd"});
+    }
+    catch(err){
+        res.status(500).json({message: "Server error", err})
+    }
+};
