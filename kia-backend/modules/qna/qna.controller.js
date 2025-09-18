@@ -17,3 +17,15 @@ exports.createQna = async (req, res) => {
     }
 }
 
+exports.getAllQna = async (req, res) => {
+    try{
+        const qnas = await Qna.find()
+        .populate("createdBy", "firstName lastName email")
+        .populate("likes", "firstName lastName");
+
+        res.json(qnas);
+    }
+    catch(err){
+        res.status(500).json({message: "Server error"});
+    }
+}
