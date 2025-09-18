@@ -2,10 +2,12 @@ require('dotenv').config({ path: './.env.dev' });
 const express = require("express");
 const connectDB = require("./config/db");
 
+const routes = require("./routes/index")
+
 const app = express();
 app.use(express.json());
 
-const routes = require("./routes/index")
+app.use("/api", routes);
 
 const PORT = process.env.PORT||5000;
 
