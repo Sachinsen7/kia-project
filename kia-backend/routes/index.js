@@ -2,9 +2,11 @@ const express = require("express");
 const router = express.Router();
 
 const authRoutes = require("../modules/auth/auth.routes");
+const qnaRoutes = require("../modules/qna/qna.routes")
 
 
-router.post("/auth", authRoutes);
+router.use("/auth", authRoutes);
+router.use("/qna", qnaRoutes);
 
 
 module.exports = router;
