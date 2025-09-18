@@ -36,3 +36,19 @@ exports.getComments = async (req, res) => {
     }
 }
 
+exports.deleteComment = async (req, res) => {
+  try {
+    const comment = await Comment.findById(req.params.id);
+    if (!comment) return res.status(404).json({ message: "Comment not found" });
+
+    // allow delete if user is the creator or seeded admin
+    if (comment.createdBy.toString() !== req.user.id) {
+      return res.status(403).json({ message: "Not authorized to delete" });
+    }
+
+    await Comment.findByIdAndDelete(req.params.id);
+    res.json({ message: "Comment deleted" });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+}
