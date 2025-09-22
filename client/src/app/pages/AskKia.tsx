@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
 import { Heart, MessageSquare } from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
+import { apiFetch } from "@/config/api";
 
 type Comment = {
   id: string;
@@ -33,20 +34,20 @@ const AskKia: React.FC = () => {
   const [mounted, setMounted] = useState(false);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [showInput, setShowInput] = useState(false);
+  const [newQuestionTitle, setNewQuestionTitle] = useState("");
   const [newQuestionText, setNewQuestionText] = useState("");
-  const [countries] = useState([
-    "Select country",
-    "USA",
-    "UK",
-    "Canada",
-    "India",
-  ]);
+  const [newQuestionCountry, setNewQuestionCountry] = useState("Select country");
   const [commentEditorContent, setCommentEditorContent] = useState("");
+  const [countries] = useState(["Select country", "USA", "UK", "Canada", "India"]);
+
   const editorRef = useRef<HTMLDivElement>(null);
   const commentEditorRef = useRef<HTMLDivElement>(null);
 
+  const token = localStorage.getItem("token"); // JWT token
+
   useEffect(() => {
     setMounted(true);
+    // Initial sample question
     setQuestions([
       {
         id: uuidv4(),
@@ -62,25 +63,41 @@ const AskKia: React.FC = () => {
     ]);
   }, []);
 
-  const handleAddQuestion = () => {
-    const text = newQuestionText.trim();
-    if (!text) return;
+  const handleAddQuestion = async () => {
+    const title = newQuestionTitle.trim();
+    const description = newQuestionText.trim();
+    const country = newQuestionCountry;
 
-    const newQ: Question = {
-      id: uuidv4(),
-      user: "You",
-      dept: "GUEST",
-      date: new Date().toISOString().slice(0, 10),
-      text,
-      likes: 0,
-      comments: 0,
-      commentList: [],
-      showCommentInput: false,
-    };
+    if (!title || !description || country === "Select country") return;
 
-    setQuestions([newQ, ...questions]);
-    setShowInput(false);
-    setNewQuestionText("");
+    try {
+      const response = await apiFetch(
+        "/api/qna",
+        "POST",
+        { title, description, country },
+        token || ""
+      );
+
+      const newQ: Question = {
+        id: response.qna._id,
+        user: "You",
+        dept: "GUEST",
+        date: new Date(response.qna.createdAt).toISOString().slice(0, 10),
+        text: response.qna.description,
+        likes: response.qna.likes.length,
+        comments: 0,
+        commentList: [],
+        showCommentInput: false,
+      };
+
+      setQuestions([newQ, ...questions]);
+      setShowInput(false);
+      setNewQuestionTitle("");
+      setNewQuestionText("");
+      setNewQuestionCountry("Select country");
+    } catch (err: any) {
+      console.error("Error adding question:", err.message);
+    }
   };
 
   const handleLike = (id: string) => {
@@ -130,36 +147,22 @@ const AskKia: React.FC = () => {
 
   return (
     <div className="h-full border-l overflow-y-auto z-50 p-6 md:p-10">
-      {/* Professional Intro Text */}
+      {/* Intro Section */}
       <section className="mb-6 p-4 rounded-lg ">
         <h1 className="text-2xl font-bold mb-3">Ask Kia (Q&amp;A)</h1>
-        <br />
         <p className="text-gray-700 text-sm mb-2">
-          The GOEF event is where the future of Kia takes shape, and we want
-          your voice to be a part of it. Feel free to ask any questions
-          you&apos;ve been curious about regarding Kia HQ. We are always
-          listening to your valuable input.
+          The GOEF event is where the future of Kia takes shape, and we want your voice to be part of it.
         </p>
-        <br />
         <h2 className="font-semibold text-gray-800 mb-1">How to Participate</h2>
         <p className="text-gray-700 text-sm mb-2">
-          <strong>Submit Your Question:</strong> Please leave your questions in
-          the comments below.
+          <strong>Submit Your Question:</strong> Leave your questions in the comments below.
         </p>
         <p className="text-gray-700 text-sm mb-2">
-          <strong>Get Your Answer:</strong> We will select questions to be
-          answered directly on-site during the GOEF event.
+          <strong>Get Your Answer:</strong> Selected questions will be answered on-site during the GOEF event.
         </p>
-        <br />
-        <h2 className="font-semibold text-gray-800 mb-1">
-          For Unanswered Questions
-        </h2>
-        We appreciate your understanding that we may not be able to answer all
-        questions immediately due to the nature of the live event. If your
-        question isn&apos;t answered on the spot, a dedicated team member will
-        review it after the event and provide a thorough response.
       </section>
 
+      {/* Question Input */}
       <div className="mb-4 flex justify-end">
         {!showInput ? (
           <button
@@ -172,9 +175,9 @@ const AskKia: React.FC = () => {
           <div className="w-full" ref={editorRef}>
             <div className="mb-2">
               <select
-                title="Country"
                 className="w-full border border-gray-300 rounded p-2 text-sm"
-                defaultValue="Select country"
+                value={newQuestionCountry}
+                onChange={(e) => setNewQuestionCountry(e.target.value)}
               >
                 {countries.map((country) => (
                   <option key={country} value={country}>
@@ -186,8 +189,10 @@ const AskKia: React.FC = () => {
             <div className="mb-2">
               <input
                 type="text"
-                placeholder="Heading"
+                placeholder="Title"
                 className="w-full border border-gray-300 rounded p-2 text-sm"
+                value={newQuestionTitle}
+                onChange={(e) => setNewQuestionTitle(e.target.value)}
               />
             </div>
             <div className="mb-2 editor-container">
@@ -214,21 +219,15 @@ const AskKia: React.FC = () => {
         )}
       </div>
 
+      {/* Questions List */}
       {questions.map((q) => (
-        <div
-          key={q.id}
-          className="border border-gray-300 rounded bg-white mb-4"
-        >
+        <div key={q.id} className="border border-gray-300 rounded bg-white mb-4">
           <div className="flex items-center px-4 py-3">
             <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center mr-3">
-              <span className="text-gray-500 font-bold">
-                {q.user.charAt(0)}
-              </span>
+              <span className="text-gray-500 font-bold">{q.user.charAt(0)}</span>
             </div>
             <div>
-              <span className="font-semibold text-gray-900 text-sm">
-                {q.user}
-              </span>
+              <span className="font-semibold text-gray-900 text-sm">{q.user}</span>
               <span className="mx-2 text-xs text-gray-500">/ {q.dept}</span>
               <span className="text-xs text-gray-400">{q.date}</span>
             </div>
@@ -258,9 +257,9 @@ const AskKia: React.FC = () => {
             <div className="px-4 pb-3" ref={commentEditorRef}>
               <div className="mb-2">
                 <select
-                  title="Country"
                   className="w-full border border-gray-300 rounded p-2 text-sm"
-                  defaultValue="Select country"
+                  value={newQuestionCountry}
+                  onChange={(e) => setNewQuestionCountry(e.target.value)}
                 >
                   {countries.map((country) => (
                     <option key={country} value={country}>
