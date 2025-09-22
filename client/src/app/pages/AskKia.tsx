@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
 import { Heart, MessageSquare, Trash2 } from "lucide-react";
-import { v4 as uuidv4 } from "uuid";
 import { apiFetch } from "@/config/api";
 
 type Comment = {
@@ -11,6 +10,7 @@ type Comment = {
   user: string;
   text: string;
   time: string;
+  isOwner?: boolean;
 };
 
 type Question = {
@@ -25,6 +25,7 @@ type Question = {
   comments: number;
   commentList: Comment[];
   showCommentInput: boolean;
+  isOwner?: boolean;
 };
 
 const EditorComponent = dynamic(
@@ -48,14 +49,15 @@ const AskKia: React.FC = () => {
   const commentEditorRef = useRef<HTMLDivElement>(null);
 
   const token = localStorage.getItem("token") || "";
+  const currentUser = localStorage.getItem("username") || "You"; // assume username saved after login
 
   useEffect(() => {
     setMounted(true);
     fetchQuestions();
   }, []);
 
-
   const fetchComments = async (questionId: string) => {
+    setLoadingComments(questionId);
     try {
       const res = await fetch(`http://localhost:5000/api/comment/${questionId}`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -63,7 +65,6 @@ const AskKia: React.FC = () => {
       if (!res.ok) throw new Error("Failed to fetch comments");
       const data = await res.json();
 
-      // Map backend comment structure to your Comment type
       return data.map((c: any) => ({
         id: c._id,
         user: `${c.createdBy.firstName} ${c.createdBy.lastName}`,
@@ -72,10 +73,13 @@ const AskKia: React.FC = () => {
           hour: "2-digit",
           minute: "2-digit",
         }),
+        isOwner: c.createdBy.username === currentUser, // backend should send username
       }));
     } catch (err) {
       console.error("Error fetching comments:", err);
       return [];
+    } finally {
+      setLoadingComments(null);
     }
   };
 
@@ -103,6 +107,7 @@ const AskKia: React.FC = () => {
             comments: comments.length,
             commentList: comments,
             showCommentInput: false,
+            isOwner: q.createdBy.username === currentUser,
           };
         })
       );
@@ -116,41 +121,40 @@ const AskKia: React.FC = () => {
   };
 
   const handleDeleteComment = async (questionId: string, commentId: string) => {
-  try {
-    await fetch(`http://localhost:5000/api/comment/${commentId}`, {
-      method: "DELETE",
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    try {
+      await fetch(`http://localhost:5000/api/comment/${commentId}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
-    setQuestions((prev) =>
-      prev.map((q) =>
-        q.id === questionId
-          ? {
+      setQuestions((prev) =>
+        prev.map((q) =>
+          q.id === questionId
+            ? {
               ...q,
               comments: q.comments - 1,
               commentList: q.commentList.filter((c) => c.id !== commentId),
             }
-          : q
-      )
-    );
-  } catch (err) {
-    console.error("Error deleting comment:", err);
-  }
-};
+            : q
+        )
+      );
+    } catch (err) {
+      console.error("Error deleting comment:", err);
+    }
+  };
 
-const handleDeleteQuestion = async (id: string) => {
-  try {
-    await fetch(`http://localhost:5000/api/qna/${id}`, {
-      method: "DELETE",
-      headers: { Authorization: `Bearer ${token}` },
-    });
+  const handleDeleteQuestion = async (id: string) => {
+    try {
+      await fetch(`http://localhost:5000/api/qna/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
-    setQuestions((prev) => prev.filter((q) => q.id !== id));
-  } catch (err) {
-    console.error("Error deleting question:", err);
-  }
-};
-
+      setQuestions((prev) => prev.filter((q) => q.id !== id));
+    } catch (err) {
+      console.error("Error deleting question:", err);
+    }
+  };
 
   const handleAddQuestion = async () => {
     const title = newQuestionTitle.trim();
@@ -169,7 +173,7 @@ const handleDeleteQuestion = async (id: string) => {
 
       const newQ: Question = {
         id: response.qna._id,
-        user: "You",
+        user: currentUser,
         dept: "GUEST",
         date: new Date(response.qna.createdAt).toISOString().slice(0, 10),
         title: response.qna.title,
@@ -179,6 +183,7 @@ const handleDeleteQuestion = async (id: string) => {
         comments: 0,
         commentList: [],
         showCommentInput: false,
+        isOwner: true,
       };
 
       setQuestions([newQ, ...questions]);
@@ -203,7 +208,6 @@ const handleDeleteQuestion = async (id: string) => {
     }
   };
 
-
   const toggleCommentInput = (id: string) => {
     setQuestions((prev) =>
       prev.map((q) =>
@@ -225,13 +229,14 @@ const handleDeleteQuestion = async (id: string) => {
       );
 
       const newComment: Comment = {
-        id: response.comment._id, // assuming backend returns comment._id
-        user: "You",
+        id: response.comment._id,
+        user: currentUser,
         text: response.comment.text,
         time: new Date(response.comment.createdAt).toLocaleTimeString("en-US", {
           hour: "2-digit",
           minute: "2-digit",
         }),
+        isOwner: true,
       };
 
       setQuestions((prev) =>
@@ -253,7 +258,6 @@ const handleDeleteQuestion = async (id: string) => {
     }
   };
 
-
   if (!mounted) return null;
 
   return (
@@ -263,15 +267,12 @@ const handleDeleteQuestion = async (id: string) => {
         <p className="text-gray-700 text-sm mb-2">
           The GOEF event is where the future of Kia takes shape, and we want your voice to be part of it.
         </p>
-        <h2 className="font-semibold text-gray-800 mb-1">How to Participate</h2>
-        <p className="text-gray-700 text-sm mb-2">
-          <strong>Submit Your Question:</strong> Leave your questions in the comments below.
-        </p>
-        <p className="text-gray-700 text-sm mb-2">
-          <strong>Get Your Answer:</strong> Selected questions will be answered on-site during the GOEF event.
-        </p>
       </section>
 
+      {/* Loader for questions */}
+      {loadingQuestions && (
+        <p className="text-gray-500 text-sm mb-4">Loading questions...</p>
+      )}
 
       <div className="mb-4 flex justify-end">
         {!showInput ? (
@@ -332,15 +333,26 @@ const handleDeleteQuestion = async (id: string) => {
       {questions.map((q) => (
         <div key={q.id} className="border border-gray-300 rounded bg-white mb-4">
           {/* User info */}
-          <div className="flex items-center px-4 py-3">
-            <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center mr-3">
-              <span className="text-gray-500 font-bold">{q.user.charAt(0)}</span>
+          <div className="flex items-center justify-between px-4 py-3">
+            <div className="flex items-center">
+              <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center mr-3">
+                <span className="text-gray-500 font-bold">{q.user.charAt(0)}</span>
+              </div>
+              <div>
+                <span className="font-semibold text-gray-900 text-sm">{q.user}</span>
+                <span className="mx-2 text-xs text-gray-500">/ {q.dept}</span>
+                <span className="text-xs text-gray-400">{q.date}</span>
+              </div>
             </div>
-            <div>
-              <span className="font-semibold text-gray-900 text-sm">{q.user}</span>
-              <span className="mx-2 text-xs text-gray-500">/ {q.dept}</span>
-              <span className="text-xs text-gray-400">{q.date}</span>
-            </div>
+            {q.isOwner && (
+              <button
+                onClick={() => handleDeleteQuestion(q.id)}
+                className="text-gray-400 hover:text-red-600 transition"
+                title="Delete question"
+              >
+                <Trash2 size={16} />
+              </button>
+            )}
           </div>
 
           {/* Question content */}
@@ -392,28 +404,44 @@ const handleDeleteQuestion = async (id: string) => {
           )}
 
           {/* Comments list */}
-          {q.commentList.length > 0 && (
-            <div className="px-6 pb-3 ">
-              {q.commentList.map((c) => (
-                <div key={c.id} className="mb-2 border-b-2 p-2 border-gray-300">
-                  <div className="flex items-center gap-3">
-                    <span className="font-semibold text-sm text-gray-800 pb-2">{c.user}</span>
-                    <span className="text-xs text-gray-400">{c.time}</span>
-                  </div>
+          {loadingComments === q.id ? (
+            <p className="px-6 pb-3 text-gray-500 text-sm">Loading comments...</p>
+          ) : (
+            q.commentList.length > 0 && (
+              <div className="px-6 pb-3 ">
+                {q.commentList.map((c) => (
                   <div
-                    className="text-sm  text-gray-700 ml-2"
-                    dangerouslySetInnerHTML={{ __html: c.text }}
-                  />
-                </div>
-              ))}
-            </div>
+                    key={c.id}
+                    className="mb-2 border-b-2 p-2 border-gray-300 flex justify-between items-start"
+                  >
+                    <div>
+                      <div className="flex items-center gap-3">
+                        <span className="font-semibold text-sm text-gray-800 pb-2">{c.user}</span>
+                        <span className="text-xs text-gray-400">{c.time}</span>
+                      </div>
+                      <div
+                        className="text-sm text-gray-700 ml-2"
+                        dangerouslySetInnerHTML={{ __html: c.text }}
+                      />
+                    </div>
+                    {c.isOwner && (
+                      <button
+                        onClick={() => handleDeleteComment(q.id, c.id)}
+                        className="text-gray-400 hover:text-red-600 transition"
+                        title="Delete comment"
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )
           )}
         </div>
       ))}
-
     </div>
   );
 };
 
 export default AskKia;
-
