@@ -76,11 +76,14 @@ function SignupPage() {
 
       toast.success("Signup successful! Redirecting to login...");
       setTimeout(() => router.push("/login"), 2000);
-    } catch (err: any) {
-      setMessage(err.message || "Signup failed.");
-      console.error(err);
-    } finally {
-      setLoading(false);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setMessage(err.message);
+        console.error(err.message);
+      } else {
+        setMessage("Signup failed.");
+        console.error(err);
+      }
     }
   };
 
