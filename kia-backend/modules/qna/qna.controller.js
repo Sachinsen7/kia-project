@@ -13,7 +13,7 @@ exports.createQna = async (req, res) => {
         res.status(201).json({message: "Qna created", qna});
     }
     catch(err){
-        res.status(500).json({message: "Server error", error: "err.message"});
+        res.status(500).json({message: "Server error", error: err.message});
     }
 }
 
@@ -30,27 +30,35 @@ exports.getAllQna = async (req, res) => {
     }
 }
 
+
 exports.toggleLike = async (req, res) => {
-    try{
-        const qna = await Qna.findById(req.params.id);
-        if(!qna) return res.status(400).json({message: "Qna not found"});
+  try {
+    const qna = await Qna.findById(req.params.id);
+    if (!qna) return res.status(404).json({ message: "QnA not found" });
 
-        const userId = req.user.id;
-        const isLiked = qna.likes.includes(userId);
+    const userId = req.user.id;
 
-        if(isLiked){
-            qna.likes = qna.likes.filter(id => id.toString() !== userId);
-        }else{
-            qna.likes.push(userId);
-        }
+    const isLiked = qna.likes.includes(userId);
 
-        await qna.save();
-        res.json({message: isLiked? "unliked" : "liked" , qna});
+    if (isLiked) {
+      qna.likes = qna.likes.filter(id => id.toString() !== userId);
+    } else {
+      qna.likes.push(userId);
     }
-    catch(err){
-        res.status(500).json({message: "Server error"});
-    }
-}
+
+    await qna.save();
+
+    return res.status(200).json({
+      message: isLiked ? "Unliked successfully" : "Liked successfully",
+      likesCount: qna.likes.length,
+      qna,
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
 
 exports.deleteQna = async(req, res) => {
     try{
