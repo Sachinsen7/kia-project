@@ -138,6 +138,19 @@ const AskKia: React.FC = () => {
   }
 };
 
+const handleDeleteQuestion = async (id: string) => {
+  try {
+    await fetch(`http://localhost:5000/api/qna/${id}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    setQuestions((prev) => prev.filter((q) => q.id !== id));
+  } catch (err) {
+    console.error("Error deleting question:", err);
+  }
+};
+
 
   const handleAddQuestion = async () => {
     const title = newQuestionTitle.trim();
