@@ -18,17 +18,15 @@ export async function apiFetch<T>(
     body: body ? JSON.stringify(body) : undefined,
   });
 
-  // If backend sends non-JSON error (like HTML), handle gracefully
   if (!res.ok) {
     let errorMessage = "Something went wrong";
     try {
       const errorData = await res.json();
       errorMessage = errorData.message || errorMessage;
-    } catch {
-      // ignore if response is not JSON
-    }
+    } catch {}
     throw new Error(errorMessage);
   }
 
   return res.json() as Promise<T>;
 }
+

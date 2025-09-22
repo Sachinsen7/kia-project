@@ -6,18 +6,9 @@ import { Heart, MessageSquare, Trash2 } from "lucide-react";
 import { apiFetch } from "@/config/api";
 
 // ----------- Types -----------
-type User = {
-  firstName: string;
-  lastName: string;
-};
+type User = { firstName: string; lastName: string };
 
-type CommentResponse = {
-  _id: string;
-  text: string;
-  createdAt: string;
-  createdBy: User;
-};
-
+type CommentResponse = { _id: string; text: string; createdAt: string; createdBy: User };
 type QuestionResponse = {
   _id: string;
   title: string;
@@ -27,14 +18,7 @@ type QuestionResponse = {
   createdBy: User;
   likes: string[];
 };
-
-type Comment = {
-  id: string;
-  user: string;
-  text: string;
-  time: string;
-};
-
+type Comment = { id: string; user: string; text: string; time: string };
 type Question = {
   id: string;
   user: string;
@@ -49,11 +33,14 @@ type Question = {
   showCommentInput: boolean;
 };
 
-// ----------- Dynamic Component -----------
-const EditorComponent = dynamic(
-  () => import("./EditorComponent").then((mod) => mod.default),
-  { ssr: false }
-);
+// API response types
+type AddQuestionResponse = { qna: QuestionResponse };
+type AddCommentResponse = { comment: CommentResponse };
+type LikeResponse = { success: boolean };
+
+const EditorComponent = dynamic(() => import("./EditorComponent").then((mod) => mod.default), {
+  ssr: false,
+});
 
 const AskKia: React.FC = () => {
   const [mounted, setMounted] = useState(false);
@@ -68,19 +55,19 @@ const AskKia: React.FC = () => {
 
   const editorRef = useRef<HTMLDivElement>(null);
   const commentEditorRef = useRef<HTMLDivElement>(null);
-
   const token = typeof window !== "undefined" ? localStorage.getItem("token") || "" : "";
 
   // Fetch comments
   const fetchComments = useCallback(
     async (questionId: string): Promise<Comment[]> => {
       try {
-        const res = await fetch(`http://localhost:5000/api/comment/${questionId}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        if (!res.ok) throw new Error("Failed to fetch comments");
+        const data = await apiFetch<CommentResponse[]>(
+          `/api/comment/${questionId}`,
+          "GET",
+          undefined,
+          token
+        );
 
-        const data: CommentResponse[] = await res.json();
         return data.map((c) => ({
           id: c._id,
           user: `${c.createdBy.firstName} ${c.createdBy.lastName}`,
@@ -102,12 +89,7 @@ const AskKia: React.FC = () => {
   const fetchQuestions = useCallback(async () => {
     setLoadingQuestions(true);
     try {
-      const res = await fetch("http://localhost:5000/api/qna/", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (!res.ok) throw new Error("Failed to fetch questions");
-
-      const data: QuestionResponse[] = await res.json();
+      const data = await apiFetch<QuestionResponse[]>("/api/qna", "GET", undefined, token);
 
       const formatted = await Promise.all(
         data.map(async (q) => {
@@ -141,54 +123,15 @@ const AskKia: React.FC = () => {
     fetchQuestions();
   }, [fetchQuestions]);
 
-  // Delete comment
-  const handleDeleteComment = async (questionId: string, commentId: string) => {
-    try {
-      await fetch(`http://localhost:5000/api/comment/${commentId}`, {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      setQuestions((prev) =>
-        prev.map((q) =>
-          q.id === questionId
-            ? {
-                ...q,
-                comments: q.comments - 1,
-                commentList: q.commentList.filter((c) => c.id !== commentId),
-              }
-            : q
-        )
-      );
-    } catch (err) {
-      console.error("Error deleting comment:", err);
-    }
-  };
-
-  // Delete question
-  const handleDeleteQuestion = async (id: string) => {
-    try {
-      await fetch(`http://localhost:5000/api/qna/${id}`, {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      setQuestions((prev) => prev.filter((q) => q.id !== id));
-    } catch (err) {
-      console.error("Error deleting question:", err);
-    }
-  };
-
   // Add question
   const handleAddQuestion = async () => {
     const title = newQuestionTitle.trim();
     const description = newQuestionText.trim();
     const country = newQuestionCountry;
-
     if (!title || !description || country === "Select country") return;
 
     try {
-      const response = await apiFetch(
+      const response = await apiFetch<AddQuestionResponse>(
         "/api/qna",
         "POST",
         { title, description, country },
@@ -215,30 +158,8 @@ const AskKia: React.FC = () => {
       setNewQuestionText("");
       setNewQuestionCountry("Select country");
     } catch (err: unknown) {
-      console.error("Error adding question:", (err as Error).message);
+      if (err instanceof Error) console.error("Error adding question:", err.message);
     }
-  };
-
-  // Like
-  const handleLike = async (id: string) => {
-    try {
-      await apiFetch(`/api/qna/${id}/like`, "PUT", {}, token);
-
-      setQuestions((prev) =>
-        prev.map((q) => (q.id === id ? { ...q, likes: q.likes + 1 } : q))
-      );
-    } catch (err: unknown) {
-      console.error("Error liking question:", (err as Error).message);
-    }
-  };
-
-  // Toggle comment input
-  const toggleCommentInput = (id: string) => {
-    setQuestions((prev) =>
-      prev.map((q) =>
-        q.id === id ? { ...q, showCommentInput: !q.showCommentInput } : q
-      )
-    );
   };
 
   // Add comment
@@ -247,7 +168,7 @@ const AskKia: React.FC = () => {
     if (!commentText) return;
 
     try {
-      const response = await apiFetch(
+      const response = await apiFetch<AddCommentResponse>(
         `/api/comment/${id}`,
         "POST",
         { text: commentText },
@@ -279,8 +200,50 @@ const AskKia: React.FC = () => {
 
       setCommentEditorContent("");
     } catch (err: unknown) {
-      console.error("Error adding comment:", (err as Error).message);
+      if (err instanceof Error) console.error("Error adding comment:", err.message);
     }
+  };
+
+  // Like
+  const handleLike = async (id: string) => {
+    try {
+      await apiFetch<LikeResponse>(`/api/qna/${id}/like`, "PUT", {}, token);
+      setQuestions((prev) => prev.map((q) => (q.id === id ? { ...q, likes: q.likes + 1 } : q)));
+    } catch (err: unknown) {
+      if (err instanceof Error) console.error("Error liking question:", err.message);
+    }
+  };
+
+  // Delete question
+  const handleDeleteQuestion = async (id: string) => {
+    try {
+      await apiFetch<{ success: boolean }>(`/api/qna/${id}`, "DELETE", undefined, token);
+      setQuestions((prev) => prev.filter((q) => q.id !== id));
+    } catch (err: unknown) {
+      if (err instanceof Error) console.error("Error deleting question:", err.message);
+    }
+  };
+
+  // Delete comment
+  const handleDeleteComment = async (questionId: string, commentId: string) => {
+    try {
+      await apiFetch<{ success: boolean }>(`/api/comment/${commentId}`, "DELETE", undefined, token);
+      setQuestions((prev) =>
+        prev.map((q) =>
+          q.id === questionId
+            ? { ...q, comments: q.comments - 1, commentList: q.commentList.filter((c) => c.id !== commentId) }
+            : q
+        )
+      );
+    } catch (err: unknown) {
+      if (err instanceof Error) console.error("Error deleting comment:", err.message);
+    }
+  };
+
+  const toggleCommentInput = (id: string) => {
+    setQuestions((prev) =>
+      prev.map((q) => (q.id === id ? { ...q, showCommentInput: !q.showCommentInput } : q))
+    );
   };
 
   if (!mounted) return null;
