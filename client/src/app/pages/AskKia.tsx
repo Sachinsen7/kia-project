@@ -115,6 +115,30 @@ const AskKia: React.FC = () => {
     }
   };
 
+  const handleDeleteComment = async (questionId: string, commentId: string) => {
+  try {
+    await fetch(`http://localhost:5000/api/comment/${commentId}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    setQuestions((prev) =>
+      prev.map((q) =>
+        q.id === questionId
+          ? {
+              ...q,
+              comments: q.comments - 1,
+              commentList: q.commentList.filter((c) => c.id !== commentId),
+            }
+          : q
+      )
+    );
+  } catch (err) {
+    console.error("Error deleting comment:", err);
+  }
+};
+
+
   const handleAddQuestion = async () => {
     const title = newQuestionTitle.trim();
     const description = newQuestionText.trim();
