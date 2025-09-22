@@ -1,16 +1,38 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import dynamic from "next/dynamic";
 import { Heart, MessageSquare, Trash2 } from "lucide-react";
 import { apiFetch } from "@/config/api";
+
+// ----------- Types -----------
+type User = {
+  firstName: string;
+  lastName: string;
+};
+
+type CommentResponse = {
+  _id: string;
+  text: string;
+  createdAt: string;
+  createdBy: User;
+};
+
+type QuestionResponse = {
+  _id: string;
+  title: string;
+  description: string;
+  country: string;
+  createdAt: string;
+  createdBy: User;
+  likes: string[];
+};
 
 type Comment = {
   id: string;
   user: string;
   text: string;
   time: string;
-  isOwner?: boolean;
 };
 
 type Question = {
@@ -25,9 +47,9 @@ type Question = {
   comments: number;
   commentList: Comment[];
   showCommentInput: boolean;
-  isOwner?: boolean;
 };
 
+// ----------- Dynamic Component -----------
 const EditorComponent = dynamic(
   () => import("./EditorComponent").then((mod) => mod.default),
   { ssr: false }
@@ -43,57 +65,52 @@ const AskKia: React.FC = () => {
   const [commentEditorContent, setCommentEditorContent] = useState("");
   const [countries] = useState(["Select country", "USA", "UK", "Canada", "India"]);
   const [loadingQuestions, setLoadingQuestions] = useState(false);
-  const [loadingComments, setLoadingComments] = useState<string | null>(null);
 
   const editorRef = useRef<HTMLDivElement>(null);
   const commentEditorRef = useRef<HTMLDivElement>(null);
 
-  const token = localStorage.getItem("token") || "";
-  const currentUser = localStorage.getItem("username") || "You"; // assume username saved after login
+  const token = typeof window !== "undefined" ? localStorage.getItem("token") || "" : "";
 
-  useEffect(() => {
-    setMounted(true);
-    fetchQuestions();
-  }, []);
+  // Fetch comments
+  const fetchComments = useCallback(
+    async (questionId: string): Promise<Comment[]> => {
+      try {
+        const res = await fetch(`http://localhost:5000/api/comment/${questionId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!res.ok) throw new Error("Failed to fetch comments");
 
-  const fetchComments = async (questionId: string) => {
-    setLoadingComments(questionId);
-    try {
-      const res = await fetch(`http://localhost:5000/api/comment/${questionId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (!res.ok) throw new Error("Failed to fetch comments");
-      const data = await res.json();
+        const data: CommentResponse[] = await res.json();
+        return data.map((c) => ({
+          id: c._id,
+          user: `${c.createdBy.firstName} ${c.createdBy.lastName}`,
+          text: c.text,
+          time: new Date(c.createdAt).toLocaleTimeString("en-US", {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+        }));
+      } catch (err) {
+        console.error("Error fetching comments:", err);
+        return [];
+      }
+    },
+    [token]
+  );
 
-      return data.map((c: any) => ({
-        id: c._id,
-        user: `${c.createdBy.firstName} ${c.createdBy.lastName}`,
-        text: c.text,
-        time: new Date(c.createdAt).toLocaleTimeString("en-US", {
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
-        isOwner: c.createdBy.username === currentUser, // backend should send username
-      }));
-    } catch (err) {
-      console.error("Error fetching comments:", err);
-      return [];
-    } finally {
-      setLoadingComments(null);
-    }
-  };
-
-  const fetchQuestions = async () => {
+  // Fetch questions
+  const fetchQuestions = useCallback(async () => {
     setLoadingQuestions(true);
     try {
       const res = await fetch("http://localhost:5000/api/qna/", {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) throw new Error("Failed to fetch questions");
-      const data = await res.json();
+
+      const data: QuestionResponse[] = await res.json();
 
       const formatted = await Promise.all(
-        data.map(async (q: any) => {
+        data.map(async (q) => {
           const comments = await fetchComments(q._id);
           return {
             id: q._id,
@@ -107,7 +124,6 @@ const AskKia: React.FC = () => {
             comments: comments.length,
             commentList: comments,
             showCommentInput: false,
-            isOwner: q.createdBy.username === currentUser,
           };
         })
       );
@@ -118,8 +134,14 @@ const AskKia: React.FC = () => {
     } finally {
       setLoadingQuestions(false);
     }
-  };
+  }, [token, fetchComments]);
 
+  useEffect(() => {
+    setMounted(true);
+    fetchQuestions();
+  }, [fetchQuestions]);
+
+  // Delete comment
   const handleDeleteComment = async (questionId: string, commentId: string) => {
     try {
       await fetch(`http://localhost:5000/api/comment/${commentId}`, {
@@ -131,10 +153,10 @@ const AskKia: React.FC = () => {
         prev.map((q) =>
           q.id === questionId
             ? {
-              ...q,
-              comments: q.comments - 1,
-              commentList: q.commentList.filter((c) => c.id !== commentId),
-            }
+                ...q,
+                comments: q.comments - 1,
+                commentList: q.commentList.filter((c) => c.id !== commentId),
+              }
             : q
         )
       );
@@ -143,6 +165,7 @@ const AskKia: React.FC = () => {
     }
   };
 
+  // Delete question
   const handleDeleteQuestion = async (id: string) => {
     try {
       await fetch(`http://localhost:5000/api/qna/${id}`, {
@@ -156,6 +179,7 @@ const AskKia: React.FC = () => {
     }
   };
 
+  // Add question
   const handleAddQuestion = async () => {
     const title = newQuestionTitle.trim();
     const description = newQuestionText.trim();
@@ -173,7 +197,7 @@ const AskKia: React.FC = () => {
 
       const newQ: Question = {
         id: response.qna._id,
-        user: currentUser,
+        user: "You",
         dept: "GUEST",
         date: new Date(response.qna.createdAt).toISOString().slice(0, 10),
         title: response.qna.title,
@@ -183,19 +207,19 @@ const AskKia: React.FC = () => {
         comments: 0,
         commentList: [],
         showCommentInput: false,
-        isOwner: true,
       };
 
-      setQuestions([newQ, ...questions]);
+      setQuestions((prev) => [newQ, ...prev]);
       setShowInput(false);
       setNewQuestionTitle("");
       setNewQuestionText("");
       setNewQuestionCountry("Select country");
-    } catch (err: any) {
-      console.error("Error adding question:", err.message);
+    } catch (err: unknown) {
+      console.error("Error adding question:", (err as Error).message);
     }
   };
 
+  // Like
   const handleLike = async (id: string) => {
     try {
       await apiFetch(`/api/qna/${id}/like`, "PUT", {}, token);
@@ -203,11 +227,12 @@ const AskKia: React.FC = () => {
       setQuestions((prev) =>
         prev.map((q) => (q.id === id ? { ...q, likes: q.likes + 1 } : q))
       );
-    } catch (err: any) {
-      console.error("Error liking question:", err.message);
+    } catch (err: unknown) {
+      console.error("Error liking question:", (err as Error).message);
     }
   };
 
+  // Toggle comment input
   const toggleCommentInput = (id: string) => {
     setQuestions((prev) =>
       prev.map((q) =>
@@ -216,6 +241,7 @@ const AskKia: React.FC = () => {
     );
   };
 
+  // Add comment
   const handleAddComment = async (id: string) => {
     const commentText = commentEditorContent.trim();
     if (!commentText) return;
@@ -230,31 +256,30 @@ const AskKia: React.FC = () => {
 
       const newComment: Comment = {
         id: response.comment._id,
-        user: currentUser,
+        user: "You",
         text: response.comment.text,
         time: new Date(response.comment.createdAt).toLocaleTimeString("en-US", {
           hour: "2-digit",
           minute: "2-digit",
         }),
-        isOwner: true,
       };
 
       setQuestions((prev) =>
         prev.map((q) =>
           q.id === id
             ? {
-              ...q,
-              comments: q.comments + 1,
-              commentList: [...q.commentList, newComment],
-              showCommentInput: false,
-            }
+                ...q,
+                comments: q.comments + 1,
+                commentList: [...q.commentList, newComment],
+                showCommentInput: false,
+              }
             : q
         )
       );
 
       setCommentEditorContent("");
-    } catch (err: any) {
-      console.error("Error adding comment:", err.message);
+    } catch (err: unknown) {
+      console.error("Error adding comment:", (err as Error).message);
     }
   };
 
@@ -269,177 +294,109 @@ const AskKia: React.FC = () => {
         </p>
       </section>
 
-      {/* Loader for questions */}
-      {loadingQuestions && (
-        <p className="text-gray-500 text-sm mb-4">Loading questions...</p>
-      )}
-
-      <div className="mb-4 flex justify-end">
-        {!showInput ? (
-          <button
-            onClick={() => setShowInput(true)}
-            className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800 text-sm font-semibold"
-          >
-            Create a question
-          </button>
-        ) : (
-          <div className="w-full" ref={editorRef}>
-            <div className="mb-2">
-              <select
-                className="w-full border border-gray-300 rounded p-2 text-sm"
-                value={newQuestionCountry}
-                onChange={(e) => setNewQuestionCountry(e.target.value)}
-              >
-                {countries.map((country) => (
-                  <option key={country} value={country}>
-                    {country}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="mb-2">
-              <input
-                type="text"
-                placeholder="Title"
-                className="w-full border border-gray-300 rounded p-2 text-sm"
-                value={newQuestionTitle}
-                onChange={(e) => setNewQuestionTitle(e.target.value)}
-              />
-            </div>
-            <div className="mb-2 editor-container">
-              <EditorComponent
-                onUpdate={setNewQuestionText}
-                initialContent={newQuestionText}
-              />
-            </div>
-            <div className="flex justify-end gap-2">
-              <button
-                onClick={() => setShowInput(false)}
-                className="px-4 py-1 border rounded text-sm"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleAddQuestion}
-                className="bg-black text-white px-4 py-1 rounded hover:bg-gray-800 text-sm"
-              >
-                Submit
-              </button>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {questions.map((q) => (
-        <div key={q.id} className="border border-gray-300 rounded bg-white mb-4">
-          {/* User info */}
-          <div className="flex items-center justify-between px-4 py-3">
-            <div className="flex items-center">
-              <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center mr-3">
-                <span className="text-gray-500 font-bold">{q.user.charAt(0)}</span>
+      {/* Loading State */}
+      {loadingQuestions ? (
+        <p className="text-gray-500 text-sm">Loading questions...</p>
+      ) : (
+        questions.map((q) => (
+          <div key={q.id} className="border border-gray-300 rounded bg-white mb-4">
+            {/* User info */}
+            <div className="flex items-center justify-between px-4 py-3">
+              <div className="flex items-center">
+                <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center mr-3">
+                  <span className="text-gray-500 font-bold">{q.user.charAt(0)}</span>
+                </div>
+                <div>
+                  <span className="font-semibold text-gray-900 text-sm">{q.user}</span>
+                  <span className="mx-2 text-xs text-gray-500">/ {q.dept}</span>
+                  <span className="text-xs text-gray-400">{q.date}</span>
+                </div>
               </div>
-              <div>
-                <span className="font-semibold text-gray-900 text-sm">{q.user}</span>
-                <span className="mx-2 text-xs text-gray-500">/ {q.dept}</span>
-                <span className="text-xs text-gray-400">{q.date}</span>
-              </div>
-            </div>
-            {q.isOwner && (
+
+              {/* Delete Question (only if user is owner - backend should validate) */}
               <button
                 onClick={() => handleDeleteQuestion(q.id)}
-                className="text-gray-400 hover:text-red-600 transition"
-                title="Delete question"
+                className="text-red-500 hover:text-red-700"
               >
                 <Trash2 size={16} />
               </button>
-            )}
-          </div>
+            </div>
 
-          {/* Question content */}
-          <div className="px-4 pb-3 text-gray-800 text-sm">
-            <strong>{q.title}</strong> - <em>{q.country}</em>
-            <div dangerouslySetInnerHTML={{ __html: q.text }} />
-          </div>
+            {/* Question content */}
+            <div className="px-4 pb-3 text-gray-800 text-sm">
+              <strong>{q.title}</strong> - <em>{q.country}</em>
+              <div dangerouslySetInnerHTML={{ __html: q.text }} />
+            </div>
 
-          {/* Actions */}
-          <div className="px-4 pb-3 flex items-center gap-6 text-xs text-gray-500">
-            <button
-              onClick={() => handleLike(q.id)}
-              className="flex items-center gap-1 hover:text-red-600 transition"
-            >
-              <Heart size={14} /> {q.likes}
-            </button>
-            <button
-              onClick={() => toggleCommentInput(q.id)}
-              className="flex items-center gap-1 hover:text-blue-600 transition"
-            >
-              <MessageSquare size={14} /> {q.comments}
-            </button>
-          </div>
+            {/* Actions */}
+            <div className="px-4 pb-3 flex items-center gap-6 text-xs text-gray-500">
+              <button
+                onClick={() => handleLike(q.id)}
+                className="flex items-center gap-1 hover:text-red-600 transition"
+              >
+                <Heart size={14} /> {q.likes}
+              </button>
+              <button
+                onClick={() => toggleCommentInput(q.id)}
+                className="flex items-center gap-1 hover:text-blue-600 transition"
+              >
+                <MessageSquare size={14} /> {q.comments}
+              </button>
+            </div>
 
-          {/* Comment input */}
-          {q.showCommentInput && (
-            <div className="px-4 pb-3" ref={commentEditorRef}>
-              <div className="mb-2 editor-container">
+            {/* Comment input */}
+            {q.showCommentInput && (
+              <div className="px-4 pb-3" ref={commentEditorRef}>
                 <EditorComponent
                   onUpdate={setCommentEditorContent}
                   initialContent={commentEditorContent}
                 />
-              </div>
-              <div className="flex justify-end gap-2 mt-2">
-                <button
-                  onClick={() => toggleCommentInput(q.id)}
-                  className="px-4 py-1 border rounded text-sm"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={() => handleAddComment(q.id)}
-                  className="bg-black text-white px-4 py-1 rounded hover:bg-gray-800 text-sm"
-                >
-                  Post
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* Comments list */}
-          {loadingComments === q.id ? (
-            <p className="px-6 pb-3 text-gray-500 text-sm">Loading comments...</p>
-          ) : (
-            q.commentList.length > 0 && (
-              <div className="px-6 pb-3 ">
-                {q.commentList.map((c) => (
-                  <div
-                    key={c.id}
-                    className="mb-2 border-b-2 p-2 border-gray-300 flex justify-between items-start"
+                <div className="flex justify-end gap-2 mt-2">
+                  <button
+                    onClick={() => toggleCommentInput(q.id)}
+                    className="px-4 py-1 border rounded text-sm"
                   >
-                    <div>
+                    Cancel
+                  </button>
+                  <button
+                    onClick={() => handleAddComment(q.id)}
+                    className="bg-black text-white px-4 py-1 rounded hover:bg-gray-800 text-sm"
+                  >
+                    Post
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Comments list */}
+            {q.commentList.length > 0 && (
+              <div className="px-6 pb-3">
+                {q.commentList.map((c) => (
+                  <div key={c.id} className="mb-2 border-b-2 p-2 border-gray-300">
+                    <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <span className="font-semibold text-sm text-gray-800 pb-2">{c.user}</span>
                         <span className="text-xs text-gray-400">{c.time}</span>
                       </div>
-                      <div
-                        className="text-sm text-gray-700 ml-2"
-                        dangerouslySetInnerHTML={{ __html: c.text }}
-                      />
-                    </div>
-                    {c.isOwner && (
+                      {/* Delete Comment (only if owner - backend validates) */}
                       <button
                         onClick={() => handleDeleteComment(q.id, c.id)}
-                        className="text-gray-400 hover:text-red-600 transition"
-                        title="Delete comment"
+                        className="text-red-500 hover:text-red-700"
                       >
                         <Trash2 size={14} />
                       </button>
-                    )}
+                    </div>
+                    <div
+                      className="text-sm text-gray-700 ml-2"
+                      dangerouslySetInnerHTML={{ __html: c.text }}
+                    />
                   </div>
                 ))}
               </div>
-            )
-          )}
-        </div>
-      ))}
+            )}
+          </div>
+        ))
+      )}
     </div>
   );
 };
