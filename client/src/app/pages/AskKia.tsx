@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
-import { Heart, MessageSquare } from "lucide-react";
+import { Heart, MessageSquare, Trash2 } from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
 import { apiFetch } from "@/config/api";
 
@@ -41,6 +41,8 @@ const AskKia: React.FC = () => {
   const [newQuestionCountry, setNewQuestionCountry] = useState("Select country");
   const [commentEditorContent, setCommentEditorContent] = useState("");
   const [countries] = useState(["Select country", "USA", "UK", "Canada", "India"]);
+  const [loadingQuestions, setLoadingQuestions] = useState(false);
+  const [loadingComments, setLoadingComments] = useState<string | null>(null);
 
   const editorRef = useRef<HTMLDivElement>(null);
   const commentEditorRef = useRef<HTMLDivElement>(null);
@@ -77,8 +79,8 @@ const AskKia: React.FC = () => {
     }
   };
 
-
   const fetchQuestions = async () => {
+    setLoadingQuestions(true);
     try {
       const res = await fetch("http://localhost:5000/api/qna/", {
         headers: { Authorization: `Bearer ${token}` },
@@ -86,7 +88,6 @@ const AskKia: React.FC = () => {
       if (!res.ok) throw new Error("Failed to fetch questions");
       const data = await res.json();
 
-      // Fetch comments for each question
       const formatted = await Promise.all(
         data.map(async (q: any) => {
           const comments = await fetchComments(q._id);
@@ -109,9 +110,10 @@ const AskKia: React.FC = () => {
       setQuestions(formatted);
     } catch (err) {
       console.error(err);
+    } finally {
+      setLoadingQuestions(false);
     }
   };
-
 
   const handleAddQuestion = async () => {
     const title = newQuestionTitle.trim();
