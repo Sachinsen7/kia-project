@@ -40,7 +40,7 @@ export default function Login() {
       localStorage.setItem("user", JSON.stringify(data.user));
 
       // Redirect to dashboard or home
-      router.push("/dashboard");
+      router.push("/");
     } catch (err) {
       setError("Network error. Please try again.");
     } finally {
