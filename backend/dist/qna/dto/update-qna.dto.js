@@ -9,32 +9,27 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.LoginDto = void 0;
+exports.UpdateQnaDto = void 0;
 const class_validator_1 = require("class-validator");
-class LoginDto {
-<<<<<<< HEAD
-    userName;
-=======
-    email;
->>>>>>> cbef98c8a99a9f1ee3f000af5f94e4f72c7da5f9
-    password;
+class UpdateQnaDto {
+    country;
+    heading;
+    description;
 }
-exports.LoginDto = LoginDto;
-__decorate([
-<<<<<<< HEAD
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], LoginDto.prototype, "userName", void 0);
+exports.UpdateQnaDto = UpdateQnaDto;
 __decorate([
     (0, class_validator_1.IsString)(),
-=======
-    (0, class_validator_1.IsEmail)(),
+    (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
-], LoginDto.prototype, "email", void 0);
+], UpdateQnaDto.prototype, "country", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
-    (0, class_validator_1.MinLength)(8),
->>>>>>> cbef98c8a99a9f1ee3f000af5f94e4f72c7da5f9
+    (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
-], LoginDto.prototype, "password", void 0);
-//# sourceMappingURL=login.dto.js.map
+], UpdateQnaDto.prototype, "heading", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], UpdateQnaDto.prototype, "description", void 0);
+//# sourceMappingURL=update-qna.dto.js.map

@@ -20,6 +20,7 @@ let UserService = class UserService {
         this.prisma = prisma;
         this.hashService = hashService;
     }
+<<<<<<< HEAD
     async createUser(dto) {
         const existingUser = await this.prisma.user.findUnique({
             where: { username: dto.userName },
@@ -43,6 +44,33 @@ let UserService = class UserService {
         });
         if (!user)
             throw new common_1.NotFoundException('Id witht eh said userName does not exist');
+=======
+    async create(dto) {
+        const hashed = await this.hashService.hashPassword(dto.password);
+        return this.prisma.user.create({
+            data: {
+                email: dto.email,
+                password: hashed,
+                title: dto.title,
+                firstName: dto.firstName,
+                lastName: dto.lastName,
+                region: dto.region,
+                country: dto.country,
+                nationality: dto.nationality,
+                privacyPolicy: dto.privacyPolicy,
+                cookiesPolicy: dto.cookiesPolicy,
+            },
+        });
+    }
+    async findByEmail(email) {
+        const user = await this.prisma.user.findUnique({
+            where: {
+                email: email,
+            }
+        });
+        if (!user)
+            throw new common_1.NotFoundException('Id witht the said userName does not exist');
+>>>>>>> cbef98c8a99a9f1ee3f000af5f94e4f72c7da5f9
         return user;
     }
 };

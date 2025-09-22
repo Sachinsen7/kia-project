@@ -17,11 +17,19 @@ let JwtStrategy = class JwtStrategy extends (0, passport_1.PassportStrategy)(pas
     constructor() {
         super({
             jwtFromRequest: passport_jwt_1.ExtractJwt.fromAuthHeaderAsBearerToken(),
+<<<<<<< HEAD
             secretOrKey: process.env.JWT_SECRET || 'dev-secret',
         });
     }
     async validate(payload) {
         return { userId: payload.sub, username: payload.username };
+=======
+            secretOrKey: process.env.JWT_SECRET || 'super-secret',
+        });
+    }
+    async validate(payload) {
+        return payload;
+>>>>>>> cbef98c8a99a9f1ee3f000af5f94e4f72c7da5f9
     }
 };
 exports.JwtStrategy = JwtStrategy;

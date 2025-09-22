@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { links } from "@/app/data/Links";
-import { X, Menu } from "lucide-react";
+import { X, Menu, User } from "lucide-react";
 import Link from "next/link";
 import Dashboard from "@/app/pages/Dashboard";
 
@@ -13,6 +13,31 @@ type SidebarRightProps = {
 export default function SidebarRight({ onSelect }: SidebarRightProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [showDashboard, setShowDashboard] = useState(false);
+
+  const [token, setToken] = useState<string | null>(null);
+  const [user, setUser] = useState<{ firstName: string; lastName: string } | null>(null);
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    const storedUser = localStorage.getItem("user");
+
+    if (storedToken) setToken(storedToken);
+    if (storedUser) {
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch {
+        console.error("Invalid user JSON in localStorage");
+      }
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setToken(null);
+    setUser(null);
+    setIsOpen(false);
+  };
 
   return (
     <>
@@ -33,24 +58,36 @@ export default function SidebarRight({ onSelect }: SidebarRightProps) {
           p-6 sm:p-8 md:p-10
           bg-[#e7e5e6] backdrop-blur-sm text-black shadow-2xl z-40
           transform transition-transform duration-300 ease-in-out
+          flex flex-col
           ${isOpen ? "translate-x-0" : "translate-x-full"}
         `}
       >
+        {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <X
             className="cursor-pointer text-gray-900 stroke-3 hover:bg-gray-100 p-2 rounded-lg transition-colors"
             size={50}
             onClick={() => setIsOpen(false)}
           />
-          <Link href="/login">
-            <button className="bg-gray-900 text-white font-bold px-10 cursor-pointer py-2 rounded-full hover:bg-black transition">
-              Login
+
+          {token ? (
+            <button
+              onClick={handleLogout}
+              className="bg-red-600 text-white font-bold px-6 py-2 rounded-full hover:bg-red-700 transition"
+            >
+              Logout
             </button>
-          </Link>
+          ) : (
+            <Link href="/login">
+              <button className="bg-gray-900 text-white font-bold px-10 cursor-pointer py-2 rounded-full hover:bg-black transition">
+                Login
+              </button>
+            </Link>
+          )}
         </div>
 
         {/* Navigation */}
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 flex-grow">
           {[
             "welcome",
             "about",
@@ -77,6 +114,16 @@ export default function SidebarRight({ onSelect }: SidebarRightProps) {
               </button>
             ))}
         </div>
+
+        {/* ✅ User info at bottom */}
+        {token && (
+          <div className="mt-auto flex items-center gap-3 border-t pt-4">
+            <User className="text-gray-700 bg-gray-200 p-2 rounded-full" size={40} />
+            <span className="font-semibold text-gray-800 text-lg">
+              {user ? `${user.firstName} ${user.lastName}` : "User"}
+            </span>
+          </div>
+        )}
       </aside>
 
       {/* Dashboard Page */}

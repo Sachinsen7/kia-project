@@ -22,7 +22,19 @@ let UserController = class UserController {
         this.userService = userService;
     }
     async register(dto) {
+<<<<<<< HEAD
         return this.userService.createUser(dto);
+=======
+        const user = await this.userService.create(dto);
+        return {
+            id: user.id,
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            approved: user.approved,
+            role: user.role,
+        };
+>>>>>>> cbef98c8a99a9f1ee3f000af5f94e4f72c7da5f9
     }
 };
 exports.UserController = UserController;

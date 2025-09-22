@@ -23,24 +23,49 @@ let AuthService = class AuthService {
         this.jwtService = jwtService;
         this.hashService = hashService;
     }
+<<<<<<< HEAD
     async validateUser(username, password) {
         const user = await this.userService.findByUserName(username);
         if (!user)
             throw new common_1.NotFoundException('User not found');
+=======
+    async validateUser(email, password) {
+        const user = await this.userService.findByEmail(email);
+        if (!user)
+            throw new common_1.NotFoundException('Invalid credentials');
+>>>>>>> cbef98c8a99a9f1ee3f000af5f94e4f72c7da5f9
         const isPasswordValid = await this.hashService.verifyPassword(user.password, password);
         if (!isPasswordValid)
             throw new common_1.UnauthorizedException('Invalid credentials');
         return user;
     }
     async login(dto) {
+<<<<<<< HEAD
         const user = await this.validateUser(dto.userName, dto.password);
         const payload = { sub: user.id, username: user.username };
+=======
+        const user = await this.validateUser(dto.email, dto.password);
+        const payload = {
+            sub: user.id,
+            email: user.email,
+            role: user.role,
+            approved: user.approved,
+        };
+>>>>>>> cbef98c8a99a9f1ee3f000af5f94e4f72c7da5f9
         return {
             access_token: this.jwtService.sign(payload),
             user: {
                 id: user.id,
+<<<<<<< HEAD
                 username: user.username,
                 createdAt: user.createdAt,
+=======
+                email: user.email,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                approved: user.approved,
+                role: user.role,
+>>>>>>> cbef98c8a99a9f1ee3f000af5f94e4f72c7da5f9
             },
         };
     }
