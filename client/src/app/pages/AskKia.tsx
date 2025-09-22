@@ -18,6 +18,8 @@ type Question = {
   user: string;
   dept: string;
   date: string;
+  title: string;
+  country: string;
   text: string;
   likes: number;
   comments: number;
@@ -43,25 +45,73 @@ const AskKia: React.FC = () => {
   const editorRef = useRef<HTMLDivElement>(null);
   const commentEditorRef = useRef<HTMLDivElement>(null);
 
-  const token = localStorage.getItem("token"); // JWT token
+  const token = localStorage.getItem("token") || "";
 
   useEffect(() => {
     setMounted(true);
-    // Initial sample question
-    setQuestions([
-      {
-        id: uuidv4(),
-        user: "John Doe",
-        dept: "KUS",
-        date: new Date().toISOString().slice(0, 10),
-        text: "Where can I get a KIDCC guidebook pdf version?",
-        likes: 24,
-        comments: 0,
-        commentList: [],
-        showCommentInput: false,
-      },
-    ]);
+    fetchQuestions();
   }, []);
+
+
+  const fetchComments = async (questionId: string) => {
+    try {
+      const res = await fetch(`http://localhost:5000/api/comment/${questionId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) throw new Error("Failed to fetch comments");
+      const data = await res.json();
+
+      // Map backend comment structure to your Comment type
+      return data.map((c: any) => ({
+        id: c._id,
+        user: `${c.createdBy.firstName} ${c.createdBy.lastName}`,
+        text: c.text,
+        time: new Date(c.createdAt).toLocaleTimeString("en-US", {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+      }));
+    } catch (err) {
+      console.error("Error fetching comments:", err);
+      return [];
+    }
+  };
+
+
+  const fetchQuestions = async () => {
+    try {
+      const res = await fetch("http://localhost:5000/api/qna/", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) throw new Error("Failed to fetch questions");
+      const data = await res.json();
+
+      // Fetch comments for each question
+      const formatted = await Promise.all(
+        data.map(async (q: any) => {
+          const comments = await fetchComments(q._id);
+          return {
+            id: q._id,
+            user: `${q.createdBy.firstName} ${q.createdBy.lastName}`,
+            dept: "GUEST",
+            date: new Date(q.createdAt).toISOString().slice(0, 10),
+            title: q.title,
+            country: q.country,
+            text: q.description,
+            likes: q.likes.length,
+            comments: comments.length,
+            commentList: comments,
+            showCommentInput: false,
+          };
+        })
+      );
+
+      setQuestions(formatted);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
 
   const handleAddQuestion = async () => {
     const title = newQuestionTitle.trim();
@@ -75,7 +125,7 @@ const AskKia: React.FC = () => {
         "/api/qna",
         "POST",
         { title, description, country },
-        token || ""
+        token
       );
 
       const newQ: Question = {
@@ -83,6 +133,8 @@ const AskKia: React.FC = () => {
         user: "You",
         dept: "GUEST",
         date: new Date(response.qna.createdAt).toISOString().slice(0, 10),
+        title: response.qna.title,
+        country: response.qna.country,
         text: response.qna.description,
         likes: response.qna.likes.length,
         comments: 0,
@@ -100,11 +152,18 @@ const AskKia: React.FC = () => {
     }
   };
 
-  const handleLike = (id: string) => {
-    setQuestions((prev) =>
-      prev.map((q) => (q.id === id ? { ...q, likes: q.likes + 1 } : q))
-    );
+  const handleLike = async (id: string) => {
+    try {
+      await apiFetch(`/api/qna/${id}/like`, "PUT", {}, token);
+
+      setQuestions((prev) =>
+        prev.map((q) => (q.id === id ? { ...q, likes: q.likes + 1 } : q))
+      );
+    } catch (err: any) {
+      console.error("Error liking question:", err.message);
+    }
   };
+
 
   const toggleCommentInput = (id: string) => {
     setQuestions((prev) =>
@@ -114,40 +173,52 @@ const AskKia: React.FC = () => {
     );
   };
 
-  const handleAddComment = (id: string) => {
+  const handleAddComment = async (id: string) => {
     const commentText = commentEditorContent.trim();
     if (!commentText) return;
 
-    const newComment: Comment = {
-      id: uuidv4(),
-      user: "You",
-      text: commentText,
-      time: new Date().toLocaleTimeString("en-US", {
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-    };
+    try {
+      const response = await apiFetch(
+        `/api/comment/${id}`,
+        "POST",
+        { text: commentText },
+        token
+      );
 
-    setQuestions((prev) =>
-      prev.map((q) =>
-        q.id === id
-          ? {
-            ...q,
-            comments: q.comments + 1,
-            commentList: [...q.commentList, newComment],
-            showCommentInput: false,
-          }
-          : q
-      )
-    );
-    setCommentEditorContent("");
+      const newComment: Comment = {
+        id: response.comment._id, // assuming backend returns comment._id
+        user: "You",
+        text: response.comment.text,
+        time: new Date(response.comment.createdAt).toLocaleTimeString("en-US", {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+      };
+
+      setQuestions((prev) =>
+        prev.map((q) =>
+          q.id === id
+            ? {
+              ...q,
+              comments: q.comments + 1,
+              commentList: [...q.commentList, newComment],
+              showCommentInput: false,
+            }
+            : q
+        )
+      );
+
+      setCommentEditorContent("");
+    } catch (err: any) {
+      console.error("Error adding comment:", err.message);
+    }
   };
+
 
   if (!mounted) return null;
 
   return (
     <div className="h-full border-l overflow-y-auto z-50 p-6 md:p-10">
-      {/* Intro Section */}
       <section className="mb-6 p-4 rounded-lg ">
         <h1 className="text-2xl font-bold mb-3">Ask Kia (Q&amp;A)</h1>
         <p className="text-gray-700 text-sm mb-2">
@@ -162,7 +233,7 @@ const AskKia: React.FC = () => {
         </p>
       </section>
 
-      {/* Question Input */}
+
       <div className="mb-4 flex justify-end">
         {!showInput ? (
           <button
@@ -219,9 +290,9 @@ const AskKia: React.FC = () => {
         )}
       </div>
 
-      {/* Questions List */}
       {questions.map((q) => (
         <div key={q.id} className="border border-gray-300 rounded bg-white mb-4">
+          {/* User info */}
           <div className="flex items-center px-4 py-3">
             <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center mr-3">
               <span className="text-gray-500 font-bold">{q.user.charAt(0)}</span>
@@ -233,11 +304,13 @@ const AskKia: React.FC = () => {
             </div>
           </div>
 
-          <div
-            className="px-4 pb-3 text-gray-800 text-sm"
-            dangerouslySetInnerHTML={{ __html: q.text }}
-          />
+          {/* Question content */}
+          <div className="px-4 pb-3 text-gray-800 text-sm">
+            <strong>{q.title}</strong> - <em>{q.country}</em>
+            <div dangerouslySetInnerHTML={{ __html: q.text }} />
+          </div>
 
+          {/* Actions */}
           <div className="px-4 pb-3 flex items-center gap-6 text-xs text-gray-500">
             <button
               onClick={() => handleLike(q.id)}
@@ -253,28 +326,9 @@ const AskKia: React.FC = () => {
             </button>
           </div>
 
+          {/* Comment input */}
           {q.showCommentInput && (
             <div className="px-4 pb-3" ref={commentEditorRef}>
-              <div className="mb-2">
-                <select
-                  className="w-full border border-gray-300 rounded p-2 text-sm"
-                  value={newQuestionCountry}
-                  onChange={(e) => setNewQuestionCountry(e.target.value)}
-                >
-                  {countries.map((country) => (
-                    <option key={country} value={country}>
-                      {country}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="mb-2">
-                <input
-                  type="text"
-                  placeholder="Heading"
-                  className="w-full border border-gray-300 rounded p-2 text-sm"
-                />
-              </div>
               <div className="mb-2 editor-container">
                 <EditorComponent
                   onUpdate={setCommentEditorContent}
@@ -295,23 +349,32 @@ const AskKia: React.FC = () => {
                   Post
                 </button>
               </div>
-              {q.commentList.length > 0 && (
-                <div className="mt-2 space-y-1">
-                  {q.commentList.map((c) => (
-                    <p
-                      key={c.id}
-                      className="text-xs text-gray-700 bg-gray-100 rounded px-2 py-1 flex justify-between"
-                      dangerouslySetInnerHTML={{ __html: c.text }}
-                    />
-                  ))}
+            </div>
+          )}
+
+          {/* Comments list */}
+          {q.commentList.length > 0 && (
+            <div className="px-6 pb-3 ">
+              {q.commentList.map((c) => (
+                <div key={c.id} className="mb-2 border-b-2 p-2 border-gray-300">
+                  <div className="flex items-center gap-3">
+                    <span className="font-semibold text-sm text-gray-800 pb-2">{c.user}</span>
+                    <span className="text-xs text-gray-400">{c.time}</span>
+                  </div>
+                  <div
+                    className="text-sm  text-gray-700 ml-2"
+                    dangerouslySetInnerHTML={{ __html: c.text }}
+                  />
                 </div>
-              )}
+              ))}
             </div>
           )}
         </div>
       ))}
+
     </div>
   );
 };
 
 export default AskKia;
+
