@@ -1,47 +1,51 @@
 const Comment = require("./comment.model");
 const Qna = require("../qna/qna.model");
 
+// Add comment
 exports.addComment = async (req, res) => {
-    try{
-        const {text} = req.body;
-        const {qnaId} = req.params;
+  try {
+    const { text } = req.body;
+    const { qnaId } = req.params;
 
-        const qna = Qna.findById(qnaId);
-        if(!qna) return res.status(400).json({message: "Qna not found"});
+   
+    const qna = await Qna.findById(qnaId);  
+    if (!qna) return res.status(404).json({ message: "QnA not found" });
 
-        const comment = await Comment.create({
-            text,
-            qna: qnaId,
-            createdBy: req.user.id
-        })
+    const comment = await Comment.create({
+      text,
+      qna: qnaId,
+      createdBy: req.user.id
+    });
 
-        res.stauts(201).json({message: "comment added"});
-    }
-    catch(err){
-        res.status(500).json({message: "Internal server error"});
-    }
-}
+    res.status(201).json({ message: "Comment added", comment });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
 
-// Get comments for qna
+// Get comments for a QnA
 exports.getComments = async (req, res) => {
-    try{
-        const {qnaId} = req.body;
+  try {
+    const { qnaId } = req.params; 
 
-        const comments = Comment.find({qna: qnaId})
-        .populate("createdBy", "firstName lastName email");
-        res.json(comments);
-    }
-    catch(err){
-        res.status(500).json({message: "Internal server error"});
-    }
-}
+    const comments = await Comment.find({ qna: qnaId })  
+      .populate("createdBy", "firstName lastName email");
 
+    res.json(comments);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+// Delete comment
 exports.deleteComment = async (req, res) => {
   try {
     const comment = await Comment.findById(req.params.id);
     if (!comment) return res.status(404).json({ message: "Comment not found" });
 
-    // allow delete if user is the creator or seeded admin
+  
     if (comment.createdBy.toString() !== req.user.id) {
       return res.status(403).json({ message: "Not authorized to delete" });
     }
@@ -49,6 +53,7 @@ exports.deleteComment = async (req, res) => {
     await Comment.findByIdAndDelete(req.params.id);
     res.json({ message: "Comment deleted" });
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: "Server error" });
   }
-}
+};
