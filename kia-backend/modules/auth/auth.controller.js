@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 
 const signUp = async (req, res) => {
     try{
-        const {email, password, confirmPassword, firstName, lastName, region, country, nationality} = req.body;
+        const {email, password, confirmPassword, title, firstName, lastName, region, country, nationality} = req.body;
 
         if(password != confirmPassword) return res.status(400).json({message: "passwords does not match"});
 
@@ -17,6 +17,7 @@ const signUp = async (req, res) => {
         const user = await User.create({
             email,
             password: hashed,
+            title,
             firstName,
             lastName,
             region,
