@@ -123,7 +123,7 @@ export default function Dashboard({}: DashboardProps) {
         experiences from the past year, including innovative concepts of unique
         campaigns, programs and differentiated customer experiences. Your
         stories will be a great source of inspiration for colleagues in other
-        regions. Lets build a growing GOFF community together.
+        regions. Lets build a growing GOFF community together..
       </p>
 
       <section className="mb-10">
