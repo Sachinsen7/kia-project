@@ -8,7 +8,12 @@ import { apiFetch } from "@/config/api";
 // ----------- Types -----------
 type User = { firstName: string; lastName: string };
 
-type CommentResponse = { _id: string; text: string; createdAt: string; createdBy: User };
+type CommentResponse = {
+  _id: string;
+  text: string;
+  createdAt: string;
+  createdBy: User;
+};
 type QuestionResponse = {
   _id: string;
   title: string;
@@ -38,9 +43,12 @@ type AddQuestionResponse = { qna: QuestionResponse };
 type AddCommentResponse = { comment: CommentResponse };
 type LikeResponse = { success: boolean };
 
-const EditorComponent = dynamic(() => import("./EditorComponent").then((mod) => mod.default), {
-  ssr: false,
-});
+const EditorComponent = dynamic(
+  () => import("./EditorComponent").then((mod) => mod.default),
+  {
+    ssr: false,
+  }
+);
 
 const AskKia: React.FC = () => {
   const [mounted, setMounted] = useState(false);
@@ -48,14 +56,22 @@ const AskKia: React.FC = () => {
   const [showInput, setShowInput] = useState(false);
   const [newQuestionTitle, setNewQuestionTitle] = useState("");
   const [newQuestionText, setNewQuestionText] = useState("");
-  const [newQuestionCountry, setNewQuestionCountry] = useState("Select country");
+  const [newQuestionCountry, setNewQuestionCountry] =
+    useState("Select country");
   const [commentEditorContent, setCommentEditorContent] = useState("");
-  const [countries] = useState(["Select country", "USA", "UK", "Canada", "India"]);
+  const [countries] = useState([
+    "Select country",
+    "USA",
+    "UK",
+    "Canada",
+    "India",
+  ]);
   const [loadingQuestions, setLoadingQuestions] = useState(false);
 
   const editorRef = useRef<HTMLDivElement>(null);
   const commentEditorRef = useRef<HTMLDivElement>(null);
-  const token = typeof window !== "undefined" ? localStorage.getItem("token") || "" : "";
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("token") || "" : "";
 
   // Fetch comments
   const fetchComments = useCallback(
@@ -89,7 +105,12 @@ const AskKia: React.FC = () => {
   const fetchQuestions = useCallback(async () => {
     setLoadingQuestions(true);
     try {
-      const data = await apiFetch<QuestionResponse[]>("/api/qna", "GET", undefined, token);
+      const data = await apiFetch<QuestionResponse[]>(
+        "/api/qna",
+        "GET",
+        undefined,
+        token
+      );
 
       const formatted = await Promise.all(
         data.map(async (q) => {
@@ -158,7 +179,8 @@ const AskKia: React.FC = () => {
       setNewQuestionText("");
       setNewQuestionCountry("Select country");
     } catch (err: unknown) {
-      if (err instanceof Error) console.error("Error adding question:", err.message);
+      if (err instanceof Error)
+        console.error("Error adding question:", err.message);
     }
   };
 
@@ -200,7 +222,8 @@ const AskKia: React.FC = () => {
 
       setCommentEditorContent("");
     } catch (err: unknown) {
-      if (err instanceof Error) console.error("Error adding comment:", err.message);
+      if (err instanceof Error)
+        console.error("Error adding comment:", err.message);
     }
   };
 
@@ -208,41 +231,62 @@ const AskKia: React.FC = () => {
   const handleLike = async (id: string) => {
     try {
       await apiFetch<LikeResponse>(`/api/qna/${id}/like`, "PUT", {}, token);
-      setQuestions((prev) => prev.map((q) => (q.id === id ? { ...q, likes: q.likes + 1 } : q)));
+      setQuestions((prev) =>
+        prev.map((q) => (q.id === id ? { ...q, likes: q.likes + 1 } : q))
+      );
     } catch (err: unknown) {
-      if (err instanceof Error) console.error("Error liking question:", err.message);
+      if (err instanceof Error)
+        console.error("Error liking question:", err.message);
     }
   };
 
   // Delete question
   const handleDeleteQuestion = async (id: string) => {
     try {
-      await apiFetch<{ success: boolean }>(`/api/qna/${id}`, "DELETE", undefined, token);
+      await apiFetch<{ success: boolean }>(
+        `/api/qna/${id}`,
+        "DELETE",
+        undefined,
+        token
+      );
       setQuestions((prev) => prev.filter((q) => q.id !== id));
     } catch (err: unknown) {
-      if (err instanceof Error) console.error("Error deleting question:", err.message);
+      if (err instanceof Error)
+        console.error("Error deleting question:", err.message);
     }
   };
 
   // Delete comment
   const handleDeleteComment = async (questionId: string, commentId: string) => {
     try {
-      await apiFetch<{ success: boolean }>(`/api/comment/${commentId}`, "DELETE", undefined, token);
+      await apiFetch<{ success: boolean }>(
+        `/api/comment/${commentId}`,
+        "DELETE",
+        undefined,
+        token
+      );
       setQuestions((prev) =>
         prev.map((q) =>
           q.id === questionId
-            ? { ...q, comments: q.comments - 1, commentList: q.commentList.filter((c) => c.id !== commentId) }
+            ? {
+                ...q,
+                comments: q.comments - 1,
+                commentList: q.commentList.filter((c) => c.id !== commentId),
+              }
             : q
         )
       );
     } catch (err: unknown) {
-      if (err instanceof Error) console.error("Error deleting comment:", err.message);
+      if (err instanceof Error)
+        console.error("Error deleting comment:", err.message);
     }
   };
 
   const toggleCommentInput = (id: string) => {
     setQuestions((prev) =>
-      prev.map((q) => (q.id === id ? { ...q, showCommentInput: !q.showCommentInput } : q))
+      prev.map((q) =>
+        q.id === id ? { ...q, showCommentInput: !q.showCommentInput } : q
+      )
     );
   };
 
@@ -253,7 +297,8 @@ const AskKia: React.FC = () => {
       <section className="mb-6 p-4 rounded-lg ">
         <h1 className="text-2xl font-bold mb-3">Ask Kia (Q&amp;A)</h1>
         <p className="text-gray-700 text-sm mb-2">
-          The GOEF event is where the future of Kia takes shape, and we want your voice to be part of it.
+          The GOEF event is where the future of Kia takes shape, and we want
+          your voice to be part of it.
         </p>
       </section>
 
@@ -262,15 +307,22 @@ const AskKia: React.FC = () => {
         <p className="text-gray-500 text-sm">Loading questions...</p>
       ) : (
         questions.map((q) => (
-          <div key={q.id} className="border border-gray-300 rounded bg-white mb-4">
+          <div
+            key={q.id}
+            className="border border-gray-300 rounded bg-white mb-4"
+          >
             {/* User info */}
             <div className="flex items-center justify-between px-4 py-3">
               <div className="flex items-center">
                 <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center mr-3">
-                  <span className="text-gray-500 font-bold">{q.user.charAt(0)}</span>
+                  <span className="text-gray-500 font-bold">
+                    {q.user.charAt(0)}
+                  </span>
                 </div>
                 <div>
-                  <span className="font-semibold text-gray-900 text-sm">{q.user}</span>
+                  <span className="font-semibold text-gray-900 text-sm">
+                    {q.user}
+                  </span>
                   <span className="mx-2 text-xs text-gray-500">/ {q.dept}</span>
                   <span className="text-xs text-gray-400">{q.date}</span>
                 </div>
@@ -335,10 +387,15 @@ const AskKia: React.FC = () => {
             {q.commentList.length > 0 && (
               <div className="px-6 pb-3">
                 {q.commentList.map((c) => (
-                  <div key={c.id} className="mb-2 border-b-2 p-2 border-gray-300">
+                  <div
+                    key={c.id}
+                    className="mb-2 border-b-2 p-2 border-gray-300"
+                  >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        <span className="font-semibold text-sm text-gray-800 pb-2">{c.user}</span>
+                        <span className="font-semibold text-sm text-gray-800 pb-2">
+                          {c.user}
+                        </span>
                         <span className="text-xs text-gray-400">{c.time}</span>
                       </div>
                       {/* Delete Comment (only if owner - backend validates) */}
