@@ -22,7 +22,11 @@ const AdminLogin: React.FC = () => {
         throw new Error("Please fill in all fields");
       }
 
-      const response = await apiFetch<{ token: string }>("/api/admin/login", "POST", { email, password });
+      const response = await apiFetch<{ token: string }>(
+        "/api/admin/login",
+        "POST",
+        { email, password }
+      );
       localStorage.setItem("admintoken", response.token);
       router.push("/admin");
     } catch (err: any) {
@@ -38,15 +42,18 @@ const AdminLogin: React.FC = () => {
         <div className="flex flex-col items-center mb-8">
           <LogIn className="text-teal-600 w-12 h-12 mb-4" />
           <h1 className="text-3xl font-bold text-gray-900">Admin Login</h1>
-          <p className="text-gray-500 mt-2">Access the Kia HQ Admin Dashboard</p>
+          <p className="text-gray-500 mt-2">
+            Access the Kia HQ Admin Dashboard
+          </p>
         </div>
 
         <div className="space-y-6">
-          {error && (
-            <p className="text-red-600 text-sm text-center">{error}</p>
-          )}
+          {error && <p className="text-red-600 text-sm text-center">{error}</p>}
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Email
             </label>
             <input
@@ -60,7 +67,10 @@ const AdminLogin: React.FC = () => {
             />
           </div>
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Password
             </label>
             <input
