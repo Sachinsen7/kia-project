@@ -35,6 +35,7 @@ const AdminLogin: React.FC = () => {
 
       const data = await response.json();
       localStorage.setItem("admintoken", data.token);
+       localStorage.setItem("role", "admin");
       router.push("/admin");
     } catch (err: any) {
       setError(err.message || "Something went wrong");
