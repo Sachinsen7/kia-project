@@ -1,23 +1,35 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { apiFetch } from "@/config/api";
 import { LogIn } from "lucide-react";
 
 const AdminLogin: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
-  const handleLogin = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    // Placeholder for login logic
-    if (!email || !password) {
-      setError("Please fill in all fields");
-      return;
-    }
+    setLoading(true);
     setError("");
-    // Add your API call or authentication logic here
-    console.log("Login attempted with:", { email, password });
+
+    try {
+      if (!email || !password) {
+        throw new Error("Please fill in all fields");
+      }
+
+      const response = await apiFetch<{ token: string }>("/api/admin/login", "POST", { email, password });
+      localStorage.setItem("admintoken", response.token);
+      router.push("/admin");
+    } catch (err: any) {
+      setError(err.message || "Invalid email or password");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -42,8 +54,9 @@ const AdminLogin: React.FC = () => {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2 border text-black border-gray-300 placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 transition-colors"
-              placeholder="Enter your email"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 transition-colors"
+              placeholder="admin@example.com"
+              disabled={loading}
             />
           </div>
           <div>
@@ -55,15 +68,17 @@ const AdminLogin: React.FC = () => {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2 border text-black border-gray-300 placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 transition-colors"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 transition-colors"
               placeholder="••••••••"
+              disabled={loading}
             />
           </div>
           <button
             onClick={handleLogin}
-            className="w-full py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors duration-200 font-medium"
+            className="w-full py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors duration-200 font-medium disabled:bg-teal-400 disabled:cursor-not-allowed"
+            disabled={loading}
           >
-            Sign In
+            {loading ? "Signing In..." : "Sign In"}
           </button>
         </div>
 
