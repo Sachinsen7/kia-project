@@ -4,7 +4,9 @@ const {
   getAllUploads,
   downloadFile,
   deleteFile,
+  uploadFile,
 } = require("./upload.controller");
+
 const authMiddleware = require("../../middleware/authMiddleware");
 const adminMiddleware = require("../../middleware/adminMiddleware");
 
