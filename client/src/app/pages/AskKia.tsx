@@ -6,26 +6,31 @@ import { Heart, MessageSquare, Trash2 } from "lucide-react";
 import { apiFetch } from "@/config/api";
 
 // ----------- Types -----------
-type User = { firstName: string; lastName: string; _id?: string }; // include _id for ownership check
+type User = { firstName: string; lastName: string; _id?: string };
 
 type Question = {
   id: string;
   user: string;
-  userId?: string;   // <-- add ownerId
+  userId?: string;
   dept: string;
   date: string;
   title: string;
   country: string;
   text: string;
   likes: number;
-  likedBy: string[]; // <-- track who liked
+  likedBy: string[];
   comments: number;
   commentList: Comment[];
   showCommentInput: boolean;
 };
 
-type Comment = { id: string; user: string; userId?: string; text: string; time: string };
-
+type Comment = {
+  id: string;
+  user: string;
+  userId?: string;
+  text: string;
+  time: string;
+};
 
 type CommentResponse = {
   _id: string;
@@ -33,6 +38,7 @@ type CommentResponse = {
   createdAt: string;
   createdBy: User;
 };
+
 type QuestionResponse = {
   _id: string;
   title: string;
@@ -43,16 +49,13 @@ type QuestionResponse = {
   likes: string[];
 };
 
-// API response types
 type AddQuestionResponse = { qna: QuestionResponse };
 type AddCommentResponse = { comment: CommentResponse };
-type LikeResponse = { success: boolean };
+type LikeResponse = { success: boolean; likes: string[]; likesCount: number };
 
 const EditorComponent = dynamic(
   () => import("./EditorComponent").then((mod) => mod.default),
-  {
-    ssr: false,
-  }
+  { ssr: false }
 );
 
 const AskKia: React.FC = () => {
@@ -77,6 +80,8 @@ const AskKia: React.FC = () => {
   const commentEditorRef = useRef<HTMLDivElement>(null);
   const token =
     typeof window !== "undefined" ? localStorage.getItem("token") || "" : "";
+  const currentUserId =
+    typeof window !== "undefined" ? localStorage.getItem("userId") || "" : "";
 
   // Fetch comments
   const fetchComments = useCallback(
@@ -88,18 +93,16 @@ const AskKia: React.FC = () => {
           undefined,
           token
         );
-
         return data.map((c) => ({
           id: c._id,
           user: `${c.createdBy.firstName} ${c.createdBy.lastName}`,
-          userId: (c.createdBy as any)._id, // owner id
+          userId: c.createdBy._id,
           text: c.text,
           time: new Date(c.createdAt).toLocaleTimeString("en-US", {
             hour: "2-digit",
             minute: "2-digit",
           }),
         }));
-
       } catch (err) {
         console.error("Error fetching comments:", err);
         return [];
@@ -113,34 +116,31 @@ const AskKia: React.FC = () => {
     setLoadingQuestions(true);
     try {
       const data = await apiFetch<QuestionResponse[]>(
-        "/api/qna",
+        `/api/qna?type=ask_kia`,
         "GET",
         undefined,
         token
       );
-
       const formatted = await Promise.all(
         data.map(async (q) => {
           const comments = await fetchComments(q._id);
           return {
             id: q._id,
             user: `${q.createdBy.firstName} ${q.createdBy.lastName}`,
-            userId: (q.createdBy as any)._id, // save ownerId
+            userId: q.createdBy._id,
             dept: "GUEST",
             date: new Date(q.createdAt).toISOString().slice(0, 10),
             title: q.title,
             country: q.country,
             text: q.description,
             likes: q.likes.length,
-            likedBy: q.likes, // store user ids
+            likedBy: q.likes,
             comments: comments.length,
             commentList: comments,
             showCommentInput: false,
           };
         })
       );
-
-
       setQuestions(formatted);
     } catch (err) {
       console.error(err);
@@ -152,7 +152,7 @@ const AskKia: React.FC = () => {
   useEffect(() => {
     setMounted(true);
     fetchQuestions();
-  }, [fetchQuestions]);
+  }, [token, fetchQuestions]);
 
   // Add question
   const handleAddQuestion = async () => {
@@ -165,14 +165,13 @@ const AskKia: React.FC = () => {
       const response = await apiFetch<AddQuestionResponse>(
         "/api/qna",
         "POST",
-        { title, description, country },
+        { title, description, country, type: "ask_kia" },
         token
       );
-
       const newQ: Question = {
         id: response.qna._id,
         user: "You",
-        userId: localStorage.getItem("userId") || "",  // <-- add this
+        userId: currentUserId,
         dept: "GUEST",
         date: new Date(response.qna.createdAt).toISOString().slice(0, 10),
         title: response.qna.title,
@@ -184,16 +183,13 @@ const AskKia: React.FC = () => {
         commentList: [],
         showCommentInput: false,
       };
-
-
       setQuestions((prev) => [newQ, ...prev]);
       setShowInput(false);
       setNewQuestionTitle("");
       setNewQuestionText("");
       setNewQuestionCountry("Select country");
-    } catch (err: unknown) {
-      if (err instanceof Error)
-        console.error("Error adding question:", err.message);
+    } catch (err) {
+      console.error("Error adding question:", err);
     }
   };
 
@@ -209,77 +205,57 @@ const AskKia: React.FC = () => {
         { text: commentText },
         token
       );
-
       const newComment: Comment = {
         id: response.comment._id,
         user: "You",
-        userId: localStorage.getItem("userId") || "", // <-- add this
+        userId: currentUserId,
         text: response.comment.text,
         time: new Date(response.comment.createdAt).toLocaleTimeString("en-US", {
           hour: "2-digit",
           minute: "2-digit",
         }),
       };
-
-
       setQuestions((prev) =>
         prev.map((q) =>
           q.id === id
             ? {
-              ...q,
-              comments: q.comments + 1,
-              commentList: [...q.commentList, newComment],
-              showCommentInput: false,
-            }
+                ...q,
+                comments: q.comments + 1,
+                commentList: [...q.commentList, newComment],
+                showCommentInput: false,
+              }
             : q
         )
       );
-
       setCommentEditorContent("");
-    } catch (err: unknown) {
-      if (err instanceof Error)
-        console.error("Error adding comment:", err.message);
+    } catch (err) {
+      console.error("Error adding comment:", err);
     }
   };
 
   // Like
   const handleLike = async (id: string) => {
     try {
-<<<<<<< HEAD
-      await apiFetch<LikeResponse>(`/api/qna/${id}/like`, "PUT", {}, token);
-      setQuestions((prev) =>
-        prev.map((q) => (q.id === id ? { ...q, likes: q.likes + 1 } : q))
+      const response = await apiFetch<LikeResponse>(
+        `/api/qna/${id}/like`,
+        "PUT",
+        {},
+        token
       );
-    } catch (err: unknown) {
-      if (err instanceof Error)
-        console.error("Error liking question:", err.message);
-=======
-      const userId = localStorage.getItem("userId");
-      console.log("Current User ID:", userId); // Debug user ID
-      console.log("Question ID:", id, "LikedBy:", questions.find(q => q.id === id)?.likedBy); // Debug likedBy
-
-      const response = await apiFetch<LikeResponse>(`/api/qna/${id}/like`, "PUT", {}, token);
       if (!response.success) return;
-
       setQuestions((prev) =>
-        prev.map((q) => {
-          if (q.id === id) {
-            const alreadyLiked = q.likedBy.includes(userId!);
-            console.log("Already Liked:", alreadyLiked); // Debug like status
-            return {
-              ...q,
-              likes: alreadyLiked ? q.likes - 1 : q.likes + 1,
-              likedBy: alreadyLiked
-                ? q.likedBy.filter((uid) => uid !== userId)
-                : [...q.likedBy, userId!],
-            };
-          }
-          return q;
-        })
+        prev.map((q) =>
+          q.id === id
+            ? {
+                ...q,
+                likes: response.likesCount,
+                likedBy: response.likes,
+              }
+            : q
+        )
       );
     } catch (err) {
-      if (err instanceof Error) console.error("Error toggling like:", err.message);
->>>>>>> 812dac84a46df94ed70673084a789c357d30cce4
+      console.error("Error toggling like:", err);
     }
   };
 
@@ -293,9 +269,8 @@ const AskKia: React.FC = () => {
         token
       );
       setQuestions((prev) => prev.filter((q) => q.id !== id));
-    } catch (err: unknown) {
-      if (err instanceof Error)
-        console.error("Error deleting question:", err.message);
+    } catch (err) {
+      console.error("Error deleting question:", err);
     }
   };
 
@@ -319,9 +294,8 @@ const AskKia: React.FC = () => {
             : q
         )
       );
-    } catch (err: unknown) {
-      if (err instanceof Error)
-        console.error("Error deleting comment:", err.message);
+    } catch (err) {
+      console.error("Error deleting comment:", err);
     }
   };
 
@@ -333,8 +307,6 @@ const AskKia: React.FC = () => {
     );
   };
 
-    
-
   if (!mounted) return null;
 
   return (
@@ -345,13 +317,9 @@ const AskKia: React.FC = () => {
         <br />
         <p className="text-gray-700 text-sm mb-2">
           The GOEF event is where the future of Kia takes shape, and we want
-<<<<<<< HEAD
-          your voice to be part of it.
-=======
           your voice to be a part of it. Feel free to ask any questions
           you&apos;ve been curious about regarding Kia HQ. We are always
           listening to your valuable input.
->>>>>>> 812dac84a46df94ed70673084a789c357d30cce4
         </p>
         <br />
         <h2 className="font-semibold text-gray-800 mb-1">How to Participate</h2>
@@ -457,9 +425,7 @@ const AskKia: React.FC = () => {
                   <span className="text-xs text-gray-400">{q.date}</span>
                 </div>
               </div>
-
-              {/* Delete Question (only if user is owner - backend should validate) */}
-              {q.userId === localStorage.getItem("userId") && (
+              {q.userId === currentUserId && (
                 <button
                   onClick={() => handleDeleteQuestion(q.id)}
                   className="text-red-500 hover:text-red-700"
@@ -467,7 +433,6 @@ const AskKia: React.FC = () => {
                   <Trash2 size={16} />
                 </button>
               )}
-
             </div>
 
             {/* Question content */}
@@ -482,17 +447,13 @@ const AskKia: React.FC = () => {
                 onClick={() => handleLike(q.id)}
                 className="flex items-center gap-1 transition"
               >
-                {q.likedBy.includes(localStorage.getItem("userId") || "") ? (
+                {q.likedBy.includes(currentUserId) ? (
                   <Heart size={16} fill="red" stroke="red" />
                 ) : (
                   <Heart size={16} stroke="gray" />
                 )}
                 {q.likes}
               </button>
-
-
-
-
               <button
                 onClick={() => toggleCommentInput(q.id)}
                 className="flex items-center gap-1 hover:text-blue-600 transition"
@@ -540,8 +501,7 @@ const AskKia: React.FC = () => {
                         </span>
                         <span className="text-xs text-gray-400">{c.time}</span>
                       </div>
-                      {/* Delete Comment (only if owner - backend validates) */}
-                      {c.userId === localStorage.getItem("userId") && (
+                      {c.userId === currentUserId && (
                         <button
                           onClick={() => handleDeleteComment(q.id, c.id)}
                           className="text-red-500 hover:text-red-700"
@@ -549,7 +509,6 @@ const AskKia: React.FC = () => {
                           <Trash2 size={14} />
                         </button>
                       )}
-
                     </div>
                     <div
                       className="text-sm text-gray-700 ml-2"
@@ -567,5 +526,3 @@ const AskKia: React.FC = () => {
 };
 
 export default AskKia;
-
-
