@@ -9,6 +9,7 @@ const {
 
 const authMiddleware = require("../../middleware/authMiddleware");
 const adminMiddleware = require("../../middleware/adminMiddleware");
+const upload = require("./upload.middleware");
 
 router.post("/", authMiddleware, upload.single("file"), uploadFile);
 router.get("/", authMiddleware, adminMiddleware, getAllUploads);
