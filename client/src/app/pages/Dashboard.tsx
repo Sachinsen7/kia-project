@@ -8,7 +8,7 @@ type DashboardProps = {
   onClose?: () => void;
 };
 
-export default function Dashboard({ onClose }: DashboardProps) {
+export default function Dashboard({}: DashboardProps) {
   const [images, setImages] = useState<File[]>([]);
   const [videos, setVideos] = useState<File[]>([]);
   const [visitorCount, setVisitorCount] = useState(0);
