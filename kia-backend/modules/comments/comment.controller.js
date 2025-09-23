@@ -8,7 +8,7 @@ exports.addComment = async (req, res) => {
     const { qnaId } = req.params;
 
    
-    const qna = await Qna.findById(qnaId);  
+    const qna = await Qna.findById(qnaId);   
     if (!qna) return res.status(404).json({ message: "QnA not found" });
 
     const comment = await Comment.create({
