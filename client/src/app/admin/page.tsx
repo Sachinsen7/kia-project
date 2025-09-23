@@ -1,260 +1,3 @@
-// "use client";
-
-// import { useEffect, useState } from "react";
-// import { apiFetch } from "@/config/api";
-// import { LogOut, CheckCircle, XCircle, Clock, Video } from "lucide-react";
-
-// type Participant = {
-//   id: string;
-//   firstName: string;
-//   lastName: string;
-//   email: string;
-//   country: string;
-//   isActive: boolean | null;
-// };
-
-// const AdminPage: React.FC = () => {
-//   const [participants, setParticipants] = useState<Participant[]>([]);
-//   const [loading, setLoading] = useState(true);
-//   const [totalUsers, setTotalUsers] = useState(0);
-//   const [visits, setVisits] = useState(0);
-//   const [pageViews, setPageViews] = useState(0);
-
-//   const token =
-//     typeof window !== "undefined"
-//       ? localStorage.getItem("admintoken") || ""
-//       : "";
-
-//   // Fetch analytics and participants
-//   useEffect(() => {
-//     const fetchData = async () => {
-//       try {
-//         // Fetch analytics
-//         // const analytics = await apiFetch<{ visits: number; pageViews: number }>("/api/admin/analytics", "GET", undefined, token);
-//         // setVisits(analytics.visits);
-//         // setPageViews(analytics.pageViews);
-
-//         // Fetch participants
-//         const response = await apiFetch<{ success: boolean; users: any[] }>(
-//           "/api/admin/all",
-//           "GET",
-//           undefined,
-//           token
-//         );
-//         const participantList = response.users.map((u) => ({
-//           id: u._id,
-//           firstName: u.firstName,
-//           lastName: u.lastName,
-//           email: u.email,
-//           country: u.country,
-//           isActive: u.isActive ?? null,
-//         }));
-//         setParticipants(participantList);
-//         setTotalUsers(participantList.length);
-//       } catch (err) {
-//         console.error(err);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-//     fetchData();
-//   }, [token]);
-
-//   const handleApprove = async (id: string) => {
-//     try {
-//       const response = await apiFetch(
-//         `/api/admin/approve/${id}`,
-//         "PATCH",
-//         {},
-//         token
-//       );
-//       if ((response as any).success) {
-//         setParticipants((prev) =>
-//           prev.map((p) => (p.id === id ? { ...p, isActive: true } : p))
-//         );
-//       }
-//     } catch (err) {
-//       console.error(err);
-//     }
-//   };
-
-//   const handleDecline = async (id: string) => {
-//     try {
-//       const response = await apiFetch(
-//         `/api/admin/decline/${id}`,
-//         "PATCH",
-//         {},
-//         token
-//       );
-//       if ((response as any).success) {
-//         setParticipants((prev) =>
-//           prev.map((p) => (p.id === id ? { ...p, isActive: false } : p))
-//         );
-//       }
-//     } catch (err) {
-//       console.error(err);
-//     }
-//   };
-
-//   if (loading)
-//     return (
-//       <div className="min-h-screen flex items-center justify-center bg-gray-50">
-//         <p className="text-lg font-medium text-gray-600 animate-pulse">
-//           Loading dashboard...
-//         </p>
-//       </div>
-//     );
-
-//   return (
-//     <div className="min-h-screen bg-gray-200 text-gray-900 p-10 lg:p-14">
-//       {/* Header */}
-//       <header className="flex justify-between items-center mb-10">
-//         <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">
-//           Kia HQ Admin Dashboard
-//         </h1>
-//         <div className="flex items-center gap-4">
-//           <button
-//             onClick={() => (window.location.href = "/admin/videos")}
-//             className="flex items-center gap-2 px-5 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800 text-lg font-bold transition-colors duration-200"
-//           >
-//             <Video size={18} /> Manage Contents
-//           </button>
-//           <button
-//             onClick={() => {
-//               localStorage.removeItem("admintoken");
-//               window.location.href = "/";
-//             }}
-//             className="flex items-center text-lg font-bold gap-2 px-5 py-2 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100 text-gray-700 transition-colors duration-200"
-//           >
-//             <LogOut size={20} /> Logout
-//           </button>
-//         </div>
-//       </header>
-
-//       {/* Analytics */}
-//       <section className="mb-12">
-//         <h2 className="text-2xl font-bold text-gray-800 mb-6">
-//           Analytics Overview
-//         </h2>
-//         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-//           <div className="bg-gray-100 shadow-lg rounded-xl p-6 flex flex-col items-center transform hover:scale-105 transition-transform duration-200">
-//             <p className="text-gray-500 text-md font-bold">Total Users</p>
-//             <p className="text-4xl font-bold text-gray-600">{totalUsers}</p>
-//           </div>
-//           <div className="bg-gray-100 shadow-lg rounded-xl p-6 flex flex-col items-center transform hover:scale-105 transition-transform duration-200">
-//             <p className="text-gray-500 text-md font-bold">Total Visits</p>
-//             <p className="text-4xl font-bold text-gray-600">{visits}</p>
-//           </div>
-//           <div className="bg-gray-100  shadow-lg rounded-xl p-6 flex flex-col items-center transform hover:scale-105 transition-transform duration-200">
-//             <p className="text-gray-500 text-md font-bold">Page Views</p>
-//             <p className="text-4xl font-bold text-gray-600">{pageViews}</p>
-//           </div>
-//         </div>
-//       </section>
-
-//       {/* Participants Management */}
-//       <section>
-//         <h2 className="text-2xl font-semibold text-gray-800 mb-6">
-//           Participants Management
-//         </h2>
-//         <div className="bg-white shadow-lg  overflow-hidden ">
-//           <div className="overflow-x-auto border  border-gray-400 p-2 rounded">
-//             <table className="w-full border-collapse">
-//               <thead className="bg-gray-200">
-//                 <tr>
-//                   <th className="text-left p-4 text-sm font-semibold text-gray-700">
-//                     Name
-//                   </th>
-//                   <th className="text-left p-4 text-sm font-semibold text-gray-700">
-//                     Email
-//                   </th>
-//                   <th className="text-left p-4 text-sm font-semibold text-gray-700">
-//                     Country
-//                   </th>
-//                   <th className="text-left p-4 text-sm font-semibold text-gray-700">
-//                     Status
-//                   </th>
-//                   <th className="text-left p-4 text-sm font-semibold text-gray-700">
-//                     Actions
-//                   </th>
-//                 </tr>
-//               </thead>
-//               <tbody>
-//                 {participants.map((p) => (
-//                   <tr
-//                     key={p.id}
-//                     className="border hover:bg-gray-100 py-10 transition-colors duration-150"
-//                   >
-//                     <td className="p-4 text-gray-800">
-//                       {p.firstName} {p.lastName}
-//                     </td>
-//                     <td className="p-4 text-gray-600">{p.email}</td>
-//                     <td className="p-4 text-gray-600">{p.country}</td>
-//                     <td className="p-4 flex items-center gap-2">
-//                       {p.isActive === true && (
-//                         <CheckCircle className="text-green-600" size={18} />
-//                       )}
-//                       {p.isActive === false && (
-//                         <XCircle className="text-red-600" size={18} />
-//                       )}
-//                       {p.isActive === null && (
-//                         <Clock className="text-yellow-600" size={18} />
-//                       )}
-//                       <span
-//                         className={`text-sm font-medium ${
-//                           p.isActive === true
-//                             ? "text-green-800"
-//                             : p.isActive === false
-//                             ? "text-red-800"
-//                             : "text-yellow-800"
-//                         }`}
-//                       >
-//                         {p.isActive === true
-//                           ? "Approved"
-//                           : p.isActive === false
-//                           ? "Declined"
-//                           : "Pending"}
-//                       </span>
-//                     </td>
-//                     <td className="p-4">
-//                       <div className="flex items-center gap-3">
-//                         {p.isActive !== true && (
-//                           <button
-//                             onClick={() => handleApprove(p.id)}
-//                             className="flex items-center gap-2 px-3 py-2 bg-green-500 text-white rounded-md hover:bg-green-700 text-sm font-medium shadow-sm transition-colors duration-200"
-//                           >
-//                             <CheckCircle size={16} /> Approve
-//                           </button>
-//                         )}
-//                         {p.isActive !== false && (
-//                           <button
-//                             onClick={() => handleDecline(p.id)}
-//                             className="flex items-center gap-2 px-3 py-2 bg-gray-500 text-white rounded-md  text-sm font-medium shadow-sm transition-colors duration-200"
-//                           >
-//                             <XCircle size={16} /> Decline
-//                           </button>
-//                         )}
-//                       </div>
-//                     </td>
-//                   </tr>
-//                 ))}
-//                 {participants.length === 0 && (
-//                   <tr>
-//                     <td colSpan={5} className="text-center p-6 text-gray-500">
-//                       No participants found
-//                     </td>
-//                   </tr>
-//                 )}
-//               </tbody>
-//             </table>
-//           </div>
-//         </div>
-//       </section>
-//     </div>
-//   );
-// };
-
-// export default AdminPage;
 
 
 "use client";
@@ -262,6 +5,7 @@
 import { useEffect, useState } from "react";
 import { apiFetch } from "@/config/api";
 import { LogOut, CheckCircle, XCircle, Clock, Video } from "lucide-react";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 type Participant = {
   id: string;
@@ -365,6 +109,7 @@ const AdminPage: React.FC = () => {
     );
 
   return (
+        <ProtectedRoute role="admin">
     <div className="min-h-screen bg-gray-200 text-gray-900 p-4 sm:p-6 md:p-10 lg:p-14">
       {/* Header */}
       <header className="flex flex-col sm:flex-row justify-between items-center mb-8 sm:mb-10">
@@ -381,6 +126,7 @@ const AdminPage: React.FC = () => {
           <button
             onClick={() => {
               localStorage.removeItem("admintoken");
+              localStorage.removeItem("role");
               window.location.href = "/";
             }}
             className="flex items-center text-sm sm:text-base font-bold gap-2 px-4 py-2 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100 text-gray-700 transition-colors duration-200 w-full sm:w-auto"
@@ -515,6 +261,7 @@ const AdminPage: React.FC = () => {
         </div>
       </section>
     </div>
+    </ProtectedRoute>
   );
 };
 
