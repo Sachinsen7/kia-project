@@ -102,7 +102,7 @@ export default function ContentManagementVideosPage() {
       // Call the download endpoint
       const response = await fetch(
         `${
-          process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000"
+          process.env.NEXT_PUBLIC_API_BASE_URL || "https://kia-project.onrender.com"
         }/api/uploads/${id}/download`,
         {
           headers: {
