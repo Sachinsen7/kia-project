@@ -5,8 +5,8 @@ const authMiddlewares = require("../../middleware/authMiddleware")
 
 
 router.post("/", authMiddlewares, createQna);
-router.get("/", getAllQna);
-router.post("/:id/like", authMiddlewares, toggleLike);
+router.get("/", authMiddlewares,getAllQna);
+router.put("/:id/like", authMiddlewares, toggleLike);
 router.delete("/:id" , authMiddlewares, deleteQna);
 
 module.exports = router;
