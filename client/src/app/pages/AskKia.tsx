@@ -245,15 +245,6 @@ const AskKia: React.FC = () => {
   // Like
   const handleLike = async (id: string) => {
     try {
-<<<<<<< HEAD
-      await apiFetch<LikeResponse>(`/api/qna/${id}/like`, "PUT", {}, token);
-      setQuestions((prev) =>
-        prev.map((q) => (q.id === id ? { ...q, likes: q.likes + 1 } : q))
-      );
-    } catch (err: unknown) {
-      if (err instanceof Error)
-        console.error("Error liking question:", err.message);
-=======
       const userId = localStorage.getItem("userId");
       console.log("Current User ID:", userId); // Debug user ID
       console.log("Question ID:", id, "LikedBy:", questions.find(q => q.id === id)?.likedBy); // Debug likedBy
@@ -279,7 +270,6 @@ const AskKia: React.FC = () => {
       );
     } catch (err) {
       if (err instanceof Error) console.error("Error toggling like:", err.message);
->>>>>>> 812dac84a46df94ed70673084a789c357d30cce4
     }
   };
 
@@ -345,13 +335,9 @@ const AskKia: React.FC = () => {
         <br />
         <p className="text-gray-700 text-sm mb-2">
           The GOEF event is where the future of Kia takes shape, and we want
-<<<<<<< HEAD
-          your voice to be part of it.
-=======
           your voice to be a part of it. Feel free to ask any questions
           you&apos;ve been curious about regarding Kia HQ. We are always
           listening to your valuable input.
->>>>>>> 812dac84a46df94ed70673084a789c357d30cce4
         </p>
         <br />
         <h2 className="font-semibold text-gray-800 mb-1">How to Participate</h2>
