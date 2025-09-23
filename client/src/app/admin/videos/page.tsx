@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Trash, Play, EyeOff, Download } from "lucide-react";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 type VideoItem = {
   id: string;
@@ -106,6 +107,7 @@ export default function ContentManagementVideosPage() {
   }
 
   return (
+     <ProtectedRoute role="admin">
     <div className="min-h-screen bg-gray-200 text-gray-900 p-4 sm:p-6 md:p-10 lg:p-14">
       {/* Header */}
       <header className="flex flex-col sm:flex-row justify-between items-center mb-8 sm:mb-10">
@@ -256,5 +258,6 @@ export default function ContentManagementVideosPage() {
         </div>
       )}
     </div>
+    </ProtectedRoute>
   );
 }
