@@ -35,12 +35,14 @@ const AdminLogin: React.FC = () => {
 
       const data = await response.json();
       localStorage.setItem("admintoken", data.token);
-       localStorage.setItem("role", "admin");
+      localStorage.setItem("role", "admin");
       router.push("/admin");
-    } catch (err: any) {
-      setError(err.message || "Something went wrong");
-    } finally {
-      setLoading(false);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Something went wrong");
+      }
     }
   };
 
@@ -59,7 +61,9 @@ const AdminLogin: React.FC = () => {
         {/* Form */}
         <div className="space-y-6">
           {error && (
-            <p className="text-red-600 text-sm text-center font-medium">{error}</p>
+            <p className="text-red-600 text-sm text-center font-medium">
+              {error}
+            </p>
           )}
 
           {/* Username */}
@@ -105,7 +109,11 @@ const AdminLogin: React.FC = () => {
               onClick={() => setShowPassword(!showPassword)}
               className="absolute right-3 mt-6 mr-3  -translate-y-1/2 text-gray-500 hover:text-teal-600 transition-colors"
             >
-              {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+              {showPassword ? (
+                <EyeOff className="w-5 h-5" />
+              ) : (
+                <Eye className="w-5 h-5" />
+              )}
             </button>
           </div>
 
@@ -124,4 +132,3 @@ const AdminLogin: React.FC = () => {
 };
 
 export default AdminLogin;
-
