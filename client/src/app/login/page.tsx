@@ -23,11 +23,11 @@ export default function Login() {
         body: JSON.stringify({ email, password }),
       });
       console.log(res);
-      
+
 
       const data = await res.json();
       console.log(data);
-      
+
 
       if (!res.ok) {
         setError(data.message || "Login failed");
@@ -87,10 +87,23 @@ export default function Login() {
                 {loading ? "Logging in..." : "Log In"}
               </button>
             </div>
+
             {error && (
               <div className="text-red-600 mt-4 text-sm font-medium">{error}</div>
             )}
+
+            {/* Signup button */}
+            <div className="mt-4 text-center">
+              <span className="text-gray-600 mr-2">New user?</span>
+              <a
+                href="/signup"
+                className="text-white bg-[#0a1b23] px-2 py-2 rounded font-medium hover:bg-black transition-colors"
+              >
+                Sign Up
+              </a>
+            </div>
           </form>
+
         </div>
       </main>
 
