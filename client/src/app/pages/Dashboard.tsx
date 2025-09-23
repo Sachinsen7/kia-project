@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { toast } from "react-hot-toast";
+import { toast, Toaster } from "react-hot-toast";
 
 type DashboardProps = {
   onClose?: () => void;
@@ -39,6 +39,8 @@ export default function Dashboard({}: DashboardProps) {
 
     setIsUploading(true);
     try {
+      const uploadedFiles: string[] = [];
+
       for (const file of files) {
         const formData = new FormData();
         formData.append("file", file);
@@ -58,8 +60,15 @@ export default function Dashboard({}: DashboardProps) {
           throw new Error(errorData.message || "Upload failed");
         }
 
-        toast.success(`${file.name} uploaded successfully`);
+        uploadedFiles.push(file.name);
       }
+
+      // Show a single success toast for all uploaded files
+      toast.success(
+        uploadedFiles.length === 1
+          ? `${uploadedFiles[0]} uploaded successfully`
+          : `${uploadedFiles.length} files uploaded successfully`
+      );
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(`Upload failed: ${error.message}`);
@@ -87,6 +96,16 @@ export default function Dashboard({}: DashboardProps) {
 
   return (
     <div className="relative h-full mx-16 bg-white text-gray-900 p-6 md:p-10">
+      {/* Toaster */}
+      <Toaster
+        position="top-right"
+        reverseOrder={false}
+        toastOptions={{
+          duration: 4000,
+          style: { background: "#333", color: "#fff" },
+        }}
+      />
+
       <h1 className="text-2xl font-extrabold mb-4 text-black">
         Upload Your Contents
       </h1>
@@ -104,7 +123,7 @@ export default function Dashboard({}: DashboardProps) {
         experiences from the past year, including innovative concepts of unique
         campaigns, programs and differentiated customer experiences. Your
         stories will be a great source of inspiration for colleagues in other
-        regions. Let&apos;s build a growing GOFF community together.
+        regions. Let's build a growing GOFF community together.
       </p>
 
       <section className="mb-10">
