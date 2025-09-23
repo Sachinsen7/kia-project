@@ -236,6 +236,7 @@ const AskKia: React.FC = () => {
   // Like
   const handleLike = async (id: string) => {
     try {
+
       const response = await apiFetch<LikeResponse>(
         `/api/qna/${id}/like`,
         "PUT",
@@ -255,6 +256,7 @@ const AskKia: React.FC = () => {
         )
       );
     } catch (err) {
+
       console.error("Error toggling like:", err);
     }
   };
