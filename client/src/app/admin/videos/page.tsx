@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Trash, Play, EyeOff, Download } from "lucide-react";
+import { Trash, Play, Download } from "lucide-react";
+import { apiFetch } from "@/config/api";
 
 type VideoItem = {
   id: string;
@@ -11,47 +12,6 @@ type VideoItem = {
   uploadedByEmail: string;
   createdAt?: string;
 };
-
-async function fetchVideosApi(token: string | null) {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000"}/api/uploads/`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
-  if (!res.ok) {
-    let errorMessage = "Failed to load videos";
-    try {
-      const errorData = await res.json();
-      errorMessage = errorData.message || errorMessage;
-    } catch {}
-    throw new Error(errorMessage);
-  }
-  return res.json();
-}
-
-async function deleteVideoApi(id: string, token: string | null) {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000"}/admin/videos/${id}`,
-    {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
-  if (!res.ok) {
-    let errorMessage = "Delete failed";
-    try {
-      const errorData = await res.json();
-      errorMessage = errorData.message || errorMessage;
-    } catch {}
-    throw new Error(errorMessage);
-  }
-  return res.json();
-}
 
 export default function ContentManagementVideosPage() {
   const [videos, setVideos] = useState<VideoItem[]>([]);
@@ -69,10 +29,42 @@ export default function ContentManagementVideosPage() {
     setError(null);
     try {
       const admintoken = localStorage.getItem("admintoken");
-      const data = await fetchVideosApi(admintoken);
-      setVideos(data.videos || data);
+      if (!admintoken) {
+        throw new Error("No admin token found. Please log in.");
+      }
+      const data = await apiFetch<{ videos: VideoItem[] }>(
+        "/api/uploads/",
+        "GET",
+        undefined,
+        admintoken
+      );
+      // Ensure videos is an array
+      const videosArray = Array.isArray(data.videos)
+        ? data.videos
+        : Array.isArray(data)
+        ? data
+        : [];
+      // Debug: Log videos to verify structure
+      console.log("Fetched videos:", videosArray);
+      // Check for unique IDs
+      const ids = videosArray.map((v: VideoItem) => v.id);
+      const uniqueIds = new Set(ids);
+      if (ids.length !== uniqueIds.size) {
+        console.warn("Duplicate video IDs detected:", ids);
+        setError("Duplicate video IDs detected. Please contact support.");
+        return;
+      }
+      // Validate required fields
+      const validVideos = videosArray.filter(
+        (v: VideoItem) => v.id && v.url && v.uploadedByEmail
+      );
+      if (validVideos.length !== videosArray.length) {
+        console.warn("Invalid video data detected:", videosArray);
+        setError("Some video data is invalid. Please contact support.");
+      }
+      setVideos(validVideos);
     } catch (err: any) {
-      console.error(err);
+      console.error("Fetch error:", err);
       setError(err?.message || "Failed to load videos");
     } finally {
       setLoading(false);
@@ -86,14 +78,50 @@ export default function ContentManagementVideosPage() {
     setDeletingId(id);
     try {
       const admintoken = localStorage.getItem("admintoken");
-      await deleteVideoApi(id, admintoken);
+      if (!admintoken) {
+        throw new Error("No admin token found. Please log in.");
+      }
+      await apiFetch(`/api/uploads/${id}`, "DELETE", undefined, admintoken);
       setVideos((prev) => prev.filter((v) => v.id !== id));
       alert("Video deleted");
     } catch (err: any) {
-      console.error(err);
+      console.error("Delete error:", err);
       alert(err?.message || "Could not delete video");
     } finally {
       setDeletingId(null);
+    }
+  }
+
+  async function handleDownload(id: string, filename: string) {
+    try {
+      const admintoken = localStorage.getItem("admintoken");
+      if (!admintoken) {
+        throw new Error("No admin token found. Please log in.");
+      }
+      // Call the download endpoint
+      const response = await fetch(
+        `${
+          process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000"
+        }/api/uploads/${id}/download`,
+        {
+          headers: {
+            Authorization: `Bearer ${admintoken}`,
+          },
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to download video");
+      }
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename || "video.mp4";
+      a.click();
+      window.URL.revokeObjectURL(url);
+    } catch (err: any) {
+      console.error("Download error:", err);
+      alert(err?.message || "Could not download video");
     }
   }
 
@@ -135,7 +163,7 @@ export default function ContentManagementVideosPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         {videos.map((video) => (
           <div
-            key={video.id}
+            key={video.id} // Ensure key is unique
             className="relative bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-200"
           >
             <div className="relative h-40 sm:h-48 bg-gray-100 flex items-center justify-center">
@@ -180,19 +208,21 @@ export default function ContentManagementVideosPage() {
 
               {/* Action Buttons */}
               <div className="absolute right-2 sm:right-3 bottom-2 sm:bottom-3 flex gap-1 sm:gap-2">
-                <a
-                  href={video.url}
-                  download
+                <button
+                  onClick={() =>
+                    handleDownload(video.id, video.title || "video.mp4")
+                  }
                   className="flex items-center gap-1 sm:gap-2 rounded-md bg-white/90 px-2 sm:px-3 py-1 text-xs sm:text-sm font-medium shadow hover:bg-white transition-colors duration-200"
                 >
                   <Download size={12} /> Download
-                </a>
+                </button>
                 <button
                   onClick={() => handleDelete(video.id)}
                   disabled={deletingId === video.id}
                   className="flex items-center gap-1 sm:gap-2 rounded-md bg-red-600 text-white px-2 sm:px-3 py-1 text-xs sm:text-sm font-medium shadow hover:bg-red-700 transition-colors duration-200"
                 >
-                  <Trash size={12} /> {deletingId === video.id ? "Deleting..." : "Delete"}
+                  <Trash size={12} />{" "}
+                  {deletingId === video.id ? "Deleting..." : "Delete"}
                 </button>
               </div>
             </div>
@@ -204,10 +234,14 @@ export default function ContentManagementVideosPage() {
                   <div className="font-semibold text-sm sm:text-base">
                     {video.title || "Untitled video"}
                   </div>
-                  <div className="text-xs text-gray-600">{video.uploadedByEmail}</div>
+                  <div className="text-xs text-gray-600">
+                    {video.uploadedByEmail}
+                  </div>
                 </div>
                 <div className="text-xs text-gray-600">
-                  {video.createdAt ? new Date(video.createdAt).toLocaleString() : ""}
+                  {video.createdAt
+                    ? new Date(video.createdAt).toLocaleString()
+                    : ""}
                 </div>
               </div>
             </div>
