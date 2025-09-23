@@ -24,10 +24,8 @@ export default function Login() {
       });
       console.log(res);
 
-
       const data = await res.json();
       console.log(data);
-
 
       if (!res.ok) {
         setError(data.message || "Login failed");
@@ -89,7 +87,9 @@ export default function Login() {
             </div>
 
             {error && (
-              <div className="text-red-600 mt-4 text-sm font-medium">{error}</div>
+              <div className="text-red-600 mt-4 text-sm font-medium">
+                {error}
+              </div>
             )}
 
             {/* Signup button */}
@@ -103,7 +103,6 @@ export default function Login() {
               </a>
             </div>
           </form>
-
         </div>
       </main>
 
