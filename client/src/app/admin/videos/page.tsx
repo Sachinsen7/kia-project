@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Trash, Play, EyeOff, Download } from "lucide-react";
+import { Trash, Play, Download } from "lucide-react";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import { apiFetch } from "@/config/api";
 
@@ -64,11 +64,14 @@ export default function ContentManagementVideosPage() {
         setError("Some video data is invalid. Please contact support.");
       }
       setVideos(validVideos);
-    } catch (err: any) {
-      console.error("Fetch error:", err);
-      setError(err?.message || "Failed to load videos");
-    } finally {
-      setLoading(false);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.error("Fetch error:", err.message);
+        setError(err.message);
+      } else {
+        console.error("Unknown error:", err);
+        setError("Failed to load videos");
+      }
     }
   }
 
@@ -85,11 +88,14 @@ export default function ContentManagementVideosPage() {
       await apiFetch(`/api/uploads/${id}`, "DELETE", undefined, admintoken);
       setVideos((prev) => prev.filter((v) => v.id !== id));
       alert("Video deleted");
-    } catch (err: any) {
-      console.error("Delete error:", err);
-      alert(err?.message || "Could not delete video");
-    } finally {
-      setDeletingId(null);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.error("Fetch error:", err.message);
+        setError(err.message);
+      } else {
+        console.error("Unknown error:", err);
+        setError("Failed to load videos");
+      }
     }
   }
 
@@ -120,9 +126,14 @@ export default function ContentManagementVideosPage() {
       a.download = filename || "video.mp4";
       a.click();
       window.URL.revokeObjectURL(url);
-    } catch (err: any) {
-      console.error("Download error:", err);
-      alert(err?.message || "Could not download video");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.error("Fetch error:", err.message);
+        setError(err.message);
+      } else {
+        console.error("Unknown error:", err);
+        setError("Failed to load videos");
+      }
     }
   }
 
