@@ -11,7 +11,7 @@ type DashboardProps = {
 export default function Dashboard({}: DashboardProps) {
   const [images, setImages] = useState<File[]>([]);
   const [videos, setVideos] = useState<File[]>([]);
-  const [visitorCount, setVisitorCount] = useState(0);
+  // const [visitorCount, setVisitorCount] = useState(0);
   const [contentViews, setContentViews] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
   const token =
@@ -21,7 +21,7 @@ export default function Dashboard({}: DashboardProps) {
     try {
       const v = Number(localStorage.getItem("dashboard_visitors") || "0") + 1;
       localStorage.setItem("dashboard_visitors", String(v));
-      setVisitorCount(v);
+      // setVisitorCount(v);
 
       const c = Number(localStorage.getItem("dashboard_content_views") || "0");
       setContentViews(c);
@@ -68,10 +68,12 @@ export default function Dashboard({}: DashboardProps) {
         );
         toast.success(`${file.name} uploaded successfully`);
       }
-    } catch (error: any) {
-      toast.error(`Upload failed: ${error.message}`);
-    } finally {
-      setIsUploading(false);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(`Upload failed: ${error.message}`);
+      } else {
+        toast.error("Upload failed due to an unknown error");
+      }
     }
   };
 
