@@ -29,8 +29,12 @@ const AdminLogin: React.FC = () => {
       );
       localStorage.setItem("admintoken", response.token);
       router.push("/admin");
-    } catch (err: any) {
-      setError(err.message || "Invalid email or password");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Invalid email or password");
+      }
     } finally {
       setLoading(false);
     }
