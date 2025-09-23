@@ -49,11 +49,14 @@ export default function Dashboard({}: DashboardProps) {
         formData.append("file", file);
         formData.append("category", category);
 
-        const res = await fetch("https://kia-project.onrender.com/api/uploads/", {
-          method: "POST",
-          headers: { Authorization: `Bearer ${token}` },
-          body: formData,
-        });
+        const res = await fetch(
+          "https://kia-project.onrender.com/api/uploads/",
+          {
+            method: "POST",
+            headers: { Authorization: `Bearer ${token}` },
+            body: formData,
+          }
+        );
 
         if (!res.ok) {
           const errorData = await res.json();
