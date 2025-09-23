@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import { toast } from "react-hot-toast";
 
 type DashboardProps = {
@@ -9,9 +8,6 @@ type DashboardProps = {
 };
 
 export default function Dashboard({}: DashboardProps) {
-  const [images, setImages] = useState<File[]>([]);
-  const [videos, setVideos] = useState<File[]>([]);
-  // const [visitorCount, setVisitorCount] = useState(0);
   const [contentViews, setContentViews] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
   const token =
@@ -21,7 +17,6 @@ export default function Dashboard({}: DashboardProps) {
     try {
       const v = Number(localStorage.getItem("dashboard_visitors") || "0") + 1;
       localStorage.setItem("dashboard_visitors", String(v));
-      // setVisitorCount(v);
 
       const c = Number(localStorage.getItem("dashboard_content_views") || "0");
       setContentViews(c);
@@ -63,12 +58,6 @@ export default function Dashboard({}: DashboardProps) {
           throw new Error(errorData.message || "Upload failed");
         }
 
-        setImages((prev) =>
-          category === "best-practice" ? [...prev, file] : prev
-        );
-        setVideos((prev) =>
-          category === "greeting-video" ? [...prev, file] : prev
-        );
         toast.success(`${file.name} uploaded successfully`);
       }
     } catch (error: unknown) {
@@ -77,6 +66,8 @@ export default function Dashboard({}: DashboardProps) {
       } else {
         toast.error("Upload failed due to an unknown error");
       }
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -93,11 +84,6 @@ export default function Dashboard({}: DashboardProps) {
       handleFileUpload(uploaded, "greeting-video");
     }
   };
-
-  const handleDeleteImage = (index: number) =>
-    setImages((prev) => prev.filter((_, i) => i !== index));
-  const handleDeleteVideo = (index: number) =>
-    setVideos((prev) => prev.filter((_, i) => i !== index));
 
   return (
     <div className="relative h-full mx-16 bg-white text-gray-900 p-6 md:p-10">
@@ -139,33 +125,6 @@ export default function Dashboard({}: DashboardProps) {
             disabled={isUploading}
           />
         </label>
-
-        <div className="h-0.5 bg-gray-300 my-4"></div>
-        {images.length > 0 && (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mt-4">
-            {images.map((file, index) => (
-              <div
-                key={index}
-                className="relative group border rounded-lg overflow-hidden shadow-sm"
-              >
-                <Image
-                  src={URL.createObjectURL(file)}
-                  alt="uploaded"
-                  className="w-full h-32 object-cover"
-                  width={150}
-                  height={150}
-                  onClick={incrementContentViews}
-                />
-                <button
-                  onClick={() => handleDeleteImage(index)}
-                  className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition"
-                >
-                  Delete
-                </button>
-              </div>
-            ))}
-          </div>
-        )}
       </section>
 
       <p className="text-sm text-gray-700 mb-8 leading-relaxed">
@@ -203,30 +162,6 @@ export default function Dashboard({}: DashboardProps) {
             disabled={isUploading}
           />
         </label>
-
-        <div className="h-0.5 bg-gray-300 my-4"></div>
-
-        <ul className="space-y-3">
-          {videos.map((file, index) => (
-            <li
-              key={index}
-              className="flex items-center justify-between bg-gray-100 px-4 py-2 rounded-lg"
-            >
-              <video
-                src={URL.createObjectURL(file)}
-                controls
-                className="w-40 h-24 object-cover rounded"
-                onClick={incrementContentViews}
-              />
-              <button
-                onClick={() => handleDeleteVideo(index)}
-                className="text-red-600 hover:text-red-800 font-semibold ml-4"
-              >
-                Delete
-              </button>
-            </li>
-          ))}
-        </ul>
       </section>
     </div>
   );
