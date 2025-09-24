@@ -29,6 +29,16 @@ exports.uploadVideo = async (req, res) => {
   }
 }
 
+exports.getAllVideos = async (req, res) => {
+    try  {
+        const videos = await Video.find().sort({createdAt: -1});
+        res.json({success: true, videos});
+    }
+    catch(err) {
+        res.status(500).json({message: "Internal server error" + err.message});
+    }
+}
+
 exports.deleteVideo = async () => {
     try {
         const {publicId} = req.body;
