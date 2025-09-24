@@ -74,17 +74,26 @@ export default function ContentManagementVideosPage() {
       const videosArray = Array.isArray(data.videos) ? data.videos : [];
 
       // Map API response to frontend structure
-      const mappedVideos = videosArray.map((v: any) => ({
-        id: v._id,
-        url: v.url,
-        title: v.title || "Untitled video",
-        uploadedByEmail: v.uploadedBy?.email || "Unknown",
-        createdAt: v.createdAt,
-        category:
-          v.categories?.[0]?.toLowerCase() === "best practices"
-            ? "bestpractices"
-            : "greeting",
-      }));
+      const mappedVideos: VideoItem[] = videosArray.map(
+        (v: {
+          _id: string;
+          url: string;
+          title?: string;
+          uploadedBy?: { email?: string };
+          createdAt?: string;
+          categories?: string[];
+        }) => ({
+          id: v._id,
+          url: v.url,
+          title: v.title || "Untitled video",
+          uploadedByEmail: v.uploadedBy?.email || "Unknown",
+          createdAt: v.createdAt,
+          category:
+            v.categories?.[0]?.toLowerCase() === "best practices"
+              ? "bestpractices"
+              : "greeting",
+        })
+      );
 
       setVideos(mappedVideos);
     } catch (err: unknown) {
