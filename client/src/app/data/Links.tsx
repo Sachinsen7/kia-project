@@ -17,29 +17,29 @@ export type CityLink = {
 };
 
 export const links: CityLink[] = [
-  { id: "welcome", name: "Welcome to 2025 GOEF", x: 60, y: 12, icon: Home },
-  { id: "about", name: "About 2025 GOEF", x: 18, y: 18, icon: Info },
-  { id: "history-goef", name: "History of GOEF", x: 23, y: 52, icon: Archive },
-  { id: "ask-kia", name: "Ask Kia (Q&A)", x: 37, y: 75, icon: MessageCircle },
+  { id: "welcome", name: "Welcome to 2025 GOEF", x: 80, y: 12, icon: Home },
+  { id: "about", name: "About 2025 GOEF", x: 30, y: 17, icon: Info },
+  { id: "history-goef", name: "History of GOEF", x: 13, y: 36, icon: Archive },
+  { id: "ask-kia", name: "Ask Kia (Q&A)", x: 30, y: 54, icon: MessageCircle },
   {
     id: "help-support",
     name: "Help and support",
-    x: 65,
-    y: 63,
+    x: 75,
+    y: 66,
     icon: LifeBuoy,
   },
   {
     id: "event",
     name: "2025 GOEF Event",
-    x: 47,
-    y: 45,
+    x: 57,
+    y: 20,
     icon: Calendar,
   },
   {
     id: "dashboard",
     name: "Upload Your Contents",
-    x: 82,
-    y: 73,
+    x: 88,
+    y: 36,
     icon: LayoutDashboard,
   },
 ];
