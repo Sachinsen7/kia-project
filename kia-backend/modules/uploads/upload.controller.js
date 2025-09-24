@@ -23,8 +23,10 @@ exports.uploadVideo = async (req, res) => {
   }
 }
 
-exports.deleteVideo = async (publicId) => {
+exports.deleteVideo = async () => {
     try {
+        const {publicId} = req.body;
+
         await cloudinary.uploader.destroy(publicId, {resource_type: "video"});
 
         res.json({success: true, message: "video deleted successfully"});
