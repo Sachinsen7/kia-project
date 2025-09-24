@@ -46,7 +46,7 @@ export default function ContentManagementVideosPage() {
 
   useEffect(() => {
     fetchVideos();
-    // fetchLinks();
+    // fetchLinks(); // you can enable if needed
   }, []);
 
   async function fetchVideos() {
@@ -69,28 +69,27 @@ export default function ContentManagementVideosPage() {
         throw new Error(errorData.message || "Failed to fetch videos");
       }
 
-      const data: { videos: VideoItem[] } = await response.json();
+      const data = await response.json();
 
       const videosArray = Array.isArray(data.videos) ? data.videos : [];
 
-      const validVideos = videosArray.filter(
-        (v: VideoItem) => v.id && v.url && v.uploadedByEmail
-      );
-
-      const categorized = validVideos.map((v) => ({
-        ...v,
-        category: v.category || "greeting",
+      // Map API response to frontend structure
+      const mappedVideos = videosArray.map((v: any) => ({
+        id: v._id,
+        url: v.url,
+        title: v.title || "Untitled video",
+        uploadedByEmail: v.uploadedBy?.email || "Unknown",
+        createdAt: v.createdAt,
+        category:
+          v.categories?.[0]?.toLowerCase() === "best practices"
+            ? "bestpractices"
+            : "greeting",
       }));
 
-      setVideos(categorized);
+      setVideos(mappedVideos);
     } catch (err: unknown) {
-      if (err instanceof Error) {
-        console.error("Fetch error:", err.message);
-        setError(err.message);
-      } else {
-        console.error("Unknown error:", err);
-        setError("Failed to load videos");
-      }
+      if (err instanceof Error) setError(err.message);
+      else setError("Failed to load videos");
     } finally {
       setLoading(false);
     }
@@ -107,13 +106,8 @@ export default function ContentManagementVideosPage() {
       setVideos((prev) => prev.filter((v) => v.id !== id));
       alert("Video deleted");
     } catch (err: unknown) {
-      if (err instanceof Error) {
-        console.error("Delete error:", err.message);
-        setError(err.message);
-      } else {
-        console.error("Unknown error:", err);
-        setError("Failed to delete video");
-      }
+      if (err instanceof Error) setError(err.message);
+      else setError("Failed to delete video");
     } finally {
       setDeletingId(null);
     }
@@ -143,13 +137,8 @@ export default function ContentManagementVideosPage() {
       setLinks((prev) => prev.filter((l) => l.id !== linkId));
       alert("Link deleted successfully");
     } catch (err: unknown) {
-      if (err instanceof Error) {
-        console.error("Delete link error:", err.message);
-        setError(err.message);
-      } else {
-        console.error("Unknown error:", err);
-        setError("Failed to delete link");
-      }
+      if (err instanceof Error) setError(err.message);
+      else setError("Failed to delete link");
     }
   }
 
