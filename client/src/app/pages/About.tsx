@@ -11,7 +11,7 @@ function About() {
           <h1 className="text-3xl md:text-5xl text-gray-900 mb-2">
             ABOUT 2025
           </h1>
-          <div className="w-[800px]  h-[4px] text-[#000] bg-[#000] absolute top-[87px] right-0"></div>
+          <div className="w-[590px]  h-[4px] text-[#000] bg-[#000] absolute top-[86px] right-0"></div>
           <h2 className="text-3xl md:text-5xl ml-40 font-bold">GOEF</h2>
         </div>
 
@@ -46,7 +46,7 @@ function About() {
             alt="Car Showcase"
             width={1200}
             height={600}
-            className="absolute top-60 left-11 w-[90%] items-center mt-10 mb-20 h-auto object-cover rounded-xl"
+            className="absolute top-80 left-11 w-[90%] items-center mt-10 mb-20 h-auto object-cover "
           />
         </div>
 
