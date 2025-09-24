@@ -1,5 +1,6 @@
 const cloudinary = require("../../config/cloudinary");
 const fs = require("fs");
+const Video = require("./upload.model")
 
 exports.uploadVideo = async (req, res) => {
   try {
@@ -12,11 +13,16 @@ exports.uploadVideo = async (req, res) => {
 
     fs.unlinkSync(filepath);
 
-    res.json({
-      success: true,
-      url: result.secure_url,
-      publicid: result.public_id,
+    const newVideo = await Video.create({
+        url: result.secure_url,
+        public_id: result.public_id,
+        uploadedBy: req.user._id,
     });
+
+    res.json({
+        success: true,
+        video: newVideo,
+    })
   }
   catch(err) {
     res.status(5000).json({messahe: "Internal server error" + err.message});
