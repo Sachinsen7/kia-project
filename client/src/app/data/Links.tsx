@@ -6,6 +6,7 @@ import {
   LifeBuoy,
   LayoutDashboard,
   Calendar,
+  Cast,
 } from "lucide-react";
 
 export type CityLink = {
@@ -17,7 +18,8 @@ export type CityLink = {
 };
 
 export const links: CityLink[] = [
-  { id: "welcome", name: "Welcome to 2025 GOEF", x: 57, y: 20, icon: Home },
+  { id: "live-link", name: "Welcome to 2025 GOEF", x: 57, y: 20, icon: Cast },
+  { id: "welcome", name: "Welcome to 2025 GOEF", x: 15, y: 35, icon:  Home},
   { id: "about", name: "About 2025 GOEF", x: 80, y: 10, icon: Info },
   { id: "history-goef", name: "History of GOEF", x: 30, y: 52, icon: Archive },
   {
