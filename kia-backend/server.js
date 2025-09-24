@@ -7,9 +7,20 @@ const seedAdmin = require("./config/seedAdmin");
 
 const app = express();
 
+const allowedOrigins = [
+  "https://kia-project-eight.vercel.app",
+  "http://localhost:3000"
+];
+
 app.use(
   cors({
-    origin: "https://kia-project-eight.vercel.app",
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );
