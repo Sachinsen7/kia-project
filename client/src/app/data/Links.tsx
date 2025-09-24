@@ -17,7 +17,7 @@ export type CityLink = {
 };
 
 export const links: CityLink[] = [
-  { id: "welcome", name: "Welcome to 2025 GOEF", x: 80, y: 12, icon: Home },
+  { id: "welcome", name: "Welcome to 2025 GOEF", x: 57, y: 20, icon: Home },
   { id: "about", name: "About 2025 GOEF", x: 30, y: 17, icon: Info },
   { id: "history-goef", name: "History of GOEF", x: 13, y: 36, icon: Archive },
   {
@@ -37,8 +37,8 @@ export const links: CityLink[] = [
   {
     id: "event",
     name: "2025 GOEF Event",
-    x: 57,
-    y: 20,
+    x: 80,
+    y: 12,
     icon: Calendar,
   },
   {
