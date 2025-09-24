@@ -53,7 +53,14 @@ type LikeResponse = { success: boolean; likes: string[]; likesCount: number };
 
 const EditorComponent = dynamic(
   () => import("./EditorComponent").then((mod) => mod.default),
-  { ssr: false }
+  {
+    ssr: false,
+    loading: () => (
+      <div className="min-h-[100px] border border-gray-300 rounded p-2 bg-gray-50">
+        Loading editor...
+      </div>
+    ),
+  }
 );
 
 const GoefEvent: React.FC = () => {
@@ -64,6 +71,9 @@ const GoefEvent: React.FC = () => {
   const [newQuestionCountry, setNewQuestionCountry] =
     useState("Select country");
   const [commentEditorContent, setCommentEditorContent] = useState("");
+  const [activeCommentEditor, setActiveCommentEditor] = useState<string | null>(
+    null
+  );
   const [countries] = useState([
     "Select country",
     "USA",
@@ -221,6 +231,7 @@ const GoefEvent: React.FC = () => {
         )
       );
       setCommentEditorContent("");
+      setActiveCommentEditor(null);
     } catch (err) {
       console.error("Error adding comment:", err);
     }
@@ -298,7 +309,17 @@ const GoefEvent: React.FC = () => {
         q.id === id ? { ...q, showCommentInput: !q.showCommentInput } : q
       )
     );
+    setActiveCommentEditor(id);
+    setCommentEditorContent(""); // Reset comment editor content
   };
+
+  const handleNewQuestionTextUpdate = useCallback((content: string) => {
+    setNewQuestionText(content);
+  }, []);
+
+  const handleCommentEditorUpdate = useCallback((content: string) => {
+    setCommentEditorContent(content);
+  }, []);
 
   if (!mounted) return null;
 
@@ -352,13 +373,18 @@ const GoefEvent: React.FC = () => {
             </div>
             <div className="mb-2 editor-container">
               <EditorComponent
-                onUpdate={setNewQuestionText}
-                initialContent={newQuestionText}
+                key="new-question-editor"
+                onUpdate={handleNewQuestionTextUpdate}
+                initialContent=""
               />
             </div>
             <div className="flex justify-end gap-2">
               <button
-                onClick={() => setShowInput(false)}
+                onClick={() => {
+                  setShowInput(false);
+                  setNewQuestionText("");
+                  setNewQuestionCountry("Select country");
+                }}
                 className="px-4 py-1 border rounded text-sm"
               >
                 Cancel
@@ -436,13 +462,18 @@ const GoefEvent: React.FC = () => {
               <div className="px-4 pb-3" ref={commentEditorRef}>
                 <div className="mb-2 editor-container">
                   <EditorComponent
-                    onUpdate={setCommentEditorContent}
-                    initialContent={commentEditorContent}
+                    key={`comment-editor-${q.id}`}
+                    onUpdate={handleCommentEditorUpdate}
+                    initialContent=""
                   />
                 </div>
                 <div className="flex justify-end gap-2 mt-2">
                   <button
-                    onClick={() => toggleCommentInput(q.id)}
+                    onClick={() => {
+                      toggleCommentInput(q.id);
+                      setCommentEditorContent("");
+                      setActiveCommentEditor(null);
+                    }}
                     className="px-4 py-1 border rounded text-sm"
                   >
                     Cancel
