@@ -61,7 +61,7 @@ export default function CityScene({ onSelect }: CitySceneProps) {
         alt="City Scene"
         fill
         priority
-        className="object-cover transition-opacity duration-500"
+        className="object-fill transition-opacity duration-500"
         onLoadingComplete={() => {
           console.timeEnd("imageLoadToIcons");
           setIsImageLoaded(true);
