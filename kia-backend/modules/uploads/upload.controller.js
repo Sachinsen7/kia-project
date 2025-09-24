@@ -22,3 +22,14 @@ exports.uploadVideo = async (req, res) => {
     res.status(5000).json({messahe: "Internal server error" + err.message});
   }
 }
+
+exports.deleteVideo = async (publicId) => {
+    try {
+        await cloudinary.uploader.destroy(publicId, {resource_type: "video"});
+
+        res.json({success: true, message: "video deleted successfully"});
+    }
+    catch(err) {
+        res.status(500).json({message: "Internal server error" + err.message});
+    }
+}
