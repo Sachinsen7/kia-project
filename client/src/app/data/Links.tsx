@@ -20,7 +20,13 @@ export const links: CityLink[] = [
   { id: "welcome", name: "Welcome to 2025 GOEF", x: 80, y: 12, icon: Home },
   { id: "about", name: "About 2025 GOEF", x: 30, y: 17, icon: Info },
   { id: "history-goef", name: "History of GOEF", x: 13, y: 36, icon: Archive },
-  { id: "ask-kia", name: "Ask Kia (Q&A)", x: 30, y: 54, icon: MessageCircle },
+  {
+    id: "ask-kia",
+    name: "Questions that shape our future",
+    x: 30,
+    y: 54,
+    icon: MessageCircle,
+  },
   {
     id: "help-support",
     name: "Help and support",
