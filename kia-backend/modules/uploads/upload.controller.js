@@ -45,6 +45,8 @@ exports.deleteVideo = async () => {
 
         await cloudinary.uploader.destroy(publicId, {resource_type: "video"});
 
+        await  Video.findOneAndDelete({ publicId });
+
         res.json({success: true, message: "video deleted successfully"});
     }
     catch(err) {
