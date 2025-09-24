@@ -44,23 +44,17 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen  bg-white overflow-hidden"> 
+    <div className="min-h-screen  bg-white overflow-hidden">
       {/* Header Banner */}
-      <header className="w-full bg-[#0a1b23] text-white  text-center">
-        <Image
-          src={"/login.png"}
-          alt="Login"
-          width={500}
-          height={300}
-          className="w-full"
-        />
+      <header className="w-full text-white my-15  text-center">
+
+        <h2 className="text-3xl text-black font-extrabold my-2 mx-5">Login</h2>
       </header>
 
-      <h2 className="text-2xl text-black font-bold my-2 mx-5">Login</h2>
       {/* Main Content */}
       <main className="w-full items-center  mx-5 py-2">
         <div className="w-full">
-          <div className="bg-white justify-center  shadow-sm">
+          <div className="bg-white justify-center border shadow-sm">
 
             {/* Sign-up Prompt */}
             <div className="bg-gray-200 text-gray-700 text-center py-4 mb-4">
@@ -78,7 +72,7 @@ export default function Login() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
-                      className="mt-1 block w-[75%] border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-[#0a1b23]"
+                      className="mt-1 text-black block w-[75%] border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-[#0a1b23]"
                     />
                   </div>
                   <div className="flex items-center">
@@ -88,7 +82,7 @@ export default function Login() {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       required
-                      className="mt-1 block w-[75%]  border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-[#0a1b23]"
+                      className="mt-1 text-black block w-[75%]  border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-[#0a1b23]"
                     />
                   </div>
                 </div>
@@ -111,12 +105,12 @@ export default function Login() {
             <div className="mt-4 py-4 text-center text-sm text-gray-600">
               <div>
 
-              Forgot your Password?{" "}
+                Forgot your Password?{" "}
               </div>
               <a href="/forgot-password" className="text-blue-600 underline">
-                Click here 
+                Click here
               </a>
-               &nbsp; to reset Password via E-mail
+              &nbsp; to reset Password via E-mail
             </div>
           </div>
         </div>
