@@ -7,9 +7,12 @@ type DashboardProps = {
   onClose?: () => void;
 };
 
+type Category = "Best Practices" | "Greeting Videos";
+
 export default function Dashboard({}: DashboardProps) {
   const [contentViews, setContentViews] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
+
   const token =
     typeof window !== "undefined" ? localStorage.getItem("token") || "" : "";
 
@@ -31,19 +34,16 @@ export default function Dashboard({}: DashboardProps) {
     } catch {}
   };
 
-  const handleFileUpload = async (
-    files: File[],
-    category: "Best Practices" | "Greeting Videos"
-  ) => {
-    if (!files.length) return;
+  const handleFileUpload = async (videos: File[], category: Category) => {
+    if (!videos.length) return;
 
     setIsUploading(true);
     try {
       const uploadedFiles: string[] = [];
 
-      for (const file of files) {
+      for (const video of videos) {
         const formData = new FormData();
-        formData.append("file", file);
+        formData.append("video", video); // must match backend Multer field
         formData.append("category", category);
 
         const res = await fetch(
@@ -60,13 +60,13 @@ export default function Dashboard({}: DashboardProps) {
           throw new Error(errorData.message || "Upload failed");
         }
 
-        uploadedFiles.push(file.name);
+        uploadedFiles.push(video.name);
       }
 
       toast.success(
         uploadedFiles.length === 1
           ? `${uploadedFiles[0]} uploaded successfully`
-          : `${uploadedFiles.length} files uploaded successfully`
+          : `${uploadedFiles.length} videos uploaded successfully`
       );
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -79,23 +79,17 @@ export default function Dashboard({}: DashboardProps) {
     }
   };
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleUpload = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    category: Category
+  ) => {
     if (e.target.files) {
-      const uploaded = Array.from(e.target.files);
-      handleFileUpload(uploaded, "Best Practices");
-    }
-  };
-
-  const handleVideoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const uploaded = Array.from(e.target.files);
-      handleFileUpload(uploaded, "Greeting Videos");
+      handleFileUpload(Array.from(e.target.files), category);
     }
   };
 
   return (
     <div className="relative h-full mx-16 bg-white text-gray-900 p-6 md:p-10">
-      {/* Toaster */}
       <Toaster
         position="top-right"
         reverseOrder={false}
@@ -110,21 +104,10 @@ export default function Dashboard({}: DashboardProps) {
       </h1>
 
       <p className="text-sm text-gray-700 mb-8 leading-relaxed">
-        Over the past year, we have all worked with dedication to provide our
-        customers with unforgettable ownership experiences. Now, we want to
-        share the brilliant results of these efforts. Please share your best
-        practices, creative ideas, ownership programs and differentiated
-        customer experiences implemented in your region. We want to learn from
-        each and be inspired by your innovative ideas across markets.
-        <br />
-        <br />
-        Your success is our collective achievement. Feel free to share your
-        experiences from the past year, including innovative concepts of unique
-        campaigns, programs and differentiated customer experiences. Your
-        stories will be a great source of inspiration for colleagues in other
-        regions. Lets build a growing GOFF community together..
+        Share your best practices and greeting videos for the GOFF community.
       </p>
 
+      {/* Best Practices */}
       <section className="mb-10">
         <h2 className="text-lg font-semibold mb-2 text-black">
           Best Practices
@@ -139,29 +122,13 @@ export default function Dashboard({}: DashboardProps) {
             accept="video/*"
             multiple
             className="hidden"
-            onChange={handleImageUpload}
+            onChange={(e) => handleUpload(e, "Best Practices")}
             disabled={isUploading}
           />
         </label>
       </section>
 
-      <p className="text-sm text-gray-700 mb-8 leading-relaxed">
-        We are creating a forum within your GOFF, and to start out, we plan to
-        invite each region to create a simple story video.
-        <br />
-        <br />
-        Please send us a video with a message to your colleagues worldwide,
-        especially a message of encouragement.
-        <br />
-        These videos will be a part of the GOFF page allowing you to welcome new
-        ownership and build a sense of engagement.
-        <br />
-        Please make sure the video is short (approx. 30-60 seconds). It can be
-        recorded with your phone, and please make sure the video is in
-        horizontal format (not vertical) and shot in HD, so the quality is
-        maintained.
-      </p>
-
+      {/* Greeting Videos */}
       <section className="mb-10">
         <h2 className="text-lg font-semibold mb-2 text-black">
           Greeting Videos
@@ -176,7 +143,7 @@ export default function Dashboard({}: DashboardProps) {
             accept="video/*"
             multiple
             className="hidden"
-            onChange={handleVideoUpload}
+            onChange={(e) => handleUpload(e, "Greeting Videos")}
             disabled={isUploading}
           />
         </label>
