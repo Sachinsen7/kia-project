@@ -57,7 +57,7 @@ export default function CityScene({ onSelect }: CitySceneProps) {
   return (
     <div className="relative w-full h-full bg-white overflow-hidden">
       <Image
-        src="/new-home-image.jpg"
+        src="/landing-page.png"
         alt="City Scene"
         fill
         priority
