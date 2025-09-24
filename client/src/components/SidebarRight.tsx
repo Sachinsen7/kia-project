@@ -59,7 +59,8 @@ export default function SidebarRight({ onSelect }: SidebarRightProps) {
     fixed top-0 right-0 h-full
     w-[80%] sm:w-[60%] md:w-[60%] lg:w-[25%]
     p-6 sm:p-8 md:p-10
-    backdrop-blur-sm text-black shadow-2xl z-40
+     text-black shadow-2xl z-40
+      bg-gray-200
     transform transition-transform duration-300 ease-in-out
     flex flex-col
     overflow-hidden  
