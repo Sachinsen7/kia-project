@@ -33,7 +33,7 @@ export default function Dashboard({}: DashboardProps) {
 
   const handleFileUpload = async (
     files: File[],
-    category: "best-practice" | "greeting-video"
+    category: "Best Practices" | "Greeting Videos"
   ) => {
     if (!files.length) return;
 
@@ -47,7 +47,7 @@ export default function Dashboard({}: DashboardProps) {
         formData.append("category", category);
 
         const res = await fetch(
-          "https://kia-project.onrender.com/api/uploads/",
+          "https://kia-project.onrender.com/api/uploads/video",
           {
             method: "POST",
             headers: { Authorization: `Bearer ${token}` },
@@ -63,7 +63,6 @@ export default function Dashboard({}: DashboardProps) {
         uploadedFiles.push(file.name);
       }
 
-      // Show a single success toast for all uploaded files
       toast.success(
         uploadedFiles.length === 1
           ? `${uploadedFiles[0]} uploaded successfully`
@@ -83,14 +82,14 @@ export default function Dashboard({}: DashboardProps) {
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const uploaded = Array.from(e.target.files);
-      handleFileUpload(uploaded, "best-practice");
+      handleFileUpload(uploaded, "Best Practices");
     }
   };
 
   const handleVideoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const uploaded = Array.from(e.target.files);
-      handleFileUpload(uploaded, "greeting-video");
+      handleFileUpload(uploaded, "Greeting Videos");
     }
   };
 
