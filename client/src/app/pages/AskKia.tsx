@@ -311,9 +311,10 @@ const AskKia: React.FC = () => {
 
   return (
     <div className="h-full border-l overflow-y-auto z-50 p-6 md:p-10">
-      {/* Professional Intro Text */}
       <section className="mb-6 p-4 rounded-lg ">
-        <h1 className="text-2xl font-bold mb-3">Ask Kia (Q&amp;A)</h1>
+        <h1 className="text-2xl font-bold mb-3">
+          Questions that shape our future
+        </h1>
         <br />
         <p className="text-gray-700 text-sm mb-2">
           The GOEF event is where the future of Kia takes shape, and we want

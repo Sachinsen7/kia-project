@@ -64,22 +64,39 @@ function HistoryGOEF() {
             <h2 className="text-lg font-medium mb-6">Gallery</h2>
             <div className="flex justify-center gap-6 flex-wrap">
               <Image
-                src="/images/gallery1.jpg"
+                src="/history/gallery-left.png"
                 alt="GOEF Gallery 1"
                 width={300}
                 height={200}
                 className="rounded-lg shadow-md object-cover"
               />
               <Image
-                src="/images/gallery2.jpg"
+                src="/history/gallery-image.png"
                 alt="GOEF Gallery 2"
                 width={300}
                 height={200}
                 className="rounded-lg shadow-md object-cover"
               />
               <Image
-                src="/images/gallery3.jpg"
+                src="/history/gallery-right.png"
                 alt="GOEF Gallery 3"
+                width={300}
+                height={200}
+                className="rounded-lg shadow-md object-cover"
+              />
+            </div>
+
+            <div>
+              <Image
+                src="/history/gallery-image.png"
+                alt="GOEF Gallery 2"
+                width={300}
+                height={200}
+                className="rounded-lg shadow-md object-cover"
+              />
+              <Image
+                src="/history/gallery-image.png"
+                alt="GOEF Gallery 2"
                 width={300}
                 height={200}
                 className="rounded-lg shadow-md object-cover"
