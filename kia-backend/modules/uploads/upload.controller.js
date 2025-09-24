@@ -5,7 +5,10 @@ const Video = require("./upload.model")
 exports.uploadVideo = async (req, res) => {
   try {
     const filepath = req.file.path;
-
+    const {category} = req.body;
+    if(!category || (category !== "Greeting Videos" && category !== "Best Practices")){
+        res.status(400).json({message: "please provide a valid category"});
+    }
     const result = await cloudinary.uploader.upload(filepath, {
       resource_type: "video",
       folder: "kia-videos"
