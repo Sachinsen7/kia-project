@@ -5,13 +5,13 @@ import Image from "next/image";
 
 function About() {
   return (
-    <div className="relative w-full min-h-screen bg-white px-6 md:px-16 py-12">
-      <div className="bg-white shadow-2xl rounded-2xl w-full max-w-6xl m-6 p-8 md:p-14">
-        <div className="relative w-full pt-6 pb-10 px-4">
+    <div className="w-full min-h-screen bg-white px-6 md:px-16 py-12">
+      <div className="bg-white relative shadow-2xl rounded-2xl w-full max-w-6xl m-6 p-8 md:p-14">
+        <div className="w-full pt-6 pb-10 px-4">
           <h1 className="text-3xl md:text-5xl text-gray-900 mb-2">
             ABOUT 2025
           </h1>
-          <div className="max-w-xl w-full h-[4px] text-[#000] bg-[#000] absolute top-[31px] right-6"></div>
+          <div className="max-w-2xl w-full h-[4px] text-[#000] bg-[#000] absolute top-[87px] right-0"></div>
           <h2 className="text-3xl md:text-5xl ml-40 font-bold">GOEF</h2>
         </div>
 
@@ -50,7 +50,7 @@ function About() {
           />
         </div>
 
-        <div className="text-center px-6 py-12 mt-96">
+        <div className="text-center mx-auto max-w-2xl px-6 py-12 mt-96">
           <div className="relative w-full max-w-4xl mx-auto">
             {/* Main Image */}
 
