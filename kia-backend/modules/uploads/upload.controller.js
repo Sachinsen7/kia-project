@@ -1,78 +1,58 @@
-const Upload = require("./upload.model");
-const path = require("path");
+const cloudinary = require("../../config/cloudinary");
 const fs = require("fs");
+const Video = require("./upload.model")
 
-// Upload file
-exports.uploadFile = async (req, res) => {
+exports.uploadVideo = async (req, res) => {
   try {
-    if (!req.file) return res.status(400).json({ message: "No file uploaded" });
-
-    const { category } = req.body;
-
-    const fileData = await Upload.create({
-      filename: req.file.filename,
-      originalName: req.file.originalname,
-      fileType: req.file.mimetype,
-      category,
-      uploadedBy: req.user.id,
-      path: req.file.path,
+    const filepath = req.file.path;
+    const {category} = req.body;
+    if(!category || (category !== "Greeting Videos" && category !== "Best Practices")){
+        res.status(400).json({message: "please provide a valid category"});
+    }
+    const result = await cloudinary.uploader.upload(filepath, {
+      resource_type: "video",
+      folder: "kia-videos"
     });
 
-    res
-      .status(201)
-      .json({ message: "File uploaded successfully", file: fileData });
-  } catch (err) {
-    res.status(500).json({ message: "Server error", error: err.message });
+    fs.unlinkSync(filepath);
+
+    const newVideo = await Video.create({
+        url: result.secure_url,
+        public_id: result.public_id,
+        uploadedBy: req.user._id,
+    });
+
+    res.json({
+        success: true,
+        video: newVideo,
+    })
   }
-};
-
-// Get all uploads
-exports.getAllUploads = async (req, res) => {
-  try {
-    const files = await Upload.find().populate("uploadedBy", "email").lean();
-    const videos = files.map((file) => ({
-      id: file._id.toString(),
-      title: file.originalName || file.filename,
-      url: file.path, // Assumes path is a URL or accessible file path
-      thumbnailUrl: undefined, // Add thumbnail generation logic if needed
-      uploadedByEmail: file.uploadedBy?.email || "Unknown",
-      createdAt: file.createdAt?.toISOString(),
-    }));
-    res.json({ videos });
-  } catch (err) {
-    console.error("Error fetching uploads:", err);
-    res.status(500).json({ message: "Server error" });
+  catch(err) {
+    res.status(5000).json({messahe: "Internal server error" + err.message});
   }
-};
+}
 
-// Download a file
-exports.downloadFile = async (req, res) => {
-  try {
-    const file = await Upload.findById(req.params.id);
-    if (!file) return res.status(404).json({ message: "File not found" });
-
-    res.download(path.resolve(file.path), file.originalName);
-  } catch (err) {
-    console.error("Error downloading file:", err);
-    res.status(500).json({ message: "Server error" });
-  }
-};
-
-exports.deleteFile = async (req, res) => {
-  try {
-    const file = await Upload.findById(req.params.id);
-    if (!file) return res.status(404).json({ message: "File not found" });
-
-    try {
-      fs.unlinkSync(path.resolve(file.path)); // Remove from storage
-    } catch (err) {
-      console.error("Error deleting file from storage:", err);
+exports.getAllVideos = async (req, res) => {
+    try  {
+        const videos = await Video.find().sort({createdAt: -1});
+        res.json({success: true, videos});
     }
-    await Upload.findByIdAndDelete(req.params.id);
+    catch(err) {
+        res.status(500).json({message: "Internal server error" + err.message});
+    }
+}
 
-    res.json({ message: "File deleted successfully" });
-  } catch (err) {
-    console.error("Error deleting file:", err);
-    res.status(500).json({ message: "Server error" });
-  }
-};
+exports.deleteVideo = async () => {
+    try {
+        const {publicId} = req.body;
+
+        await cloudinary.uploader.destroy(publicId, {resource_type: "video"});
+
+        await  Video.findOneAndDelete({ publicId });
+
+        res.json({success: true, message: "video deleted successfully"});
+    }
+    catch(err) {
+        res.status(500).json({message: "Internal server error" + err.message});
+    }
+}

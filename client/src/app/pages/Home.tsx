@@ -4,15 +4,17 @@ import React from "react";
 
 function Home() {
   return (
-    <div className="relative min-h-screen bg-gray-100 flex items-center justify-center p-6 md:p-12">
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6 md:p-12">
       {/* Floating Card */}
-      <div className="bg-white shadow-2xl rounded-2xl w-full max-w-6xl m-6 p-8 md:p-14">
+      <div className="relative bg-white shadow-2xl rounded-2xl w-full max-w-6xl m-6 p-8 md:p-14">
         {/* Heading */}
-        <h1 className="text-3xl md:text-5xl text-gray-900 mb-2">WELCOME TO</h1>
+        <h1 className="text-3xl ml-10 md:text-5xl text-gray-900 mb-2">
+          WELCOME TO
+        </h1>
 
         {/* Underline + 2025 */}
-        <div className="flex items-center">
-          <div className="w-40 h-[2px] mt-10 bg-gray-800"></div>
+        <div className="ml-40 flex items-center">
+          <div className="left-0 w-[240px] h-[4px] text-[#000] bg-[#000] absolute top-37"></div>
           <h2 className="text-4xl md:text-5xl text-gray-900">
             2025 <span className="font-bold">GOEF</span>
           </h2>
