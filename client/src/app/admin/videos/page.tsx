@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Trash, Play, Download } from "lucide-react";
+import { Trash, Play, Download, Plus, X, Link as LinkIcon } from "lucide-react";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import { apiFetch } from "@/config/api";
 
@@ -15,11 +15,22 @@ type VideoItem = {
   category?: "greeting" | "bestpractices";
 };
 
+type LinkItem = {
+  id?: string;
+  type: "youtube";
+  url: string;
+  addedBy?: string;
+  createdAt?: string;
+  updatedAt?: string;
+};
+
 type Category = "greeting" | "bestpractices";
 
 export default function ContentManagementVideosPage() {
   const [videos, setVideos] = useState<VideoItem[]>([]);
+  const [links, setLinks] = useState<LinkItem[]>([]);
   const [loading, setLoading] = useState(false);
+  const [linksLoading, setLinksLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [playing, setPlaying] = useState<VideoItem | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
@@ -28,8 +39,14 @@ export default function ContentManagementVideosPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 9;
 
+  // Link upload modal state
+  const [showLinkModal, setShowLinkModal] = useState(false);
+  const [linkUrl, setLinkUrl] = useState("");
+  const [linkUploading, setLinkUploading] = useState(false);
+
   useEffect(() => {
     fetchVideos();
+    // fetchLinks();
   }, []);
 
   async function fetchVideos() {
@@ -75,6 +92,41 @@ export default function ContentManagementVideosPage() {
     }
   }
 
+  // async function fetchLinks() {
+  //   setLinksLoading(true);
+  //   try {
+  //     const admintoken = localStorage.getItem("admintoken");
+  //     if (!admintoken) throw new Error("No admin token found. Please log in.");
+
+  //     const response = await fetch(
+  //       "https://kia-project.onrender.com/api/Link/",
+  //       {
+  //         method: "GET",
+  //         headers: {
+  //           Authorization: `Bearer ${admintoken}`,
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     );
+
+  //     if (!response.ok) {
+  //       throw new Error("Failed to fetch links");
+  //     }
+
+  //     const data = await response.json();
+  //     const linksArray = Array.isArray(data.links)
+  //       ? data.links
+  //       : Array.isArray(data)
+  //       ? data
+  //       : [];
+  //     setLinks(linksArray);
+  //   } catch (err: unknown) {
+  //     console.error("Failed to fetch links:", err);
+  //   } finally {
+  //     setLinksLoading(false);
+  //   }
+  // }
+
   async function handleDelete(id: string) {
     if (!confirm("Are you sure you want to delete this video?")) return;
     setDeletingId(id);
@@ -95,6 +147,40 @@ export default function ContentManagementVideosPage() {
       }
     } finally {
       setDeletingId(null);
+    }
+  }
+
+  async function handleDeleteLink(linkId: string) {
+    if (!confirm("Are you sure you want to delete this link?")) return;
+    try {
+      const admintoken = localStorage.getItem("admintoken");
+      if (!admintoken) throw new Error("No admin token found. Please log in.");
+
+      const response = await fetch(
+        `https://kia-project.onrender.com/api/Link/${linkId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${admintoken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to delete link");
+      }
+
+      setLinks((prev) => prev.filter((l) => l.id !== linkId));
+      alert("Link deleted successfully");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.error("Delete link error:", err.message);
+        setError(err.message);
+      } else {
+        console.error("Unknown error:", err);
+        setError("Failed to delete link");
+      }
     }
   }
 
@@ -132,6 +218,63 @@ export default function ContentManagementVideosPage() {
     }
   }
 
+  async function handleUploadLink() {
+    if (!linkUrl.trim()) {
+      alert("Please enter a valid URL");
+      return;
+    }
+
+    // Basic YouTube URL validation
+    if (!linkUrl.includes("youtube.com") && !linkUrl.includes("youtu.be")) {
+      alert("Please enter a valid YouTube URL");
+      return;
+    }
+
+    setLinkUploading(true);
+    try {
+      const admintoken = localStorage.getItem("admintoken");
+      if (!admintoken) throw new Error("No admin token found. Please log in.");
+
+      const response = await fetch(
+        "https://kia-project.onrender.com/api/Link/",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${admintoken}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            type: "youtube",
+            url: linkUrl.trim(),
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to upload link");
+      }
+
+      const data = await response.json();
+
+      if (data.link) {
+        setLinks((prev) => [data.link, ...prev]);
+        setLinkUrl("");
+        setShowLinkModal(false);
+        alert("Link added successfully!");
+      }
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.error("Upload link error:", err.message);
+        alert(`Failed to upload link: ${err.message}`);
+      } else {
+        console.error("Unknown error:", err);
+        alert("Failed to upload link");
+      }
+    } finally {
+      setLinkUploading(false);
+    }
+  }
+
   const filteredVideos = videos.filter((v) => v.category === category);
   const totalPages = Math.ceil(filteredVideos.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -147,16 +290,38 @@ export default function ContentManagementVideosPage() {
     setPlaying(null);
   }
 
+  function getYouTubeVideoId(url: string) {
+    const regExp =
+      /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url.match(regExp);
+    return match && match[2].length === 11 ? match[2] : null;
+  }
+
+  function getYouTubeThumbnail(url: string) {
+    const videoId = getYouTubeVideoId(url);
+    return videoId
+      ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
+      : null;
+  }
+
   return (
     <ProtectedRoute role="admin">
       <div className="min-h-screen bg-gray-200 text-gray-900 p-4 sm:p-6 md:p-10 lg:p-14">
         {/* Header */}
         <header className="flex flex-col sm:flex-row justify-between items-center mb-8 sm:mb-10">
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-gray-900 tracking-tight mb-4 sm:mb-0">
-            Content Management — Videos
+            Content Management — Videos & Links
           </h1>
-          <div className="text-sm sm:text-base text-gray-600 font-medium">
-            Manage uploaded videos by category
+          <div className="flex items-center gap-4">
+            <div className="text-sm sm:text-base text-gray-600 font-medium">
+              Manage uploaded videos and team links
+            </div>
+            <button
+              onClick={() => setShowLinkModal(true)}
+              className="flex items-center gap-2 bg-[#05141f] text-white px-4 py-2 rounded-lg font-medium hover:bg-[#171e22] transition-colors duration-200"
+            >
+              <Plus size={16} /> Upload Link
+            </button>
           </div>
         </header>
 
@@ -169,7 +334,7 @@ export default function ContentManagementVideosPage() {
             }}
             className={`px-4 py-2 rounded-lg font-medium ${
               category === "greeting"
-                ? "bg-blue-600 text-white"
+                ? "bg-[#05141f] text-white"
                 : "bg-gray-300 text-gray-800"
             }`}
           >
@@ -182,12 +347,88 @@ export default function ContentManagementVideosPage() {
             }}
             className={`px-4 py-2 rounded-lg font-medium ${
               category === "bestpractices"
-                ? "bg-blue-600 text-white"
+                ? "bg-[#05141f] text-white"
                 : "bg-gray-300 text-gray-800"
             }`}
           >
             Best Practices
           </button>
+        </div>
+
+        {/* Team Links Section */}
+        <div className="mb-8">
+          <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <LinkIcon size={20} /> Team Links
+          </h2>
+          {linksLoading ? (
+            <div className="py-4 text-center text-gray-600 animate-pulse">
+              Loading links...
+            </div>
+          ) : links.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {links.map((link, index) => (
+                <div
+                  key={link.id || index}
+                  className="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-200"
+                >
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 bg-red-600 rounded-full flex items-center justify-center">
+                        <Play size={12} className="text-white ml-0.5" />
+                      </div>
+                      <span className="text-sm font-medium text-gray-900">
+                        YouTube
+                      </span>
+                    </div>
+                    {link.id && (
+                      <button
+                        onClick={() => handleDeleteLink(link.id!)}
+                        className="text-red-600 hover:text-red-700 transition-colors duration-200"
+                      >
+                        <Trash size={16} />
+                      </button>
+                    )}
+                  </div>
+
+                  {getYouTubeThumbnail(link.url) && (
+                    <img
+                      src={getYouTubeThumbnail(link.url)!}
+                      alt="YouTube thumbnail"
+                      className="w-full h-32 object-cover rounded-md mb-3"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).style.display = "none";
+                      }}
+                    />
+                  )}
+
+                  <a
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#05141f] hover:text-[#171e22] text-sm font-medium block mb-2 truncate"
+                  >
+                    {link.url}
+                  </a>
+
+                  {link.addedBy && (
+                    <p className="text-xs text-gray-500 mb-1">
+                      Added by: {link.addedBy}
+                    </p>
+                  )}
+
+                  {link.createdAt && (
+                    <p className="text-xs text-gray-500">
+                      {new Date(link.createdAt).toLocaleString()}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-6 text-gray-500">
+              No team links found. Upload your first link!
+            </div>
+          )}
         </div>
 
         {/* Loading and Error States */}
@@ -210,11 +451,21 @@ export default function ContentManagementVideosPage() {
             <table className="min-w-full bg-white rounded-xl shadow-lg">
               <thead>
                 <tr className="bg-gray-100 text-gray-900">
-                  <th className="px-4 py-3 text-left text-sm font-semibold">Title</th>
-                  <th className="px-4 py-3 text-left text-sm font-semibold">Uploaded By</th>
-                  <th className="px-4 py-3 text-left text-sm font-semibold">Created At</th>
-                  <th className="px-4 py-3 text-left text-sm font-semibold">Category</th>
-                  <th className="px-4 py-3 text-left text-sm font-semibold">Actions</th>
+                  <th className="px-4 py-3 text-left text-sm font-semibold">
+                    Title
+                  </th>
+                  <th className="px-4 py-3 text-left text-sm font-semibold">
+                    Uploaded By
+                  </th>
+                  <th className="px-4 py-3 text-left text-sm font-semibold">
+                    Created At
+                  </th>
+                  <th className="px-4 py-3 text-left text-sm font-semibold">
+                    Category
+                  </th>
+                  <th className="px-4 py-3 text-left text-sm font-semibold">
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -240,7 +491,7 @@ export default function ContentManagementVideosPage() {
                     <td className="px-4 py-3 text-sm flex gap-2">
                       <button
                         onClick={() => openPlayer(video)}
-                        className="flex items-center gap-1 rounded-md bg-blue-600 text-white px-3 py-1 text-xs font-medium hover:bg-blue-700 transition-colors duration-200"
+                        className="flex items-center gap-1 rounded-md bg-[#05141f] text-white px-3 py-1 text-xs font-medium hover:bg-[#171e22] transition-colors duration-200"
                       >
                         <Play size={12} /> Watch
                       </button>
@@ -288,6 +539,54 @@ export default function ContentManagementVideosPage() {
             >
               Next
             </button>
+          </div>
+        )}
+
+        {/* Link Upload Modal */}
+        {showLinkModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+            <div className="w-full max-w-md bg-white rounded-xl p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-gray-900">
+                  Upload YouTube Link
+                </h3>
+                <button
+                  onClick={() => setShowLinkModal(false)}
+                  className="text-gray-500 hover:text-gray-700 transition-colors duration-200"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  YouTube URL
+                </label>
+                <input
+                  type="url"
+                  value={linkUrl}
+                  onChange={(e) => setLinkUrl(e.target.value)}
+                  placeholder="https://www.youtube.com/watch?v=..."
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#05141f] focus:border-transparent"
+                />
+              </div>
+
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setShowLinkModal(false)}
+                  className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors duration-200"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleUploadLink}
+                  disabled={linkUploading || !linkUrl.trim()}
+                  className="flex-1 px-4 py-2 bg-[#05141f] text-white rounded-lg hover:bg-[#171e22] transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {linkUploading ? "Uploading..." : "Upload"}
+                </button>
+              </div>
+            </div>
           </div>
         )}
 
