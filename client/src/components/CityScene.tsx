@@ -25,7 +25,7 @@ export default function CityScene({ onSelect }: CitySceneProps) {
           }}
         >
           <div className="relative flex items-center justify-center w-[4rem] h-[4rem] md:w-16 md:h-16">
-            <span className="absolute inline-flex h-full w-full rounded-full bg-[#ff6c4c]/50 opacity-0 group-hover:opacity-100 group-hover:animate-ping transition-opacity"></span>
+            <span className="absolute inline-flex h-full w-full rounded-full bg-[#05141f]/50 opacity-0 group-hover:opacity-100 group-hover:animate-ping transition-opacity"></span>
 
             <div
               className="absolute w-[4rem] h-[4rem] md:w-16 md:h-16 bg-white flex items-center justify-center shadow-lg transition-transform duration-300 group-hover:scale-110"
