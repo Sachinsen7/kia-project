@@ -105,9 +105,10 @@ export default function Login() {
                 <p className="text-red-600 text-sm mt-2">{error}</p>
               )}
             </form>
+            <hr />
 
             {/* Forgot Password */}
-            <div className="mt-4 text-center text-sm text-gray-600">
+            <div className="mt-4 py-4 text-center text-sm text-gray-600">
               <div>
 
               Forgot your Password?{" "}
