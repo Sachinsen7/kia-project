@@ -528,9 +528,6 @@
 
 // export default AskKia;
 
-
-
-
 // AskKia.tsx
 import React from "react";
 import { Heart, MessageSquare } from "lucide-react";
@@ -552,9 +549,9 @@ export default function AskKia() {
         <div className="border border-gray-300 rounded-md p-8 mb-10 text-gray-800 space-y-6">
           <p>
             The GOEF event is where the future of Kia takes shape, and we want
-            your voice to be a part of it. Feel free to ask any questions you've
-            been curious about regarding Kia HQ. We're always listening to your
-            valuable input.
+            your voice to be a part of it. Feel free to ask any questions
+            you&quote;ve been curious about regarding Kia HQ. We&quote;re always
+            listening to your valuable input.
           </p>
 
           <p>
@@ -562,8 +559,8 @@ export default function AskKia() {
             <br />
             Submit Your Question: Please leave your questions in the comments
             below. <br />
-            Get Your Answer: We'll select questions to be answered directly
-            on-site during the GOEF event.
+            Get Your Answer: We&quote;ll select questions to be answered
+            directly on-site during the GOEF event.
           </p>
 
           <p>
@@ -631,7 +628,7 @@ export default function AskKia() {
               <button className="italic">I</button>
               <button>•</button>
               <button>1.</button>
-              <button>" "</button>
+              <button></button>
               <button>{`</>`}</button>
               <button>🔗</button>
               <button>🖼</button>
