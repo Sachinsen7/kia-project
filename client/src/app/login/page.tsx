@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { BASE_URL } from "@/config/api";
+import Image from "next/image";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -22,10 +23,8 @@ export default function Login() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-      console.log(res);
 
       const data = await res.json();
-      console.log(data);
 
       if (!res.ok) {
         setError(data.message || "Login failed");
@@ -33,11 +32,9 @@ export default function Login() {
         return;
       }
 
-      // Save token securely
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
 
-      // Redirect to dashboard or home
       router.push("/");
     } catch (err) {
       setError("Network error. Please try again.");
@@ -47,76 +44,82 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-between bg-white">
-      <main className="flex flex-col items-center flex-1">
-        <div className="w-full max-w-4xl mt-6 px-4">
-          <img
-            src="/login-banner.png"
-            alt="Kia Car"
-            className="w-full max-h-[500px] object-contain sm:object-cover"
-          />
+    <div className="min-h-screen  bg-white overflow-hidden"> 
+      {/* Header Banner */}
+      <header className="w-full bg-[#0a1b23] text-white  text-center">
+        <Image
+          src={"/login.png"}
+          alt="Login"
+          width={500}
+          height={300}
+          className="w-full"
+        />
+      </header>
 
-          <form
-            className="w-full flex flex-col items-center py-6 bg-white border border-gray-200 rounded-md shadow-sm mt-4"
-            onSubmit={handleSubmit}
-          >
-            <div className="flex flex-col sm:flex-row gap-4 px-4 mx-4 w-full">
-              <input
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="border border-gray-300 px-4 py-2 w-full text-gray-900 rounded focus:outline-none focus:border-[#0a1b23]"
-              />
-              <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="border border-gray-300 px-4 py-2 w-full text-gray-900 rounded focus:outline-none focus:border-[#0a1b23]"
-              />
-              <button
-                type="submit"
-                disabled={loading}
-                className="bg-[#0a1b23] whitespace-nowrap text-white px-8 py-2 rounded font-semibold hover:bg-black transition-colors w-full sm:w-auto"
-              >
-                {loading ? "Logging in..." : "Log In"}
-              </button>
+      <h2 className="text-2xl text-black font-bold my-2 mx-5">Login</h2>
+      {/* Main Content */}
+      <main className="w-full items-center  mx-5 py-2">
+        <div className="w-full">
+          <div className="bg-white justify-center  shadow-sm">
+
+            {/* Sign-up Prompt */}
+            <div className="bg-gray-200 text-gray-700 text-center py-4 mb-4">
+              If you have not yet signed up, click <a href="/signup" className="text-black font-semibold underline">Sign up</a>.
             </div>
 
-            {error && (
-              <div className="text-red-600 mt-4 text-sm font-medium">
-                {error}
+            {/* Form */}
+            <form onSubmit={handleSubmit} className="w-[80%] justify-center mx-auto ">
+              <div className="flex justify-center w-full mx-auto">
+                <div className="w-[60%] mx-0 my-7">
+                  <div className="flex items-center my-2  " >
+                    <label className="block text-md font-medium mr-5 w-[20%] text-gray-700">E-mail</label>
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                      className="mt-1 block w-[75%] border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-[#0a1b23]"
+                    />
+                  </div>
+                  <div className="flex items-center">
+                    <label className="block mr-5 w-[20%] text-md font-medium text-gray-700">Password</label>
+                    <input
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                      className="mt-1 block w-[75%]  border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-[#0a1b23]"
+                    />
+                  </div>
+                </div>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className=" bg-black text-white h-22 my-10 w-[10%]  font-semibold hover:bg-gray-800 disabled:opacity-50"
+                >
+                  {loading ? "Logging in..." : "Login"}
+                </button>
               </div>
-            )}
 
-            {/* Signup button */}
-            <div className="mt-4 text-center">
-              <span className="text-gray-600 mr-2">New user?</span>
-              <a
-                href="/signup"
-                className="text-white bg-[#0a1b23] px-2 py-2 rounded font-medium hover:bg-black transition-colors"
-              >
-                Sign Up
+              {error && (
+                <p className="text-red-600 text-sm mt-2">{error}</p>
+              )}
+            </form>
+
+            {/* Forgot Password */}
+            <div className="mt-4 text-center text-sm text-gray-600">
+              <div>
+
+              Forgot your Password?{" "}
+              </div>
+              <a href="/forgot-password" className="text-blue-600 underline">
+                Click here 
               </a>
+               &nbsp; to reset Password via E-mail
             </div>
-          </form>
+          </div>
         </div>
       </main>
-
-      <footer className="w-full flex flex-col items-center mt-8 mb-4">
-        <div className="w-full max-w-3xl text-center text-gray-500 text-xs border-t pt-4">
-          © 2016 Kia Dealer Academy. All rights reserved. &nbsp;
-          <a href="#" className="underline mx-1">
-            Terms of Use
-          </a>
-          <a href="#" className="underline mx-1">
-            Privacy Policy
-          </a>
-        </div>
-      </footer>
     </div>
   );
 }
