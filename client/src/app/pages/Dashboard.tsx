@@ -136,7 +136,7 @@ export default function Dashboard({}: DashboardProps) {
           </span>
           <input
             type="file"
-            accept="image/*"
+            accept="video/*"
             multiple
             className="hidden"
             onChange={handleImageUpload}
