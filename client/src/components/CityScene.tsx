@@ -1,24 +1,114 @@
+
 "use client";
 
 import { useState, useMemo } from "react";
 import Image from "next/image";
 import { links } from "@/app/data/Links";
 
-type CitySceneProps = {
-  onSelect: (id: string) => void;
+type CityLink = {
+  id: string;
+  name: string;
+  icon: React.ElementType;
+  x: number;
+  y: number;
+  url?: string;
 };
+
+type CitySceneProps = {
+  onSelect: (id: string, data?: unknown) => void;
+};
+
+// Updated to handle array response
+async function fetchLiveData(token: string): Promise<{ url?: string } | null> {
+  try {
+    const response = await fetch("https://kia-project.onrender.com/api/Link/", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      credentials: "include",
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log("LIVE data:", data);
+
+    // Check if data is an array and has at least one item
+    if (Array.isArray(data) && data.length > 0 && data[0].url) {
+      return { url: data[0].url }; // Extract URL from first object
+    }
+    return null; // Return null if no valid URL is found
+  } catch (error) {
+    console.error("Error fetching live data:", error);
+    return null;
+  }
+}
 
 export default function CityScene({ onSelect }: CitySceneProps) {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const [isLoadingLive, setIsLoadingLive] = useState(false);
 
   const memoizedIcons = useMemo(() => {
-    return links.map((link) => {
+    return links.map((link: CityLink) => {
       const Icon = link.icon;
+
+      const handleClick = async () => {
+        if (link.id === "live-link") {
+          const token = localStorage.getItem("token");
+          if (!token) {
+            console.warn("No token found, please login first");
+            alert("Please log in to access the live link.");
+            onSelect(link.id, { error: "No token" });
+            return;
+          }
+
+          setIsLoadingLive(true);
+          const data = await fetchLiveData(token);
+          setIsLoadingLive(false);
+
+          if (data?.url) {
+            try {
+              const url = new URL(data.url);
+              console.log("Opening live URL:", url.toString());
+              window.open(url.toString(), "_blank");
+              onSelect(link.id, data);
+            } catch (error) {
+              console.error("Invalid URL:", data.url);
+              alert("Invalid URL received from the server.");
+              onSelect(link.id, { error: "Invalid URL" });
+            }
+          } else {
+            console.warn("No valid URL in live data");
+            alert("No live link available at the moment.");
+            onSelect(link.id, { error: "No URL" });
+          }
+        } else if (link.url) {
+          try {
+            const url = new URL(link.url);
+            console.log("Opening static URL:", url.toString());
+            window.open(url.toString(), "_blank");
+            onSelect(link.id, link.url);
+          } catch (error) {
+            console.error("Invalid static URL:", link.url);
+            alert("Invalid static URL.");
+            onSelect(link.id, { error: "Invalid static URL" });
+          }
+        } else {
+          onSelect(link.id);
+        }
+      };
+
       return (
         <button
           key={link.id}
-          onClick={() => onSelect(link.id)}
-          className="absolute transform -translate-x-1/2 -translate-y-1/2 group"
+          onClick={handleClick}
+          disabled={link.id === "live-link" && isLoadingLive}
+          className={`absolute transform -translate-x-1/2 -translate-y-1/2 group ${isLoadingLive && link.id === "live-link" ? "opacity-50 cursor-wait" : ""
+            }`}
           style={{
             left: `${link.x}%`,
             top: `${link.y}%`,
@@ -39,9 +129,9 @@ export default function CityScene({ onSelect }: CitySceneProps) {
               </div>
             </div>
 
-            {link.id === "welcome" && (
+            {link.id === "live-link" && (
               <span className="absolute -top-5 text-xs font-bold px-2 py-1 rounded bg-red-600 text-white animate-pulse">
-                LIVE
+                {isLoadingLive ? "LOADING" : "LIVE"}
               </span>
             )}
           </div>
@@ -52,7 +142,7 @@ export default function CityScene({ onSelect }: CitySceneProps) {
         </button>
       );
     });
-  }, []);
+  }, [onSelect]);
 
   return (
     <div className="relative w-full h-full bg-white overflow-hidden">
@@ -69,7 +159,7 @@ export default function CityScene({ onSelect }: CitySceneProps) {
       />
 
       <div className="absolute top-[-9999px] opacity-0">
-        {links.map((link) => {
+        {links.map((link: CityLink) => {
           const Icon = link.icon;
           return <Icon key={link.id} className="hidden" />;
         })}
