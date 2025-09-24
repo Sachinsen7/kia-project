@@ -19,7 +19,9 @@ const authMiddleware = (req, res, next) => {
       next();
     });
   } catch (err) {
-    res.status(500).json({ message: "Auth middleware error", error: err.message });
+    res
+      .status(500)
+      .json({ message: "Auth middleware error", error: err.message });
   }
 };
 

@@ -1,13 +1,19 @@
 const express = require("express");
 const router = express.Router();
-const { uploadFile, getAllUploads, downloadFile, deleteFile } = require("./upload.controller");
+const {
+  getAllUploads,
+  downloadFile,
+  deleteFile,
+  uploadFile,
+} = require("./upload.controller");
+
 const authMiddleware = require("../../middleware/authMiddleware");
+const adminMiddleware = require("../../middleware/adminMiddleware");
 const upload = require("./upload.middleware");
 
-
 router.post("/", authMiddleware, upload.single("file"), uploadFile);
-router.get("/", authMiddleware, getAllUploads);
-router.get("/:id/download", authMiddleware, downloadFile);
-router.delete("/:id", authMiddleware, deleteFile); 
+router.get("/", authMiddleware, adminMiddleware, getAllUploads);
+router.get("/:id/download", authMiddleware, adminMiddleware, downloadFile);
+router.delete("/:id", authMiddleware, adminMiddleware, deleteFile);
 
 module.exports = router;

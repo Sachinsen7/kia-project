@@ -15,10 +15,12 @@ exports.uploadFile = async (req, res) => {
       fileType: req.file.mimetype,
       category,
       uploadedBy: req.user.id,
-      path: req.file.path
+      path: req.file.path,
     });
 
-    res.status(201).json({ message: "File uploaded successfully", file: fileData });
+    res
+      .status(201)
+      .json({ message: "File uploaded successfully", file: fileData });
   } catch (err) {
     res.status(500).json({ message: "Server error", error: err.message });
   }
@@ -27,10 +29,18 @@ exports.uploadFile = async (req, res) => {
 // Get all uploads
 exports.getAllUploads = async (req, res) => {
   try {
-    const files = await Upload.find()
-      .populate("uploadedBy", "firstName lastName email");
-    res.json(files);
+    const files = await Upload.find().populate("uploadedBy", "email").lean();
+    const videos = files.map((file) => ({
+      id: file._id.toString(),
+      title: file.originalName || file.filename,
+      url: file.path, // Assumes path is a URL or accessible file path
+      thumbnailUrl: undefined, // Add thumbnail generation logic if needed
+      uploadedByEmail: file.uploadedBy?.email || "Unknown",
+      createdAt: file.createdAt?.toISOString(),
+    }));
+    res.json({ videos });
   } catch (err) {
+    console.error("Error fetching uploads:", err);
     res.status(500).json({ message: "Server error" });
   }
 };
@@ -43,21 +53,26 @@ exports.downloadFile = async (req, res) => {
 
     res.download(path.resolve(file.path), file.originalName);
   } catch (err) {
+    console.error("Error downloading file:", err);
     res.status(500).json({ message: "Server error" });
   }
 };
 
-// Delete a file (admin only ideally)
 exports.deleteFile = async (req, res) => {
   try {
     const file = await Upload.findById(req.params.id);
     if (!file) return res.status(404).json({ message: "File not found" });
 
-    fs.unlinkSync(file.path); // remove from storage
+    try {
+      fs.unlinkSync(path.resolve(file.path)); // Remove from storage
+    } catch (err) {
+      console.error("Error deleting file from storage:", err);
+    }
     await Upload.findByIdAndDelete(req.params.id);
 
     res.json({ message: "File deleted successfully" });
   } catch (err) {
+    console.error("Error deleting file:", err);
     res.status(500).json({ message: "Server error" });
   }
 };

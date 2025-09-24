@@ -1,7 +1,7 @@
 // src/config/api.ts
 
 export const BASE_URL: string =
-  process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000";
+  process.env.NEXT_PUBLIC_API_BASE_URL || "https://kia-project.onrender.com";
 
 export async function apiFetch<T>(
   endpoint: string,
@@ -29,4 +29,3 @@ export async function apiFetch<T>(
 
   return res.json() as Promise<T>;
 }
-

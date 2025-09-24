@@ -38,18 +38,17 @@ function SignupPage() {
     setShowModal(true);
   };
 
-const handleChange = (
-  e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-) => {
-  const { name, value, type } = e.target;
-  const checked = (e.target as HTMLInputElement).checked;
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value, type } = e.target;
+    const checked = (e.target as HTMLInputElement).checked;
 
-  setFormData((prev) => ({
-    ...prev,
-    [name]: type === "checkbox" ? checked : value,
-  }));
-};
-
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -97,17 +96,45 @@ const handleChange = (
       <Toaster position="top-right" />
       <div className="shadow-lg my-3 rounded-lg w-[70%] bg-white">
         <div className="text-sm mb-6 bg-gray-200 text-black py-4 px-6 rounded-t-lg border-b">
-          Fields marked with <span className="text-black font-bold">✔</span> are mandatory.
+          Fields marked with <span className="text-black font-bold">✔</span> are
+          mandatory.
         </div>
 
         <form className="mx-10 py-6 space-y-6" onSubmit={handleSubmit}>
           {/* Input Fields */}
           {[
-            { label: "✔ E-mail", name: "email", type: "email", placeholder: "Enter your email", info: "If you haven't received the confirmation email, try another email." },
-            { label: "✔ Password", name: "password", type: "password", placeholder: "Enter password", info: "Password must be at least 8 characters, including letters, numbers, and special characters." },
-            { label: "✔ Confirm Password", name: "confirmPassword", type: "password", placeholder: "Confirm password" },
-            { label: "✔ First Name", name: "firstName", type: "text", placeholder: "Enter first name" },
-            { label: "✔ Last Name", name: "lastName", type: "text", placeholder: "Enter last name" },
+            {
+              label: "✔ E-mail",
+              name: "email",
+              type: "email",
+              placeholder: "Enter your email",
+              info: "If you haven't received the confirmation email, try another email.",
+            },
+            {
+              label: "✔ Password",
+              name: "password",
+              type: "password",
+              placeholder: "Enter password",
+              info: "Password must be at least 8 characters, including letters, numbers, and special characters.",
+            },
+            {
+              label: "✔ Confirm Password",
+              name: "confirmPassword",
+              type: "password",
+              placeholder: "Confirm password",
+            },
+            {
+              label: "✔ First Name",
+              name: "firstName",
+              type: "text",
+              placeholder: "Enter first name",
+            },
+            {
+              label: "✔ Last Name",
+              name: "lastName",
+              type: "text",
+              placeholder: "Enter last name",
+            },
           ].map((field, idx) => (
             <div key={idx} className="border rounded bg-gray-50 flex">
               <div className="w-1/3 border-r border-gray-300 p-4 flex items-center">
@@ -118,21 +145,41 @@ const handleChange = (
                   type={field.type}
                   name={field.name}
                   placeholder={field.placeholder}
-                  value={formData[field.name as keyof typeof formData] as string}
+                  value={
+                    formData[field.name as keyof typeof formData] as string
+                  }
                   onChange={handleChange}
                   className="border p-2 w-full placeholder-gray text-black rounded"
                 />
-                {field.info && <p className="text-xs text-gray-700 mt-2">{field.info}</p>}
+                {field.info && (
+                  <p className="text-xs text-gray-700 mt-2">{field.info}</p>
+                )}
               </div>
             </div>
           ))}
 
           {/* Dropdown Fields */}
           {[
-            { label: "✔ Title", name: "title", options: ["Select", "Mr", "Ms", "Dr"] },
-            { label: "✔ Region", name: "region", options: ["Select", "Asia", "Europe", "America"] },
-            { label: "✔ Country", name: "country", options: ["Select", "India", "USA", "UK"] },
-            { label: "✔ Nationality", name: "nationality", options: ["Select", "Indian", "American", "British"] },
+            {
+              label: "✔ Title",
+              name: "title",
+              options: ["Select", "Mr", "Ms", "Dr"],
+            },
+            {
+              label: "✔ Region",
+              name: "region",
+              options: ["Select", "Asia", "Europe", "America"],
+            },
+            {
+              label: "✔ Country",
+              name: "country",
+              options: ["Select", "India", "USA", "UK"],
+            },
+            {
+              label: "✔ Nationality",
+              name: "nationality",
+              options: ["Select", "Indian", "American", "British"],
+            },
           ].map((dropdown, idx) => (
             <div key={idx} className="border rounded bg-gray-50 flex">
               <div className="w-1/3 border-r border-gray-300 p-4 flex items-center">
@@ -141,7 +188,9 @@ const handleChange = (
               <div className="w-2/3 p-4">
                 <select
                   name={dropdown.name}
-                  value={formData[dropdown.name as keyof typeof formData] as string}
+                  value={
+                    formData[dropdown.name as keyof typeof formData] as string
+                  }
                   onChange={handleChange}
                   className="border p-2 w-full text-black rounded"
                 >
@@ -175,7 +224,9 @@ const handleChange = (
                 <input
                   type="checkbox"
                   name={item.name}
-                  checked={formData[item.name as keyof typeof formData] as boolean}
+                  checked={
+                    formData[item.name as keyof typeof formData] as boolean
+                  }
                   onChange={handleChange}
                   className="ml-2"
                 />
