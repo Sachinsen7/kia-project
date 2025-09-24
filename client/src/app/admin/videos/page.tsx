@@ -12,7 +12,10 @@ type VideoItem = {
   thumbnailUrl?: string;
   uploadedByEmail: string;
   createdAt?: string;
+  category?: "greeting" | "bestpractices";
 };
+
+type Category = "greeting" | "bestpractices";
 
 export default function ContentManagementVideosPage() {
   const [videos, setVideos] = useState<VideoItem[]>([]);
@@ -20,6 +23,10 @@ export default function ContentManagementVideosPage() {
   const [error, setError] = useState<string | null>(null);
   const [playing, setPlaying] = useState<VideoItem | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  const [category, setCategory] = useState<Category>("greeting");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 9;
 
   useEffect(() => {
     fetchVideos();
@@ -30,40 +37,31 @@ export default function ContentManagementVideosPage() {
     setError(null);
     try {
       const admintoken = localStorage.getItem("admintoken");
-      if (!admintoken) {
-        throw new Error("No admin token found. Please log in.");
-      }
+      if (!admintoken) throw new Error("No admin token found. Please log in.");
+
       const data = await apiFetch<{ videos: VideoItem[] }>(
         "/api/uploads/",
         "GET",
         undefined,
         admintoken
       );
-      // Ensure videos is an array
+
       const videosArray = Array.isArray(data.videos)
         ? data.videos
         : Array.isArray(data)
         ? data
         : [];
-      // Debug: Log videos to verify structure
-      console.log("Fetched videos:", videosArray);
-      // Check for unique IDs
-      const ids = videosArray.map((v: VideoItem) => v.id);
-      const uniqueIds = new Set(ids);
-      if (ids.length !== uniqueIds.size) {
-        console.warn("Duplicate video IDs detected:", ids);
-        setError("Duplicate video IDs detected. Please contact support.");
-        return;
-      }
-      // Validate required fields
+
       const validVideos = videosArray.filter(
         (v: VideoItem) => v.id && v.url && v.uploadedByEmail
       );
-      if (validVideos.length !== videosArray.length) {
-        console.warn("Invalid video data detected:", videosArray);
-        setError("Some video data is invalid. Please contact support.");
-      }
-      setVideos(validVideos);
+
+      const categorized = validVideos.map((v) => ({
+        ...v,
+        category: v.category || "greeting",
+      }));
+
+      setVideos(categorized);
     } catch (err: unknown) {
       if (err instanceof Error) {
         console.error("Fetch error:", err.message);
@@ -72,53 +70,50 @@ export default function ContentManagementVideosPage() {
         console.error("Unknown error:", err);
         setError("Failed to load videos");
       }
+    } finally {
+      setLoading(false);
     }
   }
 
   async function handleDelete(id: string) {
-    const ok = confirm("Are you sure you want to delete this video?");
-    if (!ok) return;
-
+    if (!confirm("Are you sure you want to delete this video?")) return;
     setDeletingId(id);
     try {
       const admintoken = localStorage.getItem("admintoken");
-      if (!admintoken) {
-        throw new Error("No admin token found. Please log in.");
-      }
+      if (!admintoken) throw new Error("No admin token found. Please log in.");
+
       await apiFetch(`/api/uploads/${id}`, "DELETE", undefined, admintoken);
       setVideos((prev) => prev.filter((v) => v.id !== id));
       alert("Video deleted");
     } catch (err: unknown) {
       if (err instanceof Error) {
-        console.error("Fetch error:", err.message);
+        console.error("Delete error:", err.message);
         setError(err.message);
       } else {
         console.error("Unknown error:", err);
-        setError("Failed to load videos");
+        setError("Failed to delete video");
       }
+    } finally {
+      setDeletingId(null);
     }
   }
 
   async function handleDownload(id: string, filename: string) {
     try {
       const admintoken = localStorage.getItem("admintoken");
-      if (!admintoken) {
-        throw new Error("No admin token found. Please log in.");
-      }
-      // Call the download endpoint
+      if (!admintoken) throw new Error("No admin token found. Please log in.");
+
       const response = await fetch(
         `${
-          process.env.NEXT_PUBLIC_API_BASE_URL || "https://kia-project.onrender.com"
+          process.env.NEXT_PUBLIC_API_BASE_URL ||
+          "https://kia-project.onrender.com"
         }/api/uploads/${id}/download`,
         {
-          headers: {
-            Authorization: `Bearer ${admintoken}`,
-          },
+          headers: { Authorization: `Bearer ${admintoken}` },
         }
       );
-      if (!response.ok) {
-        throw new Error("Failed to download video");
-      }
+      if (!response.ok) throw new Error("Failed to download video");
+
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -128,19 +123,26 @@ export default function ContentManagementVideosPage() {
       window.URL.revokeObjectURL(url);
     } catch (err: unknown) {
       if (err instanceof Error) {
-        console.error("Fetch error:", err.message);
+        console.error("Download error:", err.message);
         setError(err.message);
       } else {
         console.error("Unknown error:", err);
-        setError("Failed to load videos");
+        setError("Failed to download video");
       }
     }
   }
 
+  const filteredVideos = videos.filter((v) => v.category === category);
+  const totalPages = Math.ceil(filteredVideos.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedVideos = filteredVideos.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
+
   function openPlayer(video: VideoItem) {
     setPlaying(video);
   }
-
   function closePlayer() {
     setPlaying(null);
   }
@@ -154,9 +156,39 @@ export default function ContentManagementVideosPage() {
             Content Management — Videos
           </h1>
           <div className="text-sm sm:text-base text-gray-600 font-medium">
-            Manage uploaded videos: watch, delete, or download
+            Manage uploaded videos by category
           </div>
         </header>
+
+        {/* Category Tabs */}
+        <div className="flex gap-4 mb-6">
+          <button
+            onClick={() => {
+              setCategory("greeting");
+              setCurrentPage(1);
+            }}
+            className={`px-4 py-2 rounded-lg font-medium ${
+              category === "greeting"
+                ? "bg-blue-600 text-white"
+                : "bg-gray-300 text-gray-800"
+            }`}
+          >
+            Greeting Videos
+          </button>
+          <button
+            onClick={() => {
+              setCategory("bestpractices");
+              setCurrentPage(1);
+            }}
+            className={`px-4 py-2 rounded-lg font-medium ${
+              category === "bestpractices"
+                ? "bg-blue-600 text-white"
+                : "bg-gray-300 text-gray-800"
+            }`}
+          >
+            Best Practices
+          </button>
+        </div>
 
         {/* Loading and Error States */}
         {loading && (
@@ -166,101 +198,98 @@ export default function ContentManagementVideosPage() {
         )}
         {error && <div className="text-red-600 text-center py-4">{error}</div>}
 
-        {!loading && !videos.length && (
+        {!loading && !filteredVideos.length && (
           <div className="text-center py-8 text-gray-500 text-lg font-medium">
-            No videos found.
+            No videos found in this category.
           </div>
         )}
 
-        {/* Video Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-          {videos.map((video) => (
-            <div
-              key={video.id} // Ensure key is unique
-              className="relative bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-200"
-            >
-              <div className="relative h-40 sm:h-48 bg-gray-100 flex items-center justify-center">
-                {video.thumbnailUrl ? (
-                  <img
-                    src={video.thumbnailUrl}
-                    alt={video.title || "thumbnail"}
-                    className="object-cover w-full h-full"
-                  />
-                ) : (
-                  <video
-                    src={video.url}
-                    className="object-cover w-full h-full"
-                    muted
-                    playsInline
-                    preload="metadata"
-                  />
-                )}
-
-                {/* Watermark Overlay */}
-                <div
-                  aria-hidden
-                  className="pointer-events-none absolute inset-0 flex items-center justify-center text-xs sm:text-sm font-medium opacity-20 select-none transform -rotate-12"
-                  style={{
-                    background:
-                      "linear-gradient(transparent 0%, transparent 30%, rgba(255,255,255,0.8) 31%, transparent 32%), repeating-linear-gradient(90deg, rgba(0,0,0,0) 0px, rgba(0,0,0,0) 100px)",
-                    mixBlendMode: "normal",
-                  }}
-                >
-                  <div className="whitespace-nowrap px-4 py-1 rounded-md bg-white/10 backdrop-blur-sm">
-                    {video.uploadedByEmail}
-                  </div>
-                </div>
-
-                {/* Watch Button */}
-                <button
-                  onClick={() => openPlayer(video)}
-                  className="absolute left-2 sm:left-3 bottom-2 sm:bottom-3 flex items-center gap-1 sm:gap-2 rounded-md bg-white/90 px-2 sm:px-3 py-1 text-xs sm:text-sm font-medium shadow hover:bg-white transition-colors duration-200"
-                >
-                  <Play size={14} /> Watch
-                </button>
-
-                {/* Action Buttons */}
-                <div className="absolute right-2 sm:right-3 bottom-2 sm:bottom-3 flex gap-1 sm:gap-2">
-                  <button
-                    onClick={() =>
-                      handleDownload(video.id, video.title || "video.mp4")
-                    }
-                    className="flex items-center gap-1 sm:gap-2 rounded-md bg-white/90 px-2 sm:px-3 py-1 text-xs sm:text-sm font-medium shadow hover:bg-white transition-colors duration-200"
+        {/* Video Table */}
+        {!loading && filteredVideos.length > 0 && (
+          <div className="overflow-x-auto">
+            <table className="min-w-full bg-white rounded-xl shadow-lg">
+              <thead>
+                <tr className="bg-gray-100 text-gray-900">
+                  <th className="px-4 py-3 text-left text-sm font-semibold">Title</th>
+                  <th className="px-4 py-3 text-left text-sm font-semibold">Uploaded By</th>
+                  <th className="px-4 py-3 text-left text-sm font-semibold">Created At</th>
+                  <th className="px-4 py-3 text-left text-sm font-semibold">Category</th>
+                  <th className="px-4 py-3 text-left text-sm font-semibold">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {paginatedVideos.map((video) => (
+                  <tr
+                    key={video.id}
+                    className="border-b hover:bg-gray-50 transition-colors duration-200"
                   >
-                    <Download size={12} /> Download
-                  </button>
-                  <button
-                    onClick={() => handleDelete(video.id)}
-                    disabled={deletingId === video.id}
-                    className="flex items-center gap-1 sm:gap-2 rounded-md bg-red-600 text-white px-2 sm:px-3 py-1 text-xs sm:text-sm font-medium shadow hover:bg-red-700 transition-colors duration-200"
-                  >
-                    <Trash size={12} />{" "}
-                    {deletingId === video.id ? "Deleting..." : "Delete"}
-                  </button>
-                </div>
-              </div>
-
-              {/* Video Info */}
-              <div className="px-3 sm:px-4 py-2 sm:py-3">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="font-semibold text-sm sm:text-base">
+                    <td className="px-4 py-3 text-sm">
                       {video.title || "Untitled video"}
-                    </div>
-                    <div className="text-xs text-gray-600">
+                    </td>
+                    <td className="px-4 py-3 text-sm text-gray-600">
                       {video.uploadedByEmail}
-                    </div>
-                  </div>
-                  <div className="text-xs text-gray-600">
-                    {video.createdAt
-                      ? new Date(video.createdAt).toLocaleString()
-                      : ""}
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+                    </td>
+                    <td className="px-4 py-3 text-sm text-gray-600">
+                      {video.createdAt
+                        ? new Date(video.createdAt).toLocaleString()
+                        : ""}
+                    </td>
+                    <td className="px-4 py-3 text-sm capitalize">
+                      {video.category}
+                    </td>
+                    <td className="px-4 py-3 text-sm flex gap-2">
+                      <button
+                        onClick={() => openPlayer(video)}
+                        className="flex items-center gap-1 rounded-md bg-blue-600 text-white px-3 py-1 text-xs font-medium hover:bg-blue-700 transition-colors duration-200"
+                      >
+                        <Play size={12} /> Watch
+                      </button>
+                      <button
+                        onClick={() =>
+                          handleDownload(video.id, video.title || "video.mp4")
+                        }
+                        className="flex items-center gap-1 rounded-md bg-gray-600 text-white px-3 py-1 text-xs font-medium hover:bg-gray-700 transition-colors duration-200"
+                      >
+                        <Download size={12} /> Download
+                      </button>
+                      <button
+                        onClick={() => handleDelete(video.id)}
+                        disabled={deletingId === video.id}
+                        className="flex items-center gap-1 rounded-md bg-red-600 text-white px-3 py-1 text-xs font-medium hover:bg-red-700 transition-colors duration-200 disabled:opacity-50"
+                      >
+                        <Trash size={12} />{" "}
+                        {deletingId === video.id ? "Deleting..." : "Delete"}
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="flex justify-center items-center gap-3 mt-6">
+            <button
+              disabled={currentPage === 1}
+              onClick={() => setCurrentPage((p) => p - 1)}
+              className="px-3 py-1 rounded bg-gray-300 disabled:opacity-50"
+            >
+              Prev
+            </button>
+            <span className="text-gray-700">
+              Page {currentPage} of {totalPages}
+            </span>
+            <button
+              disabled={currentPage === totalPages}
+              onClick={() => setCurrentPage((p) => p + 1)}
+              className="px-3 py-1 rounded bg-gray-300 disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
+        )}
 
         {/* Player Modal */}
         {playing && (
