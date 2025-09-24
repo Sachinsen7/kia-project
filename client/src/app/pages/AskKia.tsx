@@ -552,8 +552,8 @@ export default function AskKia() {
         <div className="border border-gray-300 rounded-md p-8 mb-10 text-gray-800 space-y-6">
           <p>
             The GOEF event is where the future of Kia takes shape, and we want
-            your voice to be a part of it. Feel free to ask any questions you've
-            been curious about regarding Kia HQ. We're always listening to your
+            your voice to be a part of it. Feel free to ask any questions you&quote;ve
+            been curious about regarding Kia HQ. We&quote;re always listening to your
             valuable input.
           </p>
 
@@ -562,7 +562,7 @@ export default function AskKia() {
             <br />
             Submit Your Question: Please leave your questions in the comments
             below. <br />
-            Get Your Answer: We'll select questions to be answered directly
+            Get Your Answer: We&quote;ll select questions to be answered directly
             on-site during the GOEF event.
           </p>
 
