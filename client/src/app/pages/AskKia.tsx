@@ -539,8 +539,8 @@ export default function AskKia() {
         {/* Header */}
         <div className="relative mb-12">
           <h1 className="text-5xl font-bold leading-tight tracking-wide">
-            ASK <span className="block">Kia</span>
-            <span className="text-2xl font-light">(Q&amp;A)</span>
+            Questions that shape our future
+            {/* <span className="text-2xl font-light">(Q&amp;A)</span> */}
           </h1>
           <div className="absolute top-0 left-0 w-40 border-t-2 border-black -translate-y-8" />
         </div>

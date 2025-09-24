@@ -56,18 +56,22 @@ export default function ContentManagementVideosPage() {
       const admintoken = localStorage.getItem("admintoken");
       if (!admintoken) throw new Error("No admin token found. Please log in.");
 
-      const data = await apiFetch<{ videos: VideoItem[] }>(
-        "/api/uploads/",
-        "GET",
-        undefined,
-        admintoken
+      const response = await fetch(
+        "https://kia-project.onrender.com/api/uploads/videos",
+        {
+          method: "GET",
+          headers: { Authorization: `Bearer ${admintoken}` },
+        }
       );
 
-      const videosArray = Array.isArray(data.videos)
-        ? data.videos
-        : Array.isArray(data)
-        ? data
-        : [];
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to fetch videos");
+      }
+
+      const data: { videos: VideoItem[] } = await response.json();
+
+      const videosArray = Array.isArray(data.videos) ? data.videos : [];
 
       const validVideos = videosArray.filter(
         (v: VideoItem) => v.id && v.url && v.uploadedByEmail
@@ -91,41 +95,6 @@ export default function ContentManagementVideosPage() {
       setLoading(false);
     }
   }
-
-  // async function fetchLinks() {
-  //   setLinksLoading(true);
-  //   try {
-  //     const admintoken = localStorage.getItem("admintoken");
-  //     if (!admintoken) throw new Error("No admin token found. Please log in.");
-
-  //     const response = await fetch(
-  //       "https://kia-project.onrender.com/api/Link/",
-  //       {
-  //         method: "GET",
-  //         headers: {
-  //           Authorization: `Bearer ${admintoken}`,
-  //           "Content-Type": "application/json",
-  //         },
-  //       }
-  //     );
-
-  //     if (!response.ok) {
-  //       throw new Error("Failed to fetch links");
-  //     }
-
-  //     const data = await response.json();
-  //     const linksArray = Array.isArray(data.links)
-  //       ? data.links
-  //       : Array.isArray(data)
-  //       ? data
-  //       : [];
-  //     setLinks(linksArray);
-  //   } catch (err: unknown) {
-  //     console.error("Failed to fetch links:", err);
-  //   } finally {
-  //     setLinksLoading(false);
-  //   }
-  // }
 
   async function handleDelete(id: string) {
     if (!confirm("Are you sure you want to delete this video?")) return;
