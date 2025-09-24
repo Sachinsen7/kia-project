@@ -34,7 +34,7 @@ export default function CityScene({ onSelect }: CitySceneProps) {
                   "path('M32 0C49.673 0 64 14.327 64 32C64 51.2 32 64 32 64C32 64 0 51.2 0 32C0 14.327 14.327 0 32 0Z')",
               }}
             >
-              <div className="w-[2.5rem] h-[2.5rem] md:w-10 md:h-10 bg-[#ff6c4c] rounded-full flex items-center justify-center transition-transform group-hover:animate-bounce duration-200">
+              <div className="w-[2.5rem] h-[2.5rem] md:w-10 md:h-10 bg-[#05141f] rounded-full flex items-center justify-center transition-transform group-hover:animate-bounce duration-200">
                 <Icon className="text-white w-[1.25rem] h-[1.25rem] md:w-5 md:h-5" />
               </div>
             </div>
