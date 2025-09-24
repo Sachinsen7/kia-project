@@ -43,7 +43,7 @@ export default function Dashboard({}: DashboardProps) {
 
       for (const video of videos) {
         const formData = new FormData();
-        formData.append("video", video); // must match backend Multer field
+        formData.append("video", video); // name must match backend
         formData.append("category", category);
 
         const res = await fetch(
@@ -66,7 +66,7 @@ export default function Dashboard({}: DashboardProps) {
       toast.success(
         uploadedFiles.length === 1
           ? `${uploadedFiles[0]} uploaded successfully`
-          : `${uploadedFiles.length} videos uploaded successfully`
+          : `${uploadedFiles.length} files uploaded successfully`
       );
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -90,6 +90,7 @@ export default function Dashboard({}: DashboardProps) {
 
   return (
     <div className="relative h-full mx-16 bg-white text-gray-900 p-6 md:p-10">
+      {/* Toaster */}
       <Toaster
         position="top-right"
         reverseOrder={false}
@@ -104,7 +105,19 @@ export default function Dashboard({}: DashboardProps) {
       </h1>
 
       <p className="text-sm text-gray-700 mb-8 leading-relaxed">
-        Share your best practices and greeting videos for the GOFF community.
+        Over the past year, we have all worked with dedication to provide our
+        customers with unforgettable ownership experiences. Now, we want to
+        share the brilliant results of these efforts. Please share your best
+        practices, creative ideas, ownership programs and differentiated
+        customer experiences implemented in your region. We want to learn from
+        each and be inspired by your innovative ideas across markets.
+        <br />
+        <br />
+        Your success is our collective achievement. Feel free to share your
+        experiences from the past year, including innovative concepts of unique
+        campaigns, programs and differentiated customer experiences. Your
+        stories will be a great source of inspiration for colleagues in other
+        regions. Lets build a growing GOFF community together..
       </p>
 
       {/* Best Practices */}
@@ -127,6 +140,23 @@ export default function Dashboard({}: DashboardProps) {
           />
         </label>
       </section>
+
+      <p className="text-sm text-gray-700 mb-8 leading-relaxed">
+        We are creating a forum within your GOFF, and to start out, we plan to
+        invite each region to create a simple story video.
+        <br />
+        <br />
+        Please send us a video with a message to your colleagues worldwide,
+        especially a message of encouragement.
+        <br />
+        These videos will be a part of the GOFF page allowing you to welcome new
+        ownership and build a sense of engagement.
+        <br />
+        Please make sure the video is short (approx. 30-60 seconds). It can be
+        recorded with your phone, and please make sure the video is in
+        horizontal format (not vertical) and shot in HD, so the quality is
+        maintained.
+      </p>
 
       {/* Greeting Videos */}
       <section className="mb-10">
