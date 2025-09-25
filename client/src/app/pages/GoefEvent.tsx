@@ -342,9 +342,9 @@ const GoefEvent: React.FC = () => {
           <div className="mt-15">
             <p className="text-gray-700 leading-relaxed mb-8">
               We&qoutes;re hosting a forum with your active participation at
-              this year's GOEF, and we have a special <br /> event planned.
-              Please share your thoughts on "What does ownership mean to you?"
-              in the <br />
+              this year&qoutes;s GOEF, and we have a special <br /> event
+              planned. Please share your thoughts on &quot;What does ownership
+              mean to you?&quot; in the <br />
               comments below!
             </p>
             <p className="text-gray-700 leading-relaxed mb-8">
