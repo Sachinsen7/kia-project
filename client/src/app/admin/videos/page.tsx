@@ -515,7 +515,7 @@ export default function ContentManagementVideosPage() {
             <div className="w-full max-w-md bg-white rounded-xl p-6">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold text-gray-900">
-                  Upload Live link 
+                  Upload Live link
                 </h3>
                 <button
                   onClick={() => setShowLinkModal(false)}
