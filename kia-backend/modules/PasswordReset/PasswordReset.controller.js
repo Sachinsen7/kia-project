@@ -2,6 +2,7 @@ const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const User = require('../users/user.model');
 const PasswordResetToken = require('./PasswordResetToken.model');
+const bcrypt = require('bcrypt');
 
 // POST /api/auth/forgot-password
 exports.forgotPassword = async (req, res) => {
@@ -61,3 +62,31 @@ exports.verifyResetCode = async (req, res) => {
     }
 }
 
+exports.resetPassword = async (req, res) => {
+    try {
+        const {email, code, newPassword} = req.body;
+
+        const user = await User.findOne({email});
+        if(!user) return res.status(404).json({message: "User not found"});
+
+        const resetToken = await PasswordResetToken.findOne({userId: user._id, token: code});
+        if(!resetToken) return res.status(400).json({message: "Invalid code"});
+
+        if (resetToken.expiresAt < Date.now()) {
+        return res.status(400).json({ success: false, message: "Code expired" });
+        }
+        //hashing new password
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        user.password = hashedPassword;
+        await user.save();
+
+        // deleting all reset tokens of user
+        await PasswordResetToken.deleteMany({userId: user._id});
+
+        res.json({success: true, message: "Password reset successful"});
+
+    }
+    catch(err){
+        res.status(500).json({success: false, message: "internal server error", error: err.message});
+    }
+}
