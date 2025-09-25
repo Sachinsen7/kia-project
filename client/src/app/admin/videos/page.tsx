@@ -192,10 +192,10 @@ export default function ContentManagementVideosPage() {
     }
 
     // Basic YouTube URL validation
-    if (!linkUrl.includes("youtube.com") && !linkUrl.includes("youtu.be")) {
-      alert("Please enter a valid YouTube URL");
-      return;
-    }
+    // if (!linkUrl.includes("youtube.com") && !linkUrl.includes("youtu.be")) {
+    //   alert("Please enter a valid YouTube URL");
+    //   return;
+    // }
 
     setLinkUploading(true);
     try {
@@ -344,7 +344,7 @@ export default function ContentManagementVideosPage() {
                         <Play size={12} className="text-white ml-0.5" />
                       </div>
                       <span className="text-sm font-medium text-gray-900">
-                        YouTube
+                        Live link
                       </span>
                     </div>
                     {link.id && (
@@ -360,7 +360,7 @@ export default function ContentManagementVideosPage() {
                   {getYouTubeThumbnail(link.url) && (
                     <img
                       src={getYouTubeThumbnail(link.url)!}
-                      alt="YouTube thumbnail"
+                      alt="Live link thumbnail"
                       className="w-full h-32 object-cover rounded-md mb-3"
                       onError={(e) => {
                         (e.target as HTMLImageElement).style.display = "none";
@@ -515,7 +515,7 @@ export default function ContentManagementVideosPage() {
             <div className="w-full max-w-md bg-white rounded-xl p-6">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold text-gray-900">
-                  Upload YouTube Link
+                  Upload Live link 
                 </h3>
                 <button
                   onClick={() => setShowLinkModal(false)}
@@ -527,13 +527,13 @@ export default function ContentManagementVideosPage() {
 
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  YouTube URL
+                  Live link URL
                 </label>
                 <input
                   type="url"
                   value={linkUrl}
                   onChange={(e) => setLinkUrl(e.target.value)}
-                  placeholder="https://www.youtube.com/watch?v=..."
+                  placeholder="Enter your URL here"
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#05141f] focus:border-transparent"
                 />
               </div>
