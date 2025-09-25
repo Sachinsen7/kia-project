@@ -44,29 +44,36 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen  bg-white overflow-hidden">
+    <div className="min-h-screen bg-white overflow-hidden">
       {/* Header Banner */}
       <header className="w-full text-white my-15  text-center">
-
         <h2 className="text-3xl text-black font-extrabold my-2 mx-5">Login</h2>
       </header>
 
       {/* Main Content */}
-      <main className="w-full items-center  mx-5 py-2">
+      <main className="w-full items-center mx-auto py-2">
         <div className="w-full">
-          <div className="bg-white justify-center border shadow-sm">
-
+          <div className="bg-white justify-center  border shadow-sm">
             {/* Sign-up Prompt */}
             <div className="bg-gray-200 text-gray-700 text-center py-4 mb-4">
-              If you have not yet signed up, click <a href="/signup" className="text-black font-semibold underline">Sign up</a>.
+              If you have not yet signed up, click{" "}
+              <a href="/signup" className="text-black font-semibold underline">
+                Sign up
+              </a>
+              .
             </div>
 
             {/* Form */}
-            <form onSubmit={handleSubmit} className="w-[80%] justify-center mx-auto ">
+            <form
+              onSubmit={handleSubmit}
+              className="w-[80%] justify-center items-center mx-auto "
+            >
               <div className="flex justify-center w-full mx-auto">
                 <div className="w-[60%] mx-0 my-7">
-                  <div className="flex items-center my-2  " >
-                    <label className="block text-md font-medium mr-5 w-[20%] text-gray-700">E-mail</label>
+                  <div className="flex items-center my-2  ">
+                    <label className="block text-md font-medium mr-5 w-[20%] text-gray-700">
+                      E-mail
+                    </label>
                     <input
                       type="email"
                       value={email}
@@ -76,7 +83,9 @@ export default function Login() {
                     />
                   </div>
                   <div className="flex items-center">
-                    <label className="block mr-5 w-[20%] text-md font-medium text-gray-700">Password</label>
+                    <label className="block mr-5 w-[20%] text-md font-medium text-gray-700">
+                      Password
+                    </label>
                     <input
                       type="password"
                       value={password}
@@ -89,24 +98,19 @@ export default function Login() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className=" bg-black text-white h-22 my-10 w-[10%]  font-semibold hover:bg-gray-800 disabled:opacity-50"
+                  className=" bg-black text-white h-[94px] my-10 w-[10%]  font-semibold hover:bg-gray-800 disabled:opacity-50"
                 >
                   {loading ? "Logging in..." : "Login"}
                 </button>
               </div>
 
-              {error && (
-                <p className="text-red-600 text-sm mt-2">{error}</p>
-              )}
+              {error && <p className="text-red-600 text-sm mt-2">{error}</p>}
             </form>
             <hr />
 
             {/* Forgot Password */}
             <div className="mt-4 py-4 text-center text-sm text-gray-600">
-              <div>
-
-                Forgot your Password?{" "}
-              </div>
+              <div>Forgot your Password? </div>
               <a href="/forgot-password" className="text-blue-600 underline">
                 Click here
               </a>
