@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { toast, Toaster } from "react-hot-toast";
+import Image from "next/image";
 
 type DashboardProps = {
   onClose?: () => void;
@@ -89,95 +90,132 @@ export default function Dashboard({}: DashboardProps) {
   };
 
   return (
-    <div className="relative h-full mx-16 bg-white text-gray-900 p-6 md:p-10">
+    <div className="relative w-full min-h-screen bg-white px-6 md:px-16 py-12">
       {/* Toaster */}
-      <Toaster
-        position="top-right"
-        reverseOrder={false}
-        toastOptions={{
-          duration: 4000,
-          style: { background: "#333", color: "#fff" },
-        }}
-      />
+      <div className="bg-white relative shadow-2xl rounded-2xl w-full max-w-6xl m-6 p-8 md:p-14">
+        <Toaster
+          position="top-right"
+          reverseOrder={false}
+          toastOptions={{
+            duration: 4000,
+            style: { background: "#333", color: "#fff" },
+          }}
+        />
+        <div className="w-full mt-10 pt-6 pb-10 px-4">
+          <h1 className="text-3xl md:text-5xl text-gray-900 mb-2">
+            <strong> UPLOAD </strong> YOUR
+          </h1>
+          <div className="w-[164px]  h-[4px] text-[#000] bg-[#000] absolute top-18 -rotate-57 left-67"></div>
+          <h2 className="text-3xl md:text-5xl ml-40">CONTENTS</h2>
+        </div>
 
-      <h1 className="text-2xl font-extrabold mb-4 text-black">
-        Upload Your Contents
-      </h1>
+        <div className="mt-10 text-gray-700 leading-relaxed w-[1108px] h-[300px]">
+          <div className="mb-52">
+            <p className="text-sm text-gray-700 mb-8 leading-relaxed">
+              Over the past year, we have all worked with dedication to provide
+              our customers with unforgettable <br />
+              ownership experiences. Now, we want to share the brilliant results
+              of these efforts. <br />
+              Please share your best practices, creative ideas, ownership
+              programs and differentiated <br />
+              customer experiences implemented in your region. We want to learn
+              from each and be inspired by your <br /> innovative ideas across
+              markets.
+              <br />
+              <br />
+              Your success is our collective achievement. Feel free to share
+              your experiences from the past year, <br />
+              including innovative concepts of unique campaigns, programs and
+              differentiated customer <br />
+              experiences. Your stories will be a great source of inspiration
+              for colleagues in other regions. <br /> Lets build a growing GOFF
+              community together..
+            </p>
+          </div>
 
-      <p className="text-sm text-gray-700 mb-8 leading-relaxed">
-        Over the past year, we have all worked with dedication to provide our
-        customers with unforgettable ownership experiences. Now, we want to
-        share the brilliant results of these efforts. Please share your best
-        practices, creative ideas, ownership programs and differentiated
-        customer experiences implemented in your region. We want to learn from
-        each and be inspired by your innovative ideas across markets.
-        <br />
-        <br />
-        Your success is our collective achievement. Feel free to share your
-        experiences from the past year, including innovative concepts of unique
-        campaigns, programs and differentiated customer experiences. Your
-        stories will be a great source of inspiration for colleagues in other
-        regions. Lets build a growing GOFF community together..
-      </p>
-
-      {/* Best Practices */}
-      <section className="mb-10">
-        <h2 className="text-lg font-semibold mb-2 text-black">
-          Best Practices
-        </h2>
-
-        <label className="flex items-center justify-center cursor-pointer border border-gray-300 rounded-lg bg-gray-100 hover:bg-gray-50 transition h-16 shadow-sm">
-          <span className="text-gray-700 font-medium">
-            {isUploading ? "Uploading..." : "Click to upload content"}
-          </span>
-          <input
-            type="file"
-            accept="video/*"
-            multiple
-            className="hidden"
-            onChange={(e) => handleUpload(e, "Best Practices")}
-            disabled={isUploading}
+          {/* Big Highlight Image */}
+          <Image
+            src="/uploadyourcontent/border.png"
+            alt="2024 GOEF Highlight"
+            width={600}
+            height={600}
+            className="absolute top-70 right-0 object-cover"
           />
-        </label>
-      </section>
+        </div>
 
-      <p className="text-sm text-gray-700 mb-8 leading-relaxed">
-        We are creating a forum within your GOFF, and to start out, we plan to
-        invite each region to create a simple story video.
-        <br />
-        <br />
-        Please send us a video with a message to your colleagues worldwide,
-        especially a message of encouragement.
-        <br />
-        These videos will be a part of the GOFF page allowing you to welcome new
-        ownership and build a sense of engagement.
-        <br />
-        Please make sure the video is short (approx. 30-60 seconds). It can be
-        recorded with your phone, and please make sure the video is in
-        horizontal format (not vertical) and shot in HD, so the quality is
-        maintained.
-      </p>
+        {/* Best Practices */}
+        <section className="mb-15">
+          <h2 className="text-lg font-semibold mb-2 text-black">
+            Best Practices
+          </h2>
 
-      {/* Greeting Videos */}
-      <section className="mb-10">
-        <h2 className="text-lg font-semibold mb-2 text-black">
-          Greeting Videos
-        </h2>
+          <label className="flex items-center justify-center cursor-pointer border border-gray-300 rounded-lg bg-gray-100 hover:bg-gray-50 transition h-16 shadow-sm">
+            <span className="text-gray-700 font-medium">
+              {isUploading ? "Uploading..." : "Click to upload content"}
+            </span>
+            <input
+              type="file"
+              accept="video/*"
+              multiple
+              className="hidden"
+              onChange={(e) => handleUpload(e, "Best Practices")}
+              disabled={isUploading}
+            />
+          </label>
+        </section>
 
-        <label className="flex items-center justify-center cursor-pointer border border-gray-300 rounded-lg bg-gray-100 hover:bg-gray-50 transition h-16 shadow-sm mb-4">
-          <span className="text-gray-700 font-medium">
-            {isUploading ? "Uploading..." : "Click to upload video"}
-          </span>
-          <input
-            type="file"
-            accept="video/*"
-            multiple
-            className="hidden"
-            onChange={(e) => handleUpload(e, "Greeting Videos")}
-            disabled={isUploading}
+        <div className="h-[2px] w-full bg-gray-300"></div>
+
+        <div className="mt-30 text-gray-700 leading-relaxed w-[1108px] h-[300px]">
+          <div className="mb-52">
+            <p className="text-sm text-gray-700 leading-relaxed">
+              We are creating a forum with you at the GOEF, and to that end, we
+              plan to edit videos from each <br /> region to create a single
+              story video.
+              <br />
+              Please send us a video with a message to your colleagues
+              worldwide, especially a message of <br /> encouragement.
+            </p>
+            <p className="text-sm">
+              {" "}
+              The video will be used as the GOEF ending video. It would be a
+              more meaningful video if all the <br /> members of each region
+              appear in it together. For editing purposes, please shoot the
+              video in <br /> horizontal format(Not Vertical) and send it to us,
+              and please make sure the video is of the highest <br /> possible
+              quality.
+            </p>
+          </div>
+
+          <Image
+            src="/uploadyourcontent/border-2.png"
+            alt="2024 GOEF Highlight"
+            width={600}
+            height={600}
+            className="absolute bottom-80 left-0 object-cover"
           />
-        </label>
-      </section>
+        </div>
+
+        <section className="mb-10">
+          <h2 className="text-lg mt-5 font-semibold mb-2 text-black">
+            Greeting Videos
+          </h2>
+
+          <label className="flex items-center justify-center cursor-pointer border border-gray-300 rounded-lg bg-gray-100 hover:bg-gray-50 transition h-16 shadow-sm mb-4 mt-10">
+            <span className="text-gray-700 font-medium">
+              {isUploading ? "Uploading..." : "Click to upload video"}
+            </span>
+            <input
+              type="file"
+              accept="video/*"
+              multiple
+              className="hidden"
+              onChange={(e) => handleUpload(e, "Greeting Videos")}
+              disabled={isUploading}
+            />
+          </label>
+        </section>
+      </div>
     </div>
   );
 }
