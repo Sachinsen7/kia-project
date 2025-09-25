@@ -1,662 +1,637 @@
-// "use client";
+"use client";
 
-// import React, { useState, useEffect, useRef, useCallback } from "react";
-// import dynamic from "next/dynamic";
-// import { Heart, MessageSquare, Trash2 } from "lucide-react";
-// import { apiFetch } from "@/config/api";
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import dynamic from "next/dynamic";
+import { Heart, MessageSquare, Trash2 } from "lucide-react";
+import { apiFetch } from "@/config/api";
+import Image from "next/image";
 
-// // ----------- Types -----------
-// type User = { firstName: string; lastName: string; _id?: string };
+// ----------- Types -----------
+type User = { firstName: string; lastName: string; _id?: string };
 
-// type Question = {
-//   id: string;
-//   user: string;
-//   userId?: string;
-//   dept: string;
-//   date: string;
-//   title: string;
-//   country: string;
-//   text: string;
-//   likes: number;
-//   likedBy: string[];
-//   comments: number;
-//   commentList: Comment[];
-//   showCommentInput: boolean;
-// };
+type Question = {
+  id: string;
+  user: string;
+  userId?: string;
+  dept: string;
+  date: string;
+  title: string;
+  country: string;
+  text: string;
+  likes: number;
+  likedBy: string[];
+  comments: number;
+  commentList: Comment[];
+  showCommentInput: boolean;
+};
 
-// type Comment = {
-//   id: string;
-//   user: string;
-//   userId?: string;
-//   text: string;
-//   time: string;
-// };
+type Comment = {
+  id: string;
+  user: string;
+  userId?: string;
+  text: string;
+  time: string;
+};
 
-// type CommentResponse = {
-//   _id: string;
-//   text: string;
-//   createdAt: string;
-//   createdBy: User;
-// };
+type CommentResponse = {
+  _id: string;
+  text: string;
+  createdAt: string;
+  createdBy: User;
+};
 
-// type QuestionResponse = {
-//   _id: string;
-//   title: string;
-//   description: string;
-//   country: string;
-//   createdAt: string;
-//   createdBy: User;
-//   likes: string[];
-// };
+type QuestionResponse = {
+  _id: string;
+  title: string;
+  description: string;
+  country: string;
+  createdAt: string;
+  createdBy: User;
+  likes: string[];
+};
 
-// type AddQuestionResponse = { qna: QuestionResponse };
-// type AddCommentResponse = { comment: CommentResponse };
-// type LikeResponse = { success: boolean; likes: string[]; likesCount: number };
+type AddQuestionResponse = { qna: QuestionResponse };
+type AddCommentResponse = { comment: CommentResponse };
+type LikeResponse = { success: boolean; likes: string[]; likesCount: number };
 
-// const EditorComponent = dynamic(
-//   () => import("./EditorComponent").then((mod) => mod.default),
-//   { ssr: false }
-// );
+const EditorComponent = dynamic(
+  () => import("./EditorComponent").then((mod) => mod.default),
+  { ssr: false }
+);
 
-// const AskKia: React.FC = () => {
-//   const [mounted, setMounted] = useState(false);
-//   const [questions, setQuestions] = useState<Question[]>([]);
-//   const [showInput, setShowInput] = useState(false);
-//   const [newQuestionTitle, setNewQuestionTitle] = useState("");
-//   const [newQuestionText, setNewQuestionText] = useState("");
-//   const [newQuestionCountry, setNewQuestionCountry] =
-//     useState("Select country");
-//   const [commentEditorContent, setCommentEditorContent] = useState("");
-//   const [countries] = useState([
-//     "Select country",
-//     "USA",
-//     "UK",
-//     "Canada",
-//     "India",
-//   ]);
-//   const [loadingQuestions, setLoadingQuestions] = useState(false);
+const AskKia: React.FC = () => {
+  const [mounted, setMounted] = useState(false);
+  const [questions, setQuestions] = useState<Question[]>([]);
+  const [showInput, setShowInput] = useState(false);
+  const [newQuestionTitle, setNewQuestionTitle] = useState("");
+  const [newQuestionText, setNewQuestionText] = useState("");
+  const [newQuestionCountry, setNewQuestionCountry] =
+    useState("Select Country");
+  const [commentEditorContent, setCommentEditorContent] = useState("");
+  const [countries] = useState([
+    "Select Country",
+    "USA",
+    "UK",
+    "Canada",
+    "India",
+  ]);
+  const [loadingQuestions, setLoadingQuestions] = useState(false);
 
-//   const editorRef = useRef<HTMLDivElement>(null);
-//   const commentEditorRef = useRef<HTMLDivElement>(null);
-//   const token =
-//     typeof window !== "undefined" ? localStorage.getItem("token") || "" : "";
-//   const currentUserId =
-//     typeof window !== "undefined" ? localStorage.getItem("userId") || "" : "";
+  const editorRef = useRef<HTMLDivElement>(null);
+  const commentEditorRef = useRef<HTMLDivElement>(null);
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("token") || "" : "";
+  const currentUserId =
+    typeof window !== "undefined" ? localStorage.getItem("userId") || "" : "";
 
-//   // Fetch comments
-//   const fetchComments = useCallback(
-//     async (questionId: string): Promise<Comment[]> => {
-//       try {
-//         const data = await apiFetch<CommentResponse[]>(
-//           `/api/comment/${questionId}`,
-//           "GET",
-//           undefined,
-//           token
-//         );
-//         return data.map((c) => ({
-//           id: c._id,
-//           user: `${c.createdBy.firstName} ${c.createdBy.lastName}`,
-//           userId: c.createdBy._id,
-//           text: c.text,
-//           time: new Date(c.createdAt).toLocaleTimeString("en-US", {
-//             hour: "2-digit",
-//             minute: "2-digit",
-//           }),
-//         }));
-//       } catch (err) {
-//         console.error("Error fetching comments:", err);
-//         return [];
-//       }
-//     },
-//     [token]
-//   );
+  // Fetch comments
+  const fetchComments = useCallback(
+    async (questionId: string): Promise<Comment[]> => {
+      try {
+        const data = await apiFetch<CommentResponse[]>(
+          `/api/comment/${questionId}`,
+          "GET",
+          undefined,
+          token
+        );
+        return data.map((c) => ({
+          id: c._id,
+          user: `${c.createdBy.firstName} ${c.createdBy.lastName}`,
+          userId: c.createdBy._id,
+          text: c.text,
+          time: new Date(c.createdAt).toLocaleTimeString("en-US", {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+        }));
+      } catch (err) {
+        console.error("Error fetching comments:", err);
+        return [];
+      }
+    },
+    [token]
+  );
 
-//   // Fetch questions
-//   const fetchQuestions = useCallback(async () => {
-//     setLoadingQuestions(true);
-//     try {
-//       const data = await apiFetch<QuestionResponse[]>(
-//         `/api/qna?type=ask_kia`,
-//         "GET",
-//         undefined,
-//         token
-//       );
-//       const formatted = await Promise.all(
-//         data.map(async (q) => {
-//           const comments = await fetchComments(q._id);
-//           return {
-//             id: q._id,
-//             user: `${q.createdBy.firstName} ${q.createdBy.lastName}`,
-//             userId: q.createdBy._id,
-//             dept: "GUEST",
-//             date: new Date(q.createdAt).toISOString().slice(0, 10),
-//             title: q.title,
-//             country: q.country,
-//             text: q.description,
-//             likes: q.likes.length,
-//             likedBy: q.likes,
-//             comments: comments.length,
-//             commentList: comments,
-//             showCommentInput: false,
-//           };
-//         })
-//       );
-//       setQuestions(formatted);
-//     } catch (err) {
-//       console.error(err);
-//     } finally {
-//       setLoadingQuestions(false);
-//     }
-//   }, [token, fetchComments]);
+  // Fetch questions
+  const fetchQuestions = useCallback(async () => {
+    setLoadingQuestions(true);
+    try {
+      const data = await apiFetch<QuestionResponse[]>(
+        `/api/qna?type=ask_kia`,
+        "GET",
+        undefined,
+        token
+      );
+      const formatted = await Promise.all(
+        data.map(async (q) => {
+          const comments = await fetchComments(q._id);
+          return {
+            id: q._id,
+            user: `${q.createdBy.firstName} ${q.createdBy.lastName}`,
+            userId: q.createdBy._id,
+            dept: "GUEST",
+            date: new Date(q.createdAt).toISOString().slice(0, 10),
+            title: q.title,
+            country: q.country,
+            text: q.description,
+            likes: q.likes.length,
+            likedBy: q.likes,
+            comments: comments.length,
+            commentList: comments,
+            showCommentInput: false,
+          };
+        })
+      );
+      setQuestions(formatted);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoadingQuestions(false);
+    }
+  }, [token, fetchComments]);
 
-//   useEffect(() => {
-//     setMounted(true);
-//     fetchQuestions();
-//   }, [token, fetchQuestions]);
+  useEffect(() => {
+    setMounted(true);
+    fetchQuestions();
+  }, [token, fetchQuestions]);
 
-//   // Add question
-//   const handleAddQuestion = async () => {
-//     const title = newQuestionTitle.trim();
-//     const description = newQuestionText.trim();
-//     const country = newQuestionCountry;
-//     if (!title || !description || country === "Select country") return;
+  // Add question
+  const handleAddQuestion = async () => {
+    const title = newQuestionTitle.trim();
+    const description = newQuestionText.trim();
+    const country = newQuestionCountry;
+    if (!title || !description || country === "Select Country") return;
 
-//     try {
-//       const response = await apiFetch<AddQuestionResponse>(
-//         "/api/qna",
-//         "POST",
-//         { title, description, country, type: "ask_kia" },
-//         token
-//       );
-//       const newQ: Question = {
-//         id: response.qna._id,
-//         user: "You",
-//         userId: currentUserId,
-//         dept: "GUEST",
-//         date: new Date(response.qna.createdAt).toISOString().slice(0, 10),
-//         title: response.qna.title,
-//         country: response.qna.country,
-//         text: response.qna.description,
-//         likes: response.qna.likes.length,
-//         likedBy: response.qna.likes,
-//         comments: 0,
-//         commentList: [],
-//         showCommentInput: false,
-//       };
-//       setQuestions((prev) => [newQ, ...prev]);
-//       setShowInput(false);
-//       setNewQuestionTitle("");
-//       setNewQuestionText("");
-//       setNewQuestionCountry("Select country");
-//     } catch (err) {
-//       console.error("Error adding question:", err);
-//     }
-//   };
+    try {
+      const response = await apiFetch<AddQuestionResponse>(
+        "/api/qna",
+        "POST",
+        { title, description, country, type: "ask_kia" },
+        token
+      );
+      const newQ: Question = {
+        id: response.qna._id,
+        user: "You",
+        userId: currentUserId,
+        dept: "GUEST",
+        date: new Date(response.qna.createdAt).toISOString().slice(0, 10),
+        title: response.qna.title,
+        country: response.qna.country,
+        text: response.qna.description,
+        likes: response.qna.likes.length,
+        likedBy: response.qna.likes,
+        comments: 0,
+        commentList: [],
+        showCommentInput: false,
+      };
+      setQuestions((prev) => [newQ, ...prev]);
+      setShowInput(false);
+      setNewQuestionTitle("");
+      setNewQuestionText("");
+      setNewQuestionCountry("Select Country");
+    } catch (err) {
+      console.error("Error adding question:", err);
+    }
+  };
 
-//   // Add comment
-//   const handleAddComment = async (id: string) => {
-//     const commentText = commentEditorContent.trim();
-//     if (!commentText) return;
+  // Add comment
+  const handleAddComment = async (id: string) => {
+    const commentText = commentEditorContent.trim();
+    if (!commentText) return;
 
-//     try {
-//       const response = await apiFetch<AddCommentResponse>(
-//         `/api/comment/${id}`,
-//         "POST",
-//         { text: commentText },
-//         token
-//       );
-//       const newComment: Comment = {
-//         id: response.comment._id,
-//         user: "You",
-//         userId: currentUserId,
-//         text: response.comment.text,
-//         time: new Date(response.comment.createdAt).toLocaleTimeString("en-US", {
-//           hour: "2-digit",
-//           minute: "2-digit",
-//         }),
-//       };
-//       setQuestions((prev) =>
-//         prev.map((q) =>
-//           q.id === id
-//             ? {
-//                 ...q,
-//                 comments: q.comments + 1,
-//                 commentList: [...q.commentList, newComment],
-//                 showCommentInput: false,
-//               }
-//             : q
-//         )
-//       );
-//       setCommentEditorContent("");
-//     } catch (err) {
-//       console.error("Error adding comment:", err);
-//     }
-//   };
+    try {
+      const response = await apiFetch<AddCommentResponse>(
+        `/api/comment/${id}`,
+        "POST",
+        { text: commentText },
+        token
+      );
+      const newComment: Comment = {
+        id: response.comment._id,
+        user: "You",
+        userId: currentUserId,
+        text: response.comment.text,
+        time: new Date(response.comment.createdAt).toLocaleTimeString("en-US", {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+      };
+      setQuestions((prev) =>
+        prev.map((q) =>
+          q.id === id
+            ? {
+                ...q,
+                comments: q.comments + 1,
+                commentList: [...q.commentList, newComment],
+                showCommentInput: false,
+              }
+            : q
+        )
+      );
+      setCommentEditorContent("");
+    } catch (err) {
+      console.error("Error adding comment:", err);
+    }
+  };
 
-//   // Like
-//   const handleLike = async (id: string) => {
-//     try {
-//       const response = await apiFetch<LikeResponse>(
-//         `/api/qna/${id}/like`,
-//         "PUT",
-//         {},
-//         token
-//       );
-//       if (!response.success) return;
-//       setQuestions((prev) =>
-//         prev.map((q) =>
-//           q.id === id
-//             ? {
-//                 ...q,
-//                 likes: response.likesCount,
-//                 likedBy: response.likes,
-//               }
-//             : q
-//         )
-//       );
-//     } catch (err) {
-//       console.error("Error toggling like:", err);
-//     }
-//   };
+  // Like
+  const handleLike = async (id: string) => {
+    try {
+      const response = await apiFetch<LikeResponse>(
+        `/api/qna/${id}/like`,
+        "PUT",
+        {},
+        token
+      );
+      if (!response.success) return;
+      setQuestions((prev) =>
+        prev.map((q) =>
+          q.id === id
+            ? {
+                ...q,
+                likes: response.likesCount,
+                likedBy: response.likes,
+              }
+            : q
+        )
+      );
+    } catch (err) {
+      console.error("Error toggling like:", err);
+    }
+  };
 
-//   // Delete question
-//   const handleDeleteQuestion = async (id: string) => {
-//     try {
-//       await apiFetch<{ success: boolean }>(
-//         `/api/qna/${id}`,
-//         "DELETE",
-//         undefined,
-//         token
-//       );
-//       setQuestions((prev) => prev.filter((q) => q.id !== id));
-//     } catch (err) {
-//       console.error("Error deleting question:", err);
-//     }
-//   };
+  // Delete question
+  const handleDeleteQuestion = async (id: string) => {
+    try {
+      await apiFetch<{ success: boolean }>(
+        `/api/qna/${id}`,
+        "DELETE",
+        undefined,
+        token
+      );
+      setQuestions((prev) => prev.filter((q) => q.id !== id));
+    } catch (err) {
+      console.error("Error deleting question:", err);
+    }
+  };
 
-//   // Delete comment
-//   const handleDeleteComment = async (questionId: string, commentId: string) => {
-//     try {
-//       await apiFetch<{ success: boolean }>(
-//         `/api/comment/${commentId}`,
-//         "DELETE",
-//         undefined,
-//         token
-//       );
-//       setQuestions((prev) =>
-//         prev.map((q) =>
-//           q.id === questionId
-//             ? {
-//                 ...q,
-//                 comments: q.comments - 1,
-//                 commentList: q.commentList.filter((c) => c.id !== commentId),
-//               }
-//             : q
-//         )
-//       );
-//     } catch (err) {
-//       console.error("Error deleting comment:", err);
-//     }
-//   };
+  // Delete comment
+  const handleDeleteComment = async (questionId: string, commentId: string) => {
+    try {
+      await apiFetch<{ success: boolean }>(
+        `/api/comment/${commentId}`,
+        "DELETE",
+        undefined,
+        token
+      );
+      setQuestions((prev) =>
+        prev.map((q) =>
+          q.id === questionId
+            ? {
+                ...q,
+                comments: q.comments - 1,
+                commentList: q.commentList.filter((c) => c.id !== commentId),
+              }
+            : q
+        )
+      );
+    } catch (err) {
+      console.error("Error deleting comment:", err);
+    }
+  };
 
-//   const toggleCommentInput = (id: string) => {
-//     setQuestions((prev) =>
-//       prev.map((q) =>
-//         q.id === id ? { ...q, showCommentInput: !q.showCommentInput } : q
-//       )
-//     );
-//   };
+  const toggleCommentInput = (id: string) => {
+    setQuestions((prev) =>
+      prev.map((q) =>
+        q.id === id ? { ...q, showCommentInput: !q.showCommentInput } : q
+      )
+    );
+  };
 
-//   if (!mounted) return null;
+  const handleCancelQuestion = () => {
+    setShowInput(false);
+    setNewQuestionTitle("");
+    setNewQuestionText("");
+    setNewQuestionCountry("Select Country");
+  };
 
-//   return (
-//     <div className="h-full border-l overflow-y-auto z-50 p-6 md:p-10">
-//       <section className="mb-6 p-4 rounded-lg ">
-//         <h1 className="text-2xl font-bold mb-3">
-//           Questions that shape our futures
-//         </h1>
-//         <br />
-//         <p className="text-gray-700 text-sm mb-2">
-//           The GOEF event is where the future of Kia takes shape, and we want
-//           your voice to be a part of it. Feel free to ask any questions
-//           you&apos;ve been curious about regarding Kia HQ. We are always
-//           listening to your valuable input.
-//         </p>
-//         <br />
-//         <h2 className="font-semibold text-gray-800 mb-1">How to Participate</h2>
-//         <p className="text-gray-700 text-sm mb-2">
-//           <strong>Submit Your Question:</strong> Please leave your questions in
-//           the comments below.
-//         </p>
-//         <p className="text-gray-700 text-sm mb-2">
-//           <strong>Get Your Answer:</strong> We will select questions to be
-//           answered directly on-site during the GOEF event.
-//         </p>
-//         <br />
-//         <h2 className="font-semibold text-gray-800 mb-1">
-//           For Unanswered Questions
-//         </h2>
-//         We appreciate your understanding that we may not be able to answer all
-//         questions immediately due to the nature of the live event. If your
-//         question isn&apos;t answered on the spot, a dedicated team member will
-//         review it after the event and provide a thorough response.
-//       </section>
+  if (!mounted) return null;
 
-//       <div className="mb-4 flex justify-end">
-//         {!showInput ? (
-//           <button
-//             onClick={() => setShowInput(true)}
-//             className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800 text-sm font-semibold"
-//           >
-//             Create a question
-//           </button>
-//         ) : (
-//           <div className="w-full" ref={editorRef}>
-//             <div className="mb-2">
-//               <select
-//                 title="Country"
-//                 className="w-full border border-gray-300 rounded p-2 text-sm"
-//                 value={newQuestionCountry}
-//                 onChange={(e) => setNewQuestionCountry(e.target.value)}
-//               >
-//                 {countries.map((country) => (
-//                   <option key={country} value={country}>
-//                     {country}
-//                   </option>
-//                 ))}
-//               </select>
-//             </div>
-
-//             <div className="mb-2">
-//               <input
-//                 type="text"
-//                 placeholder="Heading"
-//                 value={newQuestionTitle}
-//                 onChange={(e) => setNewQuestionTitle(e.target.value)}
-//                 className="w-full border border-gray-300 rounded p-2 text-sm"
-//               />
-//             </div>
-
-//             <div className="mb-2 editor-container">
-//               <EditorComponent
-//                 onUpdate={setNewQuestionText}
-//                 initialContent={newQuestionText}
-//               />
-//             </div>
-
-//             <div className="flex justify-end gap-2">
-//               <button
-//                 onClick={() => setShowInput(false)}
-//                 className="px-4 py-1 border rounded text-sm"
-//               >
-//                 Cancel
-//               </button>
-//               <button
-//                 onClick={handleAddQuestion}
-//                 className="bg-black text-white px-4 py-1 rounded hover:bg-gray-800 text-sm"
-//               >
-//                 Submit
-//               </button>
-//             </div>
-//           </div>
-//         )}
-//       </div>
-//       {/* Loading State */}
-//       {loadingQuestions ? (
-//         <p className="text-gray-500 text-sm">Loading questions...</p>
-//       ) : (
-//         questions.map((q) => (
-//           <div
-//             key={q.id}
-//             className="border border-gray-300 rounded bg-white mb-4"
-//           >
-//             {/* User info */}
-//             <div className="flex items-center justify-between px-4 py-3">
-//               <div className="flex items-center">
-//                 <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center mr-3">
-//                   <span className="text-gray-500 font-bold">
-//                     {q.user.charAt(0)}
-//                   </span>
-//                 </div>
-//                 <div>
-//                   <span className="font-semibold text-gray-900 text-sm">
-//                     {q.user}
-//                   </span>
-//                   <span className="mx-2 text-xs text-gray-500">/ {q.dept}</span>
-//                   <span className="text-xs text-gray-400">{q.date}</span>
-//                 </div>
-//               </div>
-//               {q.userId === currentUserId && (
-//                 <button
-//                   onClick={() => handleDeleteQuestion(q.id)}
-//                   className="text-red-500 hover:text-red-700"
-//                 >
-//                   <Trash2 size={16} />
-//                 </button>
-//               )}
-//             </div>
-
-//             {/* Question content */}
-//             <div className="px-4 pb-3 text-gray-800 text-sm">
-//               <strong>{q.title}</strong> - <em>{q.country}</em>
-//               <div dangerouslySetInnerHTML={{ __html: q.text }} />
-//             </div>
-
-//             {/* Actions */}
-//             <div className="px-4 pb-3 flex items-center gap-6 text-xs text-gray-500">
-//               <button
-//                 onClick={() => handleLike(q.id)}
-//                 className="flex items-center gap-1 transition"
-//               >
-//                 {q.likedBy.includes(currentUserId) ? (
-//                   <Heart size={16} fill="red" stroke="red" />
-//                 ) : (
-//                   <Heart size={16} stroke="gray" />
-//                 )}
-//                 {q.likes}
-//               </button>
-//               <button
-//                 onClick={() => toggleCommentInput(q.id)}
-//                 className="flex items-center gap-1 hover:text-blue-600 transition"
-//               >
-//                 <MessageSquare size={14} /> {q.comments}
-//               </button>
-//             </div>
-
-//             {/* Comment input */}
-//             {q.showCommentInput && (
-//               <div className="px-4 pb-3" ref={commentEditorRef}>
-//                 <EditorComponent
-//                   onUpdate={setCommentEditorContent}
-//                   initialContent={commentEditorContent}
-//                 />
-//                 <div className="flex justify-end gap-2 mt-2">
-//                   <button
-//                     onClick={() => toggleCommentInput(q.id)}
-//                     className="px-4 py-1 border rounded text-sm"
-//                   >
-//                     Cancel
-//                   </button>
-//                   <button
-//                     onClick={() => handleAddComment(q.id)}
-//                     className="bg-black text-white px-4 py-1 rounded hover:bg-gray-800 text-sm"
-//                   >
-//                     Post
-//                   </button>
-//                 </div>
-//               </div>
-//             )}
-
-//             {/* Comments list */}
-//             {q.commentList.length > 0 && (
-//               <div className="px-6 pb-3">
-//                 {q.commentList.map((c) => (
-//                   <div
-//                     key={c.id}
-//                     className="mb-2 border-b-2 p-2 border-gray-300"
-//                   >
-//                     <div className="flex items-center justify-between">
-//                       <div className="flex items-center gap-3">
-//                         <span className="font-semibold text-sm text-gray-800 pb-2">
-//                           {c.user}
-//                         </span>
-//                         <span className="text-xs text-gray-400">{c.time}</span>
-//                       </div>
-//                       {c.userId === currentUserId && (
-//                         <button
-//                           onClick={() => handleDeleteComment(q.id, c.id)}
-//                           className="text-red-500 hover:text-red-700"
-//                         >
-//                           <Trash2 size={14} />
-//                         </button>
-//                       )}
-//                     </div>
-//                     <div
-//                       className="text-sm text-gray-700 ml-2"
-//                       dangerouslySetInnerHTML={{ __html: c.text }}
-//                     />
-//                   </div>
-//                 ))}
-//               </div>
-//             )}
-//           </div>
-//         ))
-//       )}
-//     </div>
-//   );
-// };
-
-// export default AskKia;
-
-// AskKia.tsx
-import React from "react";
-import { Heart, MessageSquare } from "lucide-react";
-
-export default function AskKia() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-100 flex justify-center py-10 px-4">
-      <div className="w-full max-w-5xl bg-white shadow-md rounded-md p-10">
-        {/* Header */}
-        <div className="relative mb-12">
-          <h1 className="text-5xl font-bold leading-tight tracking-wide">
-            Questions that shape our future
-            {/* <span className="text-2xl font-light">(Q&amp;A)</span> */}
+    <div className="relative w-full min-h-screen bg-white px-6 md:px-16 py-12">
+      <div className="bg-white relative shadow-2xl rounded-2xl w-full max-w-6xl m-6 p-8 md:p-14">
+        <div className="w-full pb-10 px-4">
+          <h1 className="text-3xl mt-10 md:text-5xl text-gray-900 mb-2 inline-block">
+            Questions that shape our futures
+            {/* Vertical black bar flush with top */}
           </h1>
-          <div className="absolute top-0 left-0 w-40 border-t-2 border-black -translate-y-8" />
         </div>
+        <br />
+        <div className="px-4 w-[1108px] h-[312px] md:px-8 text-gray-700 leading-relaxed">
+          <div>
+            <p className="text-gray-700 text-[15px]">
+              The GOEF event is where the future of Kia takes shape, and we want
+              your voice to be a part of it. <br /> Feel free to ask any
+              questions you&apos;ve been curious about regarding Kia HQ. We are
+              always listening <br /> to your valuable input.
+            </p>
 
-        {/* Info Box */}
-        <div className="border border-gray-300 rounded-md p-8 mb-10 text-gray-800 space-y-6">
-          <p>
-            The GOEF event is where the future of Kia takes shape, and we want
-            your voice to be a part of it. Feel free to ask any questions
-            you&quote;ve been curious about regarding Kia HQ. We&quote;re always
-            listening to your valuable input.
-          </p>
+            <h2 className="font-bold text-gray-800 text-[15px] mt-1">
+              How to Participate
+            </h2>
+            <p className="text-gray-700 text-[15px]">
+              Submit Your Question: Please leave your questions in the comments
+              below.
+            </p>
+            <p className="text-gray-700 text-[15px]">
+              Get Your Answer: We will select questions to be answered directly
+              on-site during the GOEF event.
+            </p>
 
-          <p>
-            <span className="font-semibold">How to Participate</span>
-            <br />
-            Submit Your Question: Please leave your questions in the comments
-            below. <br />
-            Get Your Answer: We&quote;ll select questions to be answered
-            directly on-site during the GOEF event.
-          </p>
+            <h2 className="font-bold text-[15px] mt-2 text-gray-800">
+              For Unanswered Questions
+            </h2>
+            <p className="text-gray-700 text-[15px]">
+              We appreciate your understanding that we may not be able to answer
+              all questions immediately due <br /> to the nature of the live
+              event. If your question isn&apos;t answered on the spot, a
+              dedicated team <br /> member will review it after the event and
+              provide a thorough response.
+            </p>
 
-          <p>
-            <span className="font-semibold">For Unanswered Questions</span>
-            <br />
-            We appreciate your understanding that we may not be able to answer
-            all questions immediately due to the nature of the live event. If
-            your question is not answered on the spot, a dedicated team member
-            will review it after the event and provide a thorough response.
-            <br />
-            Thank you for your active participation and interest!
-          </p>
-        </div>
-
-        {/* Create Question Button */}
-        <div className="flex justify-end mb-10">
-          <button className="px-6 py-2 bg-black text-white font-medium rounded hover:bg-gray-800 transition">
-            Create a question
-          </button>
-        </div>
-
-        {/* Example Question */}
-        <div className="border border-gray-300 rounded-md p-6 mb-12 bg-gray-50">
-          <div className="flex items-center mb-3">
-            <div className="w-10 h-10 rounded-full bg-gray-300 mr-3" />
-            <div>
-              <p className="font-semibold text-gray-900">John Doe / KUS</p>
-              <p className="text-xs text-gray-500">2025/08/21 12:37</p>
+            <div className="">
+              <Image
+                className="absolute top-49 right-0 object-cover"
+                width={600}
+                height={1000}
+                src="/askkia/border.png"
+                alt=""
+              />
             </div>
           </div>
-          <p className="text-gray-800 mb-4">
-            Where can I get a KDCCC guidebook pdf version?
-          </p>
-          <div className="flex items-center gap-6 text-sm text-gray-600">
-            <span className="flex items-center gap-1">
-              <Heart size={16} className="text-red-500" /> 1
-            </span>
-            <span className="flex items-center gap-1">
-              <MessageSquare size={16} /> 4
-            </span>
-          </div>
         </div>
 
-        {/* Write Post */}
-        <div className="space-y-5">
-          <h2 className="font-bold text-gray-900 text-lg">Write Post</h2>
+        {/* Loading State */}
+        {loadingQuestions ? (
+          <p className="text-gray-500 text-sm">Loading questions...</p>
+        ) : (
+          questions.map((q) => (
+            <div
+              key={q.id}
+              className="border border-gray-300 bg-[#edeef1] mb-4 mt-10 p-5"
+            >
+              {/* User info */}
+              <div className="flex items-center justify-between px-4 py-3">
+                {/* Left: Avatar + User info */}
+                <div className="flex items-center">
+                  {/* Avatar */}
+                  <img
+                    src={"/default-avatar.png"}
+                    alt={q.user}
+                    className="w-10 h-10 rounded-full mr-3"
+                  />
 
-          <select className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-black">
-            <option>Select Country</option>
-          </select>
+                  {/* User Info */}
+                  <div className="flex flex-col">
+                    <span className="font-semibold text-gray-900 text-sm">
+                      {q.user}{" "}
+                      <span className="font-normal text-gray-500">
+                        / {q.dept}
+                      </span>
+                    </span>
+                    <span className="text-xs text-gray-400">{q.date}</span>
+                  </div>
+                </div>
 
-          <input
-            type="text"
-            placeholder="제목을 입력해 주세요*"
-            className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-black"
-          />
+                {/* Delete button (if owner) */}
+                {q.userId === currentUserId && (
+                  <button
+                    onClick={() => handleDeleteQuestion(q.id)}
+                    className="text-red-500 hover:text-red-700"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                )}
+              </div>
 
-          <div className="border border-gray-300 rounded-md">
-            {/* Toolbar */}
-            <div className="flex gap-3 border-b border-gray-300 px-3 py-2 text-gray-600 text-sm">
-              <select className="border-none bg-transparent focus:outline-none">
-                <option>Heading</option>
+              {/* Question content */}
+              <div className="px-4 pb-3 text-gray-800 text-sm">
+                <strong>{q.title}</strong> - <em>{q.country}</em>
+                <div dangerouslySetInnerHTML={{ __html: q.text }} />
+              </div>
+
+              {/* Actions */}
+              <div className="px-4 pb-3 flex items-center gap-6 text-xs text-gray-500">
+                <button
+                  onClick={() => handleLike(q.id)}
+                  className="flex items-center gap-1 transition"
+                >
+                  {q.likedBy.includes(currentUserId) ? (
+                    <Heart size={16} fill="red" stroke="red" />
+                  ) : (
+                    <Heart size={16} stroke="gray" />
+                  )}
+                  {q.likes}
+                </button>
+                <button
+                  onClick={() => toggleCommentInput(q.id)}
+                  className="flex items-center gap-1 hover:text-blue-600 transition"
+                >
+                  <MessageSquare size={14} /> {q.comments}
+                </button>
+              </div>
+
+              {/* Comment input */}
+              {q.showCommentInput && (
+                <div className="px-4 pb-3" ref={commentEditorRef}>
+                  <EditorComponent
+                    onUpdate={setCommentEditorContent}
+                    initialContent={commentEditorContent}
+                  />
+                  <div className="flex justify-end gap-2 mt-2">
+                    <button
+                      onClick={() => toggleCommentInput(q.id)}
+                      className="px-4 py-1 border rounded text-sm"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={() => handleAddComment(q.id)}
+                      className="bg-black text-white px-4 py-1 rounded hover:bg-gray-800 text-sm"
+                    >
+                      Post
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Comments list */}
+              {q.commentList.length > 0 && (
+                <div className="px-6 pb-3">
+                  {q.commentList.map((c) => (
+                    <div
+                      key={c.id}
+                      className="mb-2 border-b-2 p-2 border-gray-300"
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <span className="font-semibold text-sm text-gray-800 pb-2">
+                            {c.user}
+                          </span>
+                          <span className="text-xs text-gray-400">
+                            {c.time}
+                          </span>
+                        </div>
+                        {c.userId === currentUserId && (
+                          <button
+                            onClick={() => handleDeleteComment(q.id, c.id)}
+                            className="text-red-500 hover:text-red-700"
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        )}
+                      </div>
+                      <div
+                        className="text-sm text-gray-700 ml-2"
+                        dangerouslySetInnerHTML={{ __html: c.text }}
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))
+        )}
+
+        {/* Write Post Section - Refined to match the design */}
+        <div className="mb-8 mt-10 bg-white border border-gray-200 rounded-lg p-6">
+          {!showInput ? (
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-semibold text-gray-900">
+                Write Post
+              </h2>
+              <button
+                onClick={() => setShowInput(true)}
+                className="bg-gray-900 text-white px-6 py-2 rounded-md hover:bg-gray-800 transition-colors font-medium"
+              >
+                Create a question
+              </button>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">
+                Write Post
+              </h2>
+
+              {/* Country Selector */}
+              <select
+                title="Country"
+                className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-500 bg-white focus:outline-none focus:border-gray-400 transition-colors"
+                value={newQuestionCountry}
+                onChange={(e) => setNewQuestionCountry(e.target.value)}
+              >
+                {countries.map((country) => (
+                  <option key={country} value={country}>
+                    {country}
+                  </option>
+                ))}
               </select>
-              <button className="font-bold">B</button>
-              <button className="italic">I</button>
-              <button>•</button>
-              <button>1.</button>
-              <button></button>
-              <button>{`</>`}</button>
-              <button>🔗</button>
-              <button>🖼</button>
-            </div>
 
-            {/* Textarea */}
-            <textarea
-              placeholder="Write your question..."
-              className="w-full p-3 rounded-b-md focus:outline-none"
-              rows={6}
-              maxLength={1500}
-            />
-            <div className="text-right text-xs text-gray-500 px-3 pb-2">
-              0/1500
-            </div>
-          </div>
+              {/* Title Input */}
+              <input
+                type="text"
+                placeholder="제목을 입력해 주세요."
+                value={newQuestionTitle}
+                onChange={(e) => setNewQuestionTitle(e.target.value)}
+                className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-400 transition-colors"
+              />
 
-          {/* Buttons */}
-          <div className="flex justify-end gap-4">
-            <button className="px-5 py-2 border border-gray-400 rounded hover:bg-gray-100">
-              Cancel
-            </button>
-            <button className="px-5 py-2 bg-black text-white rounded hover:bg-gray-800">
-              Post
-            </button>
-          </div>
+              {/* Rich Text Editor */}
+              <div className="border border-gray-300 rounded-lg overflow-hidden">
+                {/* Editor Toolbar */}
+                <div className="bg-gray-50 border-b border-gray-300 px-4 py-2 flex items-center gap-1">
+                  <select className="bg-white border border-gray-300 rounded px-3 py-1 text-sm text-gray-700">
+                    <option>Heading</option>
+                    <option>Paragraph</option>
+                    <option>H1</option>
+                    <option>H2</option>
+                    <option>H3</option>
+                  </select>
+                  <div className="flex items-center gap-1 ml-2">
+                    <button className="p-2 hover:bg-gray-200 rounded text-gray-700 font-bold">
+                      B
+                    </button>
+                    <button className="p-2 hover:bg-gray-200 rounded text-gray-700 italic">
+                      I
+                    </button>
+                    <button className="p-2 hover:bg-gray-200 rounded text-gray-700">
+                      🔗
+                    </button>
+                    <button className="p-2 hover:bg-gray-200 rounded text-gray-700">
+                      ≡
+                    </button>
+                    <button className="p-2 hover:bg-gray-200 rounded text-gray-700">
+                      ⋮
+                    </button>
+                    <button className="p-2 hover:bg-gray-200 rounded text-gray-700">
+                      H
+                    </button>
+                    <button className="p-2 hover:bg-gray-200 rounded text-gray-700">
+                      ❝
+                    </button>
+                    <button className="p-2 hover:bg-gray-200 rounded text-gray-700">
+                      ‹›
+                    </button>
+                    <button className="p-2 hover:bg-gray-200 rounded text-gray-700">
+                      🖼
+                    </button>
+                    <button className="p-2 hover:bg-gray-200 rounded text-gray-700">
+                      ⚡
+                    </button>
+                    <button className="p-2 hover:bg-gray-200 rounded text-gray-700">
+                      🖼
+                    </button>
+                  </div>
+                </div>
+
+                {/* Editor Content Area */}
+                <div className="min-h-[300px] p-4 bg-white">
+                  <EditorComponent
+                    onUpdate={setNewQuestionText}
+                    initialContent={newQuestionText}
+                  />
+                </div>
+              </div>
+
+              {/* Character Count and Buttons */}
+              <div className="flex items-center justify-between pt-2">
+                <span className="text-sm text-gray-400">0/1500</span>
+                <div className="flex gap-3">
+                  <button
+                    onClick={handleCancelQuestion}
+                    className="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors font-medium"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleAddQuestion}
+                    className="px-6 py-2 bg-gray-900 text-white rounded-md hover:bg-gray-800 transition-colors font-medium"
+                    disabled={
+                      !newQuestionTitle.trim() ||
+                      !newQuestionText.trim() ||
+                      newQuestionCountry === "Select Country"
+                    }
+                  >
+                    Post
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
   );
-}
+};
+
+export default AskKia;
