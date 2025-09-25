@@ -39,3 +39,25 @@ exports.forgotPassword = async (req, res) => {
     }
 }
 
+// POST /api/auth/verify-reset-code
+exports.verifyResetCode = async (req, res) => {
+    try {
+        const {email, code} = req.body;
+
+        const user = await User.findOne({email});
+        if(!user) return res.status(404).json({message: "User not  found"});
+
+        const resetToken = await PasswordResetToken.findOne({userId:  user._id, token: code});
+        if(!resetToken) return res.status(400).json({message: "Invalid code"});
+
+        if(resetToken.expiresAt < new Date.now()){
+            return res.status(400).json({message: "Code expired"})
+        }
+
+        res.json({success: true, message: "Code verified. You can reset your password now."});
+    }
+    catch(err) {
+        res.status(500).json({success: false, message: "Internal server error", error: err.message});
+    }
+}
+
