@@ -22,11 +22,14 @@ const AdminLogin: React.FC = () => {
         throw new Error("Please fill in all fields");
       }
 
-      const response = await fetch("https://kia-project.onrender.com/api/admin/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
-      });
+      const response = await fetch(
+        "https://kia-project.onrender.com/api/admin/login",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password }),
+        }
+      );
 
       if (!response.ok) {
         const data = await response.json();

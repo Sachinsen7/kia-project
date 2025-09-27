@@ -201,9 +201,9 @@ const AdminPage: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {participants.map((p) => (
+                  {participants.map((p, index) => (
                     <tr
-                      key={p.id}
+                      key={p.id ?? `${p.email}-${index}`}
                       className="border-b hover:bg-gray-100 transition-colors duration-150"
                     >
                       <td className="p-2 sm:p-4 text-gray-800">
