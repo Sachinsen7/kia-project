@@ -15,7 +15,10 @@ export default function SidebarRight({ onSelect }: SidebarRightProps) {
   const [showDashboard, setShowDashboard] = useState(false);
 
   const [token, setToken] = useState<string | null>(null);
-  const [user, setUser] = useState<{ firstName: string; lastName: string } | null>(null);
+  const [user, setUser] = useState<{
+    firstName: string;
+    lastName: string;
+  } | null>(null);
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -53,14 +56,16 @@ export default function SidebarRight({ onSelect }: SidebarRightProps) {
 
       <aside
         className={`
-          fixed top-0 right-0 h-full
-          w-[80%] sm:w-[60%] md:w-[60%] lg:w-[25%]
-          p-6 sm:p-8 md:p-10
-          bg-[#e7e5e6] backdrop-blur-sm text-black shadow-2xl z-40
-          transform transition-transform duration-300 ease-in-out
-          flex flex-col
-          ${isOpen ? "translate-x-0" : "translate-x-full"}
-        `}
+    fixed top-0 right-0 h-full
+    w-[80%] sm:w-[60%] md:w-[60%] lg:w-[25%]
+    p-6 sm:p-8 md:p-10
+     text-black shadow-2xl z-40
+      bg-gray-200
+    transform transition-transform duration-300 ease-in-out
+    flex flex-col
+    overflow-hidden  
+    ${isOpen ? "translate-x-0" : "translate-x-full"}
+  `}
       >
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
@@ -118,7 +123,10 @@ export default function SidebarRight({ onSelect }: SidebarRightProps) {
         {/* ✅ User info at bottom */}
         {token && (
           <div className="mt-auto flex items-center gap-3 border-t pt-4">
-            <User className="text-gray-700 bg-gray-200 p-2 rounded-full" size={40} />
+            <User
+              className="text-gray-700 bg-gray-200 p-2 rounded-full"
+              size={40}
+            />
             <span className="font-semibold text-gray-800 text-lg">
               {user ? `${user.firstName} ${user.lastName}` : "User"}
             </span>

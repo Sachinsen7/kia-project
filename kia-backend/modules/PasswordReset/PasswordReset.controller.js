@@ -4,7 +4,7 @@ const User = require('../users/user.model');
 const PasswordResetToken = require('./PasswordResetToken.model');
 const bcrypt = require('bcrypt');
 
-// ✅ Reuse one transporter instead of creating new each time
+// Reuse one transporter instead of creating new each time
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 465,
