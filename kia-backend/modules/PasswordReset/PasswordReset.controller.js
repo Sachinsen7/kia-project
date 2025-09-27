@@ -2,9 +2,10 @@ const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const User = require('../users/user.model');
 const PasswordResetToken = require('./PasswordResetToken.model');
+const dns = require("dns");
 const bcrypt = require('bcrypt');
 
-// Reuse one transporter instead of creating new each time
+// ✅ Reuse one transporter instead of creating new each time
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 465,
@@ -26,8 +27,9 @@ transporter.verify((error, success) => {
 
 // POST /api/auth/forgot-password
 exports.forgotPassword = async (req, res) => {
-  console.log("EMAIL_USER:", process.env.EMAIL_USER);
-  console.log("EMAIL_PASS:", process.env.EMAIL_PASS ? "exists" : "missing");
+  dns.lookup("smtp.gmail.com", (err, address, family) => {
+  console.log("SMTP Gmail resolved to:", address, family);
+  });
   try {
     const { email } = req.body;
     const user = await User.findOne({ email });
