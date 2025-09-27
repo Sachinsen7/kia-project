@@ -26,7 +26,8 @@ transporter.verify((error, success) => {
 
 // POST /api/auth/forgot-password
 exports.forgotPassword = async (req, res) => {
-  console.log("📩 Forgot password hit with body:", req.body);
+  console.log("EMAIL_USER:", process.env.EMAIL_USER);
+  console.log("EMAIL_PASS:", process.env.EMAIL_PASS ? "exists" : "missing");
   try {
     const { email } = req.body;
     const user = await User.findOne({ email });
