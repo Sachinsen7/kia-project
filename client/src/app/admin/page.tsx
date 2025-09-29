@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { apiFetch } from "@/config/api";
 import { LogOut, CheckCircle, XCircle, Clock, Video } from "lucide-react";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import toast from "react-hot-toast";
+
 
 type ApiResponse = {
   success: boolean;
@@ -80,9 +82,13 @@ const AdminPage: React.FC = () => {
         setParticipants((prev) =>
           prev.map((p) => (p.id === id ? { ...p, isActive: true } : p))
         );
+        toast.success("Participant approved successfully!");
+      } else {
+        toast.error(response.message || "Failed to approve participant");
       }
     } catch (err) {
       console.error(err);
+      toast.error("Something went wrong while approving");
     }
   };
 
@@ -99,9 +105,13 @@ const AdminPage: React.FC = () => {
         setParticipants((prev) =>
           prev.map((p) => (p.id === id ? { ...p, isActive: false } : p))
         );
+        toast.success("Participant declined successfully!");
+      } else {
+        toast.error(response.message || "Failed to decline participant");
       }
     } catch (err) {
       console.error(err);
+      toast.error("Something went wrong while declining");
     }
   };
 
@@ -235,19 +245,18 @@ const AdminPage: React.FC = () => {
                           <Clock className="text-yellow-600" size={16} />
                         )}
                         <span
-                          className={`text-xs sm:text-sm font-medium ${
-                            p.isActive === true
+                          className={`text-xs sm:text-sm font-medium ${p.isActive === true
                               ? "text-green-800"
                               : p.isActive === false
-                              ? "text-red-800"
-                              : "text-yellow-800"
-                          }`}
+                                ? "text-red-800"
+                                : "text-yellow-800"
+                            }`}
                         >
                           {p.isActive === true
                             ? "Approved"
                             : p.isActive === false
-                            ? "Declined"
-                            : "Pending"}
+                              ? "Declined"
+                              : "Pending"}
                         </span>
                       </td>
                       <td className="p-2 sm:p-4">
