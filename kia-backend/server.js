@@ -4,6 +4,8 @@ const cors = require("cors");
 const connectDB = require("./config/db");
 const routes = require("./routes/index");
 const seedAdmin = require("./config/seedAdmin");
+const visitRouter = require("./modules/websiteVisit/visit.routes"); // make sure the path is correct
+
 
 const app = express();
 
@@ -26,6 +28,7 @@ app.use(
 );
 app.use(express.json());
 app.use("/api", routes);
+app.use("/api/visit", visitRouter);
 
 const PORT = process.env.PORT || 5000;
 
