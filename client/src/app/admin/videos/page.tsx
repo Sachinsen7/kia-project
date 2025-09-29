@@ -1,9 +1,10 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Trash, Play, Download, Plus, X, Link as LinkIcon } from "lucide-react";
+import { Trash, Play, Plus, X, Link as LinkIcon } from "lucide-react";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import { apiFetch } from "@/config/api";
+import { Toaster, toast } from "react-hot-toast";
 
 type VideoItem = {
   id: string;
@@ -97,8 +98,13 @@ export default function ContentManagementVideosPage() {
 
       setVideos(mappedVideos);
     } catch (err: unknown) {
-      if (err instanceof Error) setError(err.message);
-      else setError("Failed to load videos");
+      if (err instanceof Error) {
+        setError(err.message);
+        toast.error(err.message);
+      } else {
+        setError("Failed to load videos");
+        toast.error("Failed to load videos");
+      }
     } finally {
       setLoading(false);
     }
@@ -111,12 +117,22 @@ export default function ContentManagementVideosPage() {
       const admintoken = localStorage.getItem("admintoken");
       if (!admintoken) throw new Error("No admin token found. Please log in.");
 
-      await apiFetch(`/api/uploads/${id}`, "DELETE", undefined, admintoken);
+      await apiFetch(
+        `/api/uploads/video`,
+        "DELETE",
+        { publicId: id },
+        admintoken
+      );
       setVideos((prev) => prev.filter((v) => v.id !== id));
-      alert("Video deleted");
+      toast.success("Video deleted successfully");
     } catch (err: unknown) {
-      if (err instanceof Error) setError(err.message);
-      else setError("Failed to delete video");
+      if (err instanceof Error) {
+        setError(err.message);
+        toast.error(err.message);
+      } else {
+        setError("Failed to delete video");
+        toast.error("Failed to delete video");
+      }
     } finally {
       setDeletingId(null);
     }
@@ -144,50 +160,55 @@ export default function ContentManagementVideosPage() {
       }
 
       setLinks((prev) => prev.filter((l) => l.id !== linkId));
-      alert("Link deleted successfully");
-    } catch (err: unknown) {
-      if (err instanceof Error) setError(err.message);
-      else setError("Failed to delete link");
-    }
-  }
-
-  async function handleDownload(id: string, filename: string) {
-    try {
-      const admintoken = localStorage.getItem("admintoken");
-      if (!admintoken) throw new Error("No admin token found. Please log in.");
-
-      const response = await fetch(
-        `${
-          process.env.NEXT_PUBLIC_API_BASE_URL ||
-          "https://kia-project.onrender.com"
-        }/api/uploads/${id}/download`,
-        {
-          headers: { Authorization: `Bearer ${admintoken}` },
-        }
-      );
-      if (!response.ok) throw new Error("Failed to download video");
-
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = filename || "video.mp4";
-      a.click();
-      window.URL.revokeObjectURL(url);
+      toast.success("Link deleted successfully");
     } catch (err: unknown) {
       if (err instanceof Error) {
-        console.error("Download error:", err.message);
         setError(err.message);
+        toast.error(err.message);
       } else {
-        console.error("Unknown error:", err);
-        setError("Failed to download video");
+        setError("Failed to delete link");
+        toast.error("Failed to delete link");
       }
     }
   }
 
+  // async function handleDownload(id: string, filename: string) {
+  //   try {
+  //     const admintoken = localStorage.getItem("admintoken");
+  //     if (!admintoken) throw new Error("No admin token found. Please log in.");
+
+  //     const response = await fetch(
+  //       `${
+  //         process.env.NEXT_PUBLIC_API_BASE_URL ||
+  //         "https://kia-project.onrender.com"
+  //       }/api/uploads/${id}/download`,
+  //       {
+  //         headers: { Authorization: `Bearer ${admintoken}` },
+  //       }
+  //     );
+  //     if (!response.ok) throw new Error("Failed to download video");
+
+  //     const blob = await response.blob();
+  //     const url = window.URL.createObjectURL(blob);
+  //     const a = document.createElement("a");
+  //     a.href = url;
+  //     a.download = filename || "video.mp4";
+  //     a.click();
+  //     window.URL.revokeObjectURL(url);
+  //   } catch (err: unknown) {
+  //     if (err instanceof Error) {
+  //       console.error("Download error:", err.message);
+  //       setError(err.message);
+  //     } else {
+  //       console.error("Unknown error:", err);
+  //       setError("Failed to download video");
+  //     }
+  //   }
+  // }
+
   async function handleUploadLink() {
     if (!linkUrl.trim()) {
-      alert("Please enter a valid URL");
+      toast.error("Please enter a valid URL");
       return;
     }
 
@@ -227,15 +248,15 @@ export default function ContentManagementVideosPage() {
         setLinks((prev) => [data.link, ...prev]);
         setLinkUrl("");
         setShowLinkModal(false);
-        alert("Link added successfully!");
+        toast.success("Link added successfully!");
       }
     } catch (err: unknown) {
       if (err instanceof Error) {
         console.error("Upload link error:", err.message);
-        alert(`Failed to upload link: ${err.message}`);
+        toast.error(`Failed to upload link: ${err.message}`);
       } else {
         console.error("Unknown error:", err);
-        alert("Failed to upload link");
+        toast.error("Failed to upload link");
       }
     } finally {
       setLinkUploading(false);
@@ -299,11 +320,10 @@ export default function ContentManagementVideosPage() {
               setCategory("greeting");
               setCurrentPage(1);
             }}
-            className={`px-4 py-2 rounded-lg font-medium ${
-              category === "greeting"
-                ? "bg-[#05141f] text-white"
-                : "bg-gray-300 text-gray-800"
-            }`}
+            className={`px-4 py-2 rounded-lg font-medium ${category === "greeting"
+              ? "bg-[#05141f] text-white"
+              : "bg-gray-300 text-gray-800"
+              }`}
           >
             Greeting Videos
           </button>
@@ -312,11 +332,10 @@ export default function ContentManagementVideosPage() {
               setCategory("bestpractices");
               setCurrentPage(1);
             }}
-            className={`px-4 py-2 rounded-lg font-medium ${
-              category === "bestpractices"
-                ? "bg-[#05141f] text-white"
-                : "bg-gray-300 text-gray-800"
-            }`}
+            className={`px-4 py-2 rounded-lg font-medium ${category === "bestpractices"
+              ? "bg-[#05141f] text-white"
+              : "bg-gray-300 text-gray-800"
+              }`}
           >
             Best Practices
           </button>
@@ -414,62 +433,62 @@ export default function ContentManagementVideosPage() {
 
         {/* Video Table */}
         {!loading && filteredVideos.length > 0 && (
-          <div className="overflow-x-auto">
-            <table className="min-w-full bg-white rounded-xl shadow-lg">
-              <thead>
-                <tr className="bg-gray-100 text-gray-900">
-                  <th className="px-4 py-3 text-left text-sm font-semibold">
+          <div className="overflow-x-auto rounded-xl shadow-lg">
+            <table className="min-w-full bg-white rounded-xl divide-y divide-gray-200">
+              <thead className="bg-gray-100">
+                <tr>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 uppercase tracking-wider">
                     Title
                   </th>
-                  <th className="px-4 py-3 text-left text-sm font-semibold">
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 uppercase tracking-wider">
                     Uploaded By
                   </th>
-                  <th className="px-4 py-3 text-left text-sm font-semibold">
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 uppercase tracking-wider">
                     Created At
                   </th>
-                  <th className="px-4 py-3 text-left text-sm font-semibold">
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 uppercase tracking-wider">
                     Category
                   </th>
-                  <th className="px-4 py-3 text-left text-sm font-semibold">
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
               </thead>
-              <tbody>
-                {paginatedVideos.map((video) => (
+              <tbody className="divide-y divide-gray-200">
+                {paginatedVideos.map((video, index) => (
                   <tr
                     key={video.id}
-                    className="border-b hover:bg-gray-50 transition-colors duration-200"
+                    className={`hover:bg-gray-50 transition-colors duration-200 ${index % 2 === 0 ? "bg-white" : "bg-gray-50"}`}
                   >
-                    <td className="px-4 py-3 text-sm">
+                    <td className="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap">
                       {video.title || "Untitled video"}
                     </td>
-                    <td className="px-4 py-3 text-sm text-gray-600">
+                    <td className="px-6 py-4 text-sm text-gray-600 whitespace-nowrap">
                       {video.uploadedByEmail}
                     </td>
-                    <td className="px-4 py-3 text-sm text-gray-600">
+                    <td className="px-6 py-4 text-sm text-gray-600 whitespace-nowrap">
                       {video.createdAt
                         ? new Date(video.createdAt).toLocaleString()
                         : ""}
                     </td>
-                    <td className="px-4 py-3 text-sm capitalize">
+                    <td className="px-6 py-4 text-sm text-gray-600 capitalize whitespace-nowrap">
                       {video.category}
                     </td>
-                    <td className="px-4 py-3 text-sm flex gap-2">
+                    <td className="px-6 py-4 text-sm flex gap-2 whitespace-nowrap">
                       <button
                         onClick={() => openPlayer(video)}
                         className="flex items-center gap-1 rounded-md bg-[#05141f] text-white px-3 py-1 text-xs font-medium hover:bg-[#171e22] transition-colors duration-200"
                       >
                         <Play size={12} /> Watch
                       </button>
-                      <button
+                      {/* <button
                         onClick={() =>
                           handleDownload(video.id, video.title || "video.mp4")
                         }
                         className="flex items-center gap-1 rounded-md bg-gray-600 text-white px-3 py-1 text-xs font-medium hover:bg-gray-700 transition-colors duration-200"
                       >
                         <Download size={12} /> Download
-                      </button>
+                      </button> */}
                       <button
                         onClick={() => handleDelete(video.id)}
                         disabled={deletingId === video.id}
@@ -570,7 +589,7 @@ export default function ContentManagementVideosPage() {
                     className="flex items-center gap-1 sm:gap-2 rounded px-2 sm:px-3 py-1 text-xs sm:text-sm bg-gray-700 text-white hover:bg-gray-600 transition-colors duration-200"
                     onClick={() => {
                       navigator.clipboard?.writeText(playing.url);
-                      alert("Video URL copied");
+                      toast.success("Video URL copied");
                     }}
                   >
                     Copy URL
@@ -598,6 +617,9 @@ export default function ContentManagementVideosPage() {
           </div>
         )}
       </div>
+      <Toaster position="top-right" reverseOrder={false} />
     </ProtectedRoute>
   );
 }
+
+
