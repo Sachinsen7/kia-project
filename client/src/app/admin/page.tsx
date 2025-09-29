@@ -69,7 +69,7 @@ const AdminPage: React.FC = () => {
     try {
       const response: ApiResponse = await apiFetch<ApiResponse>(
         `/api/admin/users/${id}/approve`,
-        "PUT",
+        "PATCH",
         {},
         token
       );
@@ -88,7 +88,7 @@ const AdminPage: React.FC = () => {
     try {
       const response: ApiResponse = await apiFetch<ApiResponse>(
         `/api/admin/users/${id}/decline`,
-        "PUT",
+        "PATCH",
         {},
         token
       );
