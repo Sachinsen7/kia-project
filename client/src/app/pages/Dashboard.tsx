@@ -44,11 +44,11 @@ export default function Dashboard({}: DashboardProps) {
 
       for (const video of videos) {
         const formData = new FormData();
-        formData.append("video", video); // name must match backend
+        formData.append("video", video);
         formData.append("category", category);
 
         const res = await fetch(
-          "https://kia-project.onrender.com/api/uploads/video",
+          "https://kia-project-hlrv.onrender.com/api/uploads/video",
           {
             method: "POST",
             headers: { Authorization: `Bearer ${token}` },
