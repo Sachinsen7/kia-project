@@ -46,14 +46,16 @@ const AdminPage: React.FC = () => {
           users: Participant[];
         }>("/api/admin/all", "GET", undefined, token);
 
-        const participantList = response.users.map((u) => ({
-          id: u.id,
+        const participantList = response.users.map((u: any) => ({
+          id: u._id,
           firstName: u.firstName,
           lastName: u.lastName,
           email: u.email,
           country: u.country,
           isActive: u.isActive ?? null,
         }));
+
+        console.log(participantList);
         setParticipants(participantList);
         setTotalUsers(participantList.length);
       } catch (err) {
