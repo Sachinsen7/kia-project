@@ -1,9 +1,8 @@
-const crypto = require('crypto');
-const User = require('../users/user.model');
-const PasswordResetToken = require('./PasswordResetToken.model');
-const bcrypt = require('bcrypt');
-const nodemailer = require('nodemailer');
-
+const crypto = require("crypto");
+const User = require("../users/user.model");
+const PasswordResetToken = require("./PasswordResetToken.model");
+const bcrypt = require("bcrypt");
+const nodemailer = require("nodemailer");
 
 const dns = require("dns");
 // const resend = new Resend(process.env.RESEND_API_KEY);
@@ -12,19 +11,17 @@ const dns = require("dns");
 
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
-  port: 587,         
-  secure: false,      // STARTTLS
+  port: 587,
+  secure: false, // STARTTLS
   auth: {
     user: process.env.EMAIL_USER, // your Gmail address
     pass: process.env.EMAIL_PASS, // 16-char App Password
   },
 });
 
-
-
 exports.forgotPassword = async (req, res) => {
   dns.lookup("smtp.gmail.com", (err, address, family) => {
-  console.log("SMTP Gmail resolved to:", address, family);
+    console.log("SMTP Gmail resolved to:", address, family);
   });
   try {
     const { email } = req.body;
@@ -42,10 +39,10 @@ exports.forgotPassword = async (req, res) => {
 
     // Send email
     await transporter.sendMail({
-    from: `"KIA Support" <${process.env.EMAIL_USER}>`,
-    to: user.email,
-    subject: "🔑 Password Reset Request - KIA Platform",
-    html: `
+      from: `"2025 GOEF Support Team" <${process.env.EMAIL_USER}>`,
+      to: user.email,
+      subject: "Password Reset Request - 2025 GOEF",
+      html: `
         <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
         <h2 style="color: #33658A;">Password Reset Request</h2>
         <p>Hello <b>${user.firstName} ${user.lastName}</b>,</p>
@@ -70,21 +67,21 @@ exports.forgotPassword = async (req, res) => {
         <br/>
         <p style="font-size: 14px; color: #777;">
             Regards,<br/>
-            <b>KIA Support Team</b>
+            <b>2025 GOEF Support Team</b>
         </p>
         </div>
     `,
     });
 
-
     res.json({ success: true, message: "Password reset token sent to email" });
   } catch (err) {
-    res
-      .status(500)
-      .json({ success: false, message: "Internal server error", error: err.message });
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: err.message,
+    });
   }
 };
-
 
 /*
 exports.forgotPassword = async (req, res) => {
@@ -147,9 +144,11 @@ exports.verifyResetCode = async (req, res) => {
       message: "Code verified. You can reset your password now.",
     });
   } catch (err) {
-    res
-      .status(500)
-      .json({ success: false, message: "Internal server error", error: err.message });
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: err.message,
+    });
   }
 };
 
@@ -181,8 +180,10 @@ exports.resetPassword = async (req, res) => {
 
     res.json({ success: true, message: "Password reset successful" });
   } catch (err) {
-    res
-      .status(500)
-      .json({ success: false, message: "Internal server error", error: err.message });
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: err.message,
+    });
   }
 };
