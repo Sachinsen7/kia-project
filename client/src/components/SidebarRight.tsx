@@ -120,7 +120,6 @@ export default function SidebarRight({ onSelect }: SidebarRightProps) {
             ))}
         </div>
 
-        {/* ✅ User info at bottom */}
         {token && (
           <div className="mt-auto flex items-center gap-3 border-t pt-4">
             <User
