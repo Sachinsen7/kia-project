@@ -57,7 +57,7 @@ export default function ContentManagementVideosPage() {
       if (!admintoken) throw new Error("No admin token found. Please log in.");
 
       const response = await fetch(
-        "https://kia-project.onrender.com/api/uploads/videos",
+        "https://kia-project-hlrv.onrender.com/api/uploads/videos",
         {
           method: "GET",
           headers: { Authorization: `Bearer ${admintoken}` },
