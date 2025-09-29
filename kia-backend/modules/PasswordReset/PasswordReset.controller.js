@@ -61,8 +61,7 @@ exports.forgotPassword = async (req, res) => {
 
         <p>This code will expire in <b>15 minutes</b>. Please enter it in the reset page to continue.</p>
 
-        <p>If you did not request this, you can safely ignore this email. 
-        Only someone with access to your email can use this code.</p>
+        <p>If you did not request a password reset, please ignore this email or contact our support team.</p>
 
         <br/>
         <p style="font-size: 14px; color: #777;">

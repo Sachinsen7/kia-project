@@ -4,10 +4,20 @@ import { useEffect, useState } from "react";
 import { apiFetch } from "@/config/api";
 import { LogOut, CheckCircle, XCircle, Clock, Video } from "lucide-react";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import toast from "react-hot-toast";
 
-type ApiResponse = {
+
+type ApiUsersResponse = {
   success: boolean;
-  message?: string;
+  message?: string;   
+  users: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    country: string;
+    isActive?: boolean | null;
+  }[];
 };
 
 type Participant = {
@@ -35,18 +45,14 @@ const AdminPage: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch analytics (uncomment when API is ready)
-        // const analytics = await apiFetch<{ visits: number; pageViews: number }>("/api/admin/analytics", "GET", undefined, token);
-        // setVisits(analytics.visits);
-        // setPageViews(analytics.pageViews);
+        const response = await apiFetch<ApiUsersResponse>(
+          "/api/admin/all",
+          "GET",
+          undefined,
+          token
+        );
 
-        // Fetch participants
-        const response = await apiFetch<{
-          success: boolean;
-          users: Participant[];
-        }>("/api/admin/all", "GET", undefined, token);
-
-        const participantList = response.users.map((u: any) => ({
+        const participantList: Participant[] = response.users.map((u) => ({
           id: u._id,
           firstName: u.firstName,
           lastName: u.lastName,
@@ -55,11 +61,11 @@ const AdminPage: React.FC = () => {
           isActive: u.isActive ?? null,
         }));
 
-        console.log(participantList);
         setParticipants(participantList);
         setTotalUsers(participantList.length);
       } catch (err) {
         console.error(err);
+        toast.error("Failed to load participants");
       } finally {
         setLoading(false);
       }
@@ -69,7 +75,7 @@ const AdminPage: React.FC = () => {
 
   const handleApprove = async (id: string) => {
     try {
-      const response: ApiResponse = await apiFetch<ApiResponse>(
+      const response: ApiUsersResponse = await apiFetch<ApiUsersResponse>(
         `/api/admin/approve/${id}`,
         "PATCH",
         {},
@@ -80,15 +86,19 @@ const AdminPage: React.FC = () => {
         setParticipants((prev) =>
           prev.map((p) => (p.id === id ? { ...p, isActive: true } : p))
         );
+        toast.success("Participant approved successfully!");
+      } else {
+        toast.error(response.message || "Failed to approve participant");
       }
     } catch (err) {
       console.error(err);
+      toast.error("Something went wrong while approving");
     }
   };
 
   const handleDecline = async (id: string) => {
     try {
-      const response: ApiResponse = await apiFetch<ApiResponse>(
+      const response: ApiUsersResponse = await apiFetch<ApiUsersResponse>(
         `/api/admin/decline/${id}`,
         "PATCH",
         {},
@@ -99,9 +109,13 @@ const AdminPage: React.FC = () => {
         setParticipants((prev) =>
           prev.map((p) => (p.id === id ? { ...p, isActive: false } : p))
         );
+        toast.success("Participant declined successfully!");
+      } else {
+        toast.error(response.message || "Failed to decline participant");
       }
     } catch (err) {
       console.error(err);
+      toast.error("Something went wrong while declining");
     }
   };
 
@@ -235,19 +249,18 @@ const AdminPage: React.FC = () => {
                           <Clock className="text-yellow-600" size={16} />
                         )}
                         <span
-                          className={`text-xs sm:text-sm font-medium ${
-                            p.isActive === true
-                              ? "text-green-800"
-                              : p.isActive === false
+                          className={`text-xs sm:text-sm font-medium ${p.isActive === true
+                            ? "text-green-800"
+                            : p.isActive === false
                               ? "text-red-800"
                               : "text-yellow-800"
-                          }`}
+                            }`}
                         >
                           {p.isActive === true
                             ? "Approved"
                             : p.isActive === false
-                            ? "Declined"
-                            : "Pending"}
+                              ? "Declined"
+                              : "Pending"}
                         </span>
                       </td>
                       <td className="p-2 sm:p-4">
