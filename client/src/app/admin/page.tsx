@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 
 type ApiUsersResponse = {
   success: boolean;
-  message?: string;   
+  message?: string;
   users: {
     _id: string;
     firstName: string;
@@ -42,9 +42,41 @@ const AdminPage: React.FC = () => {
       : "";
 
   // Fetch analytics and participants
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await apiFetch<ApiUsersResponse>(
+  //         "/api/admin/all",
+  //         "GET",
+  //         undefined,
+  //         token
+  //       );
+
+  //       const participantList: Participant[] = response.users.map((u) => ({
+  //         id: u._id,
+  //         firstName: u.firstName,
+  //         lastName: u.lastName,
+  //         email: u.email,
+  //         country: u.country,
+  //         isActive: u.isActive ?? null,
+  //       }));
+
+  //       setParticipants(participantList);
+  //       setTotalUsers(participantList.length);
+  //     } catch (err) {
+  //       console.error(err);
+  //       toast.error("Failed to load participants");
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+  //   fetchData();
+  // }, [token]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // Fetch participants
         const response = await apiFetch<ApiUsersResponse>(
           "/api/admin/all",
           "GET",
@@ -63,15 +95,25 @@ const AdminPage: React.FC = () => {
 
         setParticipants(participantList);
         setTotalUsers(participantList.length);
+
+        // Fetch total visits from your visits API
+        const visitsResponse = await apiFetch<{ count: number }>(
+          "/api/visits/count",
+          "GET"
+        );
+
+        setVisits(visitsResponse.count);
       } catch (err) {
         console.error(err);
-        toast.error("Failed to load participants");
+        toast.error("Failed to load data");
       } finally {
         setLoading(false);
       }
     };
+
     fetchData();
   }, [token]);
+
 
   const handleApprove = async (id: string) => {
     try {
@@ -161,7 +203,8 @@ const AdminPage: React.FC = () => {
           <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6">
             Analytics Overview
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+            {/* Total Users */}
             <div className="bg-gray-100 shadow-lg rounded-xl p-4 sm:p-6 flex flex-col items-center transform hover:scale-105 transition-transform duration-200">
               <p className="text-gray-500 text-sm sm:text-md font-bold">
                 Total Users
@@ -170,6 +213,8 @@ const AdminPage: React.FC = () => {
                 {totalUsers}
               </p>
             </div>
+
+            {/* Total Visits */}
             <div className="bg-gray-100 shadow-lg rounded-xl p-4 sm:p-6 flex flex-col items-center transform hover:scale-105 transition-transform duration-200">
               <p className="text-gray-500 text-sm sm:text-md font-bold">
                 Total Visits
@@ -178,16 +223,9 @@ const AdminPage: React.FC = () => {
                 {visits}
               </p>
             </div>
-            <div className="bg-gray-100 shadow-lg rounded-xl p-4 sm:p-6 flex flex-col items-center transform hover:scale-105 transition-transform duration-200">
-              <p className="text-gray-500 text-sm sm:text-md font-bold">
-                Page Views
-              </p>
-              <p className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-600">
-                {pageViews}
-              </p>
-            </div>
           </div>
         </section>
+
 
         {/* Participants Management */}
         <section>
