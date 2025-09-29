@@ -6,7 +6,6 @@ import { LogOut, CheckCircle, XCircle, Clock, Video } from "lucide-react";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import toast from "react-hot-toast";
 
-
 type ApiUsersResponse = {
   success: boolean;
   message?: string;
@@ -98,7 +97,7 @@ const AdminPage: React.FC = () => {
 
         // Fetch total visits from your visits API
         const visitsResponse = await apiFetch<{ count: number }>(
-          "/api/visits/count",
+          "/api/visit/count",
           "GET"
         );
 
@@ -113,7 +112,6 @@ const AdminPage: React.FC = () => {
 
     fetchData();
   }, [token]);
-
 
   const handleApprove = async (id: string) => {
     try {
@@ -226,7 +224,6 @@ const AdminPage: React.FC = () => {
           </div>
         </section>
 
-
         {/* Participants Management */}
         <section>
           <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-4 sm:mb-6">
@@ -287,18 +284,19 @@ const AdminPage: React.FC = () => {
                           <Clock className="text-yellow-600" size={16} />
                         )}
                         <span
-                          className={`text-xs sm:text-sm font-medium ${p.isActive === true
-                            ? "text-green-800"
-                            : p.isActive === false
+                          className={`text-xs sm:text-sm font-medium ${
+                            p.isActive === true
+                              ? "text-green-800"
+                              : p.isActive === false
                               ? "text-red-800"
                               : "text-yellow-800"
-                            }`}
+                          }`}
                         >
                           {p.isActive === true
                             ? "Approved"
                             : p.isActive === false
-                              ? "Declined"
-                              : "Pending"}
+                            ? "Declined"
+                            : "Pending"}
                         </span>
                       </td>
                       <td className="p-2 sm:p-4">
