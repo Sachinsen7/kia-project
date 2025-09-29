@@ -34,14 +34,11 @@
 //   );
 // }
 
-
-"use client";
-
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { CityProvider } from "./context/CityContext";
-import { Toaster } from "react-hot-toast";
+import ClientWrapper from "./providers/ClientWrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -69,11 +66,9 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <CityProvider>
-          {children}
-          <Toaster position="top-right" reverseOrder={false} />
+          <ClientWrapper>{children}</ClientWrapper>
         </CityProvider>
       </body>
     </html>
   );
 }
-
