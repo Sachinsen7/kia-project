@@ -23,7 +23,7 @@ const AdminLogin: React.FC = () => {
       }
 
       const response = await fetch(
-        "https://kia-project.onrender.com/api/admin/login",
+        "https://kia-project-hlrv.onrender.com/api/admin/login",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
