@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useMemo } from "react";
@@ -18,17 +17,19 @@ type CitySceneProps = {
   onSelect: (id: string, data?: unknown) => void;
 };
 
-// Updated to handle array response
 async function fetchLiveData(token: string): Promise<{ url?: string } | null> {
   try {
-    const response = await fetch("https://kia-project.onrender.com/api/Link/", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      credentials: "include",
-    });
+    const response = await fetch(
+      "https://kia-project-hlrv.onrender.com/api/Link/",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        credentials: "include",
+      }
+    );
 
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
@@ -37,11 +38,10 @@ async function fetchLiveData(token: string): Promise<{ url?: string } | null> {
     const data = await response.json();
     console.log("LIVE data:", data);
 
-    // Check if data is an array and has at least one item
     if (Array.isArray(data) && data.length > 0 && data[0].url) {
-      return { url: data[0].url }; // Extract URL from first object
+      return { url: data[0].url };
     }
-    return null; // Return null if no valid URL is found
+    return null;
   } catch (error) {
     console.error("Error fetching live data:", error);
     return null;
@@ -107,8 +107,11 @@ export default function CityScene({ onSelect }: CitySceneProps) {
           key={link.id}
           onClick={handleClick}
           disabled={link.id === "live-link" && isLoadingLive}
-          className={`absolute transform -translate-x-1/2 -translate-y-1/2 group ${isLoadingLive && link.id === "live-link" ? "opacity-50 cursor-wait" : ""
-            }`}
+          className={`absolute transform -translate-x-1/2 -translate-y-1/2 group ${
+            isLoadingLive && link.id === "live-link"
+              ? "opacity-50 cursor-wait"
+              : ""
+          }`}
           style={{
             left: `${link.x}%`,
             top: `${link.y}%`,
