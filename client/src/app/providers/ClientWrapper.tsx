@@ -1,12 +1,27 @@
 "use client";
 
 import { Toaster } from "react-hot-toast";
+import { useEffect } from "react";
+import { apiFetch } from "@/config/api"; // Your API helper
 
 export default function ClientWrapper({
     children,
 }: {
     children: React.ReactNode;
 }) {
+
+    useEffect(() => {
+        const recordVisit = async () => {
+            try {
+                await apiFetch("/api/visits", "POST"); // Call your backend
+            } catch (err) {
+                console.error("Failed to record visit", err);
+            }
+        };
+
+        recordVisit();
+    }, []);
+
     return (
         <>
             {children}
