@@ -7,9 +7,17 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import toast from "react-hot-toast";
 
 
-type ApiResponse = {
+type ApiUsersResponse = {
   success: boolean;
-  message?: string;
+  message?: string;   
+  users: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    country: string;
+    isActive?: boolean | null;
+  }[];
 };
 
 type Participant = {
@@ -37,18 +45,14 @@ const AdminPage: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch analytics (uncomment when API is ready)
-        // const analytics = await apiFetch<{ visits: number; pageViews: number }>("/api/admin/analytics", "GET", undefined, token);
-        // setVisits(analytics.visits);
-        // setPageViews(analytics.pageViews);
+        const response = await apiFetch<ApiUsersResponse>(
+          "/api/admin/all",
+          "GET",
+          undefined,
+          token
+        );
 
-        // Fetch participants
-        const response = await apiFetch<{
-          success: boolean;
-          users: Participant[];
-        }>("/api/admin/all", "GET", undefined, token);
-
-        const participantList = response.users.map((u: any) => ({
+        const participantList: Participant[] = response.users.map((u) => ({
           id: u._id,
           firstName: u.firstName,
           lastName: u.lastName,
@@ -57,11 +61,11 @@ const AdminPage: React.FC = () => {
           isActive: u.isActive ?? null,
         }));
 
-        console.log(participantList);
         setParticipants(participantList);
         setTotalUsers(participantList.length);
       } catch (err) {
         console.error(err);
+        toast.error("Failed to load participants");
       } finally {
         setLoading(false);
       }
@@ -71,7 +75,7 @@ const AdminPage: React.FC = () => {
 
   const handleApprove = async (id: string) => {
     try {
-      const response: ApiResponse = await apiFetch<ApiResponse>(
+      const response: ApiUsersResponse = await apiFetch<ApiUsersResponse>(
         `/api/admin/approve/${id}`,
         "PATCH",
         {},
@@ -94,7 +98,7 @@ const AdminPage: React.FC = () => {
 
   const handleDecline = async (id: string) => {
     try {
-      const response: ApiResponse = await apiFetch<ApiResponse>(
+      const response: ApiUsersResponse = await apiFetch<ApiUsersResponse>(
         `/api/admin/decline/${id}`,
         "PATCH",
         {},
@@ -246,10 +250,10 @@ const AdminPage: React.FC = () => {
                         )}
                         <span
                           className={`text-xs sm:text-sm font-medium ${p.isActive === true
-                              ? "text-green-800"
-                              : p.isActive === false
-                                ? "text-red-800"
-                                : "text-yellow-800"
+                            ? "text-green-800"
+                            : p.isActive === false
+                              ? "text-red-800"
+                              : "text-yellow-800"
                             }`}
                         >
                           {p.isActive === true
