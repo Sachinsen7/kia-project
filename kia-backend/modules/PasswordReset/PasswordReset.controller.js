@@ -1,31 +1,27 @@
 const crypto = require('crypto');
-const nodemailer = require('nodemailer');
 const User = require('../users/user.model');
 const PasswordResetToken = require('./PasswordResetToken.model');
-const dns = require("dns");
 const bcrypt = require('bcrypt');
+const nodemailer = require('nodemailer');
 
-// ✅ Reuse one transporter instead of creating new each time
+
+const dns = require("dns");
+// const resend = new Resend(process.env.RESEND_API_KEY);
+
+// POST /api/auth/forgot-password
+
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
+  port: 587,         
+  secure: false,      // STARTTLS
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
+    user: process.env.EMAIL_USER, // your Gmail address
+    pass: process.env.EMAIL_PASS, // 16-char App Password
   },
 });
 
-// Verify transporter once at startup
-transporter.verify((error, success) => {
-  if (error) {
-    console.error("SMTP Error:", error);
-  } else {
-    console.log("✅ SMTP server is ready to send emails");
-  }
-});
 
-// POST /api/auth/forgot-password
+
 exports.forgotPassword = async (req, res) => {
   dns.lookup("smtp.gmail.com", (err, address, family) => {
   console.log("SMTP Gmail resolved to:", address, family);
@@ -89,6 +85,45 @@ exports.forgotPassword = async (req, res) => {
   }
 };
 
+
+/*
+exports.forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    // Delete old tokens
+    await PasswordResetToken.deleteMany({ userId: user._id });
+
+    // Generate 6-digit token
+    const token = crypto.randomInt(100000, 999999).toString();
+    const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
+
+    await PasswordResetToken.create({ userId: user._id, token, expiresAt });
+
+    // Send mail
+    const subject = "🔑 Password Reset Request - KIA Platform";
+    const text = `Your reset code is: ${token}`;
+    const html = `
+      <h2>Password Reset Request</h2>
+      <p>Hello <b>${user.firstName} ${user.lastName}</b>,</p>
+      <p>We received a request to reset your password for <b>${user.email}</b>.</p>
+      <p>Your reset code is:</p>
+      <div style="font-size:24px;font-weight:bold;color:#33658A;">${token}</div>
+      <p>This code expires in 15 minutes.</p>
+    `;
+
+    await sendEmail(user.email, subject, text, html);
+
+    res.json({ success: true, message: "Password reset token sent to email" });
+  } catch (err) {
+    console.error("Forgot Password Error:", err);
+    res.status(500).json({ success: false, message: "Internal server error", error: err.message });
+  }
+};
+
+*/
 // POST /api/auth/verify-reset-code
 exports.verifyResetCode = async (req, res) => {
   try {
