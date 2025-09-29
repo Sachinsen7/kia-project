@@ -68,8 +68,8 @@ const AdminPage: React.FC = () => {
   const handleApprove = async (id: string) => {
     try {
       const response: ApiResponse = await apiFetch<ApiResponse>(
-        `/api/admin/approve/${id}`,
-        "PATCH",
+        `/api/admin/users/${id}/approve`,
+        "PUT",
         {},
         token
       );
@@ -87,8 +87,8 @@ const AdminPage: React.FC = () => {
   const handleDecline = async (id: string) => {
     try {
       const response: ApiResponse = await apiFetch<ApiResponse>(
-        `/api/admin/decline/${id}`,
-        "PATCH",
+        `/api/admin/users/${id}/decline`,
+        "PUT",
         {},
         token
       );
