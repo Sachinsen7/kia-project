@@ -25,7 +25,7 @@ function About() {
               exchanging valuable insights from each region.
             </p>
             <p className="mb-4">
-              This year's GOEF has been planned based on a customer-centric
+              This year&apos;s GOEF has been planned based on a customer-centric
               differentiation strategy. It will cover various business plans and
               programs designed to enhance the customer ownership experience and
               loyalty, ultimately maximizing profitability for NSC, dealers, and
