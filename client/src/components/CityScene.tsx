@@ -107,11 +107,10 @@ export default function CityScene({ onSelect }: CitySceneProps) {
           key={link.id}
           onClick={handleClick}
           disabled={link.id === "live-link" && isLoadingLive}
-          className={`absolute transform -translate-x-1/2 -translate-y-1/2 group ${
-            isLoadingLive && link.id === "live-link"
-              ? "opacity-50 cursor-wait"
-              : ""
-          }`}
+          className={`absolute transform -translate-x-1/2 -translate-y-1/2 group ${isLoadingLive && link.id === "live-link"
+            ? "opacity-50 cursor-wait"
+            : ""
+            }`}
           style={{
             left: `${link.x}%`,
             top: `${link.y}%`,
@@ -147,30 +146,99 @@ export default function CityScene({ onSelect }: CitySceneProps) {
     });
   }, [onSelect]);
 
-  return (
-    <div className="relative w-full h-full bg-white overflow-hidden">
-      <Image
-        src="/landing-page.png"
-        alt="City Scene"
-        fill
-        priority
-        className="object-fill transition-opacity duration-500"
-        onLoadingComplete={() => {
-          console.timeEnd("imageLoadToIcons");
-          setIsImageLoaded(true);
-        }}
-      />
+  // return (
+  //   <div className="relative w-full h-full bg-white overflow-hidden flex flex-col">
+  //     {/* Background Image */}
+  //     <Image
+  //       src="/landing-page.png"
+  //       alt="City Scene"
+  //       fill
+  //       priority
+  //       className="object-fill transition-opacity duration-500"
+  //       onLoadingComplete={() => {
+  //         console.timeEnd("imageLoadToIcons");
+  //         setIsImageLoaded(true);
+  //       }}
+  //     />
 
-      <div className="absolute top-[-9999px] opacity-0">
-        {links.map((link: CityLink) => {
-          const Icon = link.icon;
-          return <Icon key={link.id} className="hidden" />;
-        })}
+  //     {/* Hidden preload for icons */}
+  //     <div className="absolute top-[-9999px] opacity-0">
+  //       {links.map((link: CityLink) => {
+  //         const Icon = link.icon;
+  //         return <Icon key={link.id} className="hidden" />;
+  //       })}
+  //     </div>
+
+  //     {/* Icons overlay after image is loaded */}
+  //     {isImageLoaded && (
+  //       <div className="absolute inset-0 w-full h-full">{memoizedIcons}</div>
+  //     )}
+
+  //     {/* Footer */}
+  // <footer className="absolute bottom-0 flex justify-between px-20 w-full bg-white border-t border-gray-200 py-7 text-center text-sm text-gray-700">
+  //   <div>
+  //     <a href="/privacy-policy" className="hover:underline mx-2">
+  //       Privacy Policy
+  //     </a>
+  //     <a href="/cookies-policy" className="hover:underline mx-2">
+  //       Cookies Policy
+  //     </a>
+  //   </div>
+  //   <div>
+
+  //     © Kia Corporation
+  //   </div>
+  // </footer>
+  //   </div>
+  // );
+
+
+  return (
+    <div className="relative w-full h-full bg-white overflow-hidden flex flex-col min-h-screen">
+      {/* Image container */}
+      <div className="relative flex-1">
+        <Image
+          src="/landing-page.png"
+          alt="City Scene"
+          fill
+          priority
+          className="object-fill transition-opacity duration-500"
+          onLoadingComplete={() => {
+            console.timeEnd("imageLoadToIcons");
+            setIsImageLoaded(true);
+          }}
+        />
+
+        {/* Hidden preload for icons */}
+        <div className="absolute top-[-9999px] opacity-0">
+          {links.map((link: CityLink) => {
+            const Icon = link.icon;
+            return <Icon key={link.id} className="hidden" />;
+          })}
+        </div>
+
+        {/* Icons overlay after image is loaded */}
+        {isImageLoaded && (
+          <div className="absolute inset-0 w-full h-full">{memoizedIcons}</div>
+        )}
       </div>
 
-      {isImageLoaded && (
-        <div className="absolute inset-0 w-full h-full">{memoizedIcons}</div>
-      )}
+      {/* Footer outside image container */}
+      <footer className="flex justify-between px-20 w-full bg-white border-t border-gray-200 py-7 text-center text-sm text-gray-700">
+        <div>
+          <a href="/privacy-policy" className="hover:underline mx-2">
+            Privacy Policy
+          </a>
+          <a href="/cookies-policy" className="hover:underline mx-2">
+            Cookies Policy
+          </a>
+        </div>
+        <div>
+
+          © Kia Corporation
+        </div>
+      </footer>
     </div>
   );
+
 }
