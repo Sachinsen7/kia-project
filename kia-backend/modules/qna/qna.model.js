@@ -1,5 +1,11 @@
 const mongoose = require("mongoose");
-const User = require("../users/user.model");
+
+let User;
+try {
+  User = mongoose.model("User");
+} catch (error) {
+  User = require("../users/user.model.js");
+}
 
 const qnaSchema = new mongoose.Schema(
   {
@@ -23,13 +29,18 @@ const qnaSchema = new mongoose.Schema(
 );
 
 qnaSchema.pre("save", async function (next) {
-  if (!this.country && this.createdBy) {
-    const user = await User.findById(this.createdBy);
-    if (user) {
-      this.country = user.country;
+  try {
+    if (!this.country && this.createdBy) {
+      const user = await User.findById(this.createdBy).select("country");
+      if (user && user.country) {
+        this.country = user.country;
+      }
     }
+    next();
+  } catch (error) {
+    console.error("Error in qnaSchema.pre(save):", error.message);
+    next(error);
   }
-  next();
 });
 
 module.exports = mongoose.model("Qna", qnaSchema);

@@ -36,15 +36,15 @@ type CommentResponse = {
   _id: string;
   text: string;
   createdAt: string;
-  createdBy: User;
+  createdBy: User | null;
 };
 
 type QuestionResponse = {
   _id: string;
   description: string;
-  country: string;
+  country: string | null;
   createdAt: string;
-  createdBy: User;
+  createdBy: User | null;
   likes: string[];
 };
 
@@ -69,27 +69,36 @@ const GoefEvent: React.FC = () => {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [showInput, setShowInput] = useState(false);
   const [newQuestionText, setNewQuestionText] = useState("");
-  const [newQuestionCountry, setNewQuestionCountry] =
-    useState("Select Country");
   const [commentEditorContent, setCommentEditorContent] = useState("");
   const [activeCommentEditor, setActiveCommentEditor] = useState<string | null>(
     null
   );
-  const [countries] = useState([
-    "Select Country",
-    "USA",
-    "UK",
-    "Canada",
-    "India",
-  ]);
   const [loadingQuestions, setLoadingQuestions] = useState(false);
 
   const editorRef = useRef<HTMLDivElement>(null);
   const commentEditorRef = useRef<HTMLDivElement>(null);
   const token =
     typeof window !== "undefined" ? localStorage.getItem("token") || "" : "";
-  const currentUserId =
-    typeof window !== "undefined" ? localStorage.getItem("userId") || "" : "";
+  let currentUserId = "";
+  let currentUserFullName = "Unknown";
+  if (typeof window !== "undefined") {
+    const userData = localStorage.getItem("user");
+    if (userData) {
+      try {
+        const parsed = JSON.parse(userData);
+        currentUserId =
+          typeof parsed === "string" ? parsed : parsed._id || parsed.id || "";
+        const firstName = (parsed as any)?.firstName || "";
+        const lastName = (parsed as any)?.lastName || "";
+        currentUserFullName = `${firstName} ${lastName}`.trim() || "Unknown";
+      } catch (err) {
+        console.error("Error parsing user data from localStorage:", err);
+      }
+    } else {
+      // fallback to older storage key if present
+      currentUserId = localStorage.getItem("userId") || "";
+    }
+  }
 
   // Fetch comments
   const fetchComments = useCallback(
@@ -103,8 +112,12 @@ const GoefEvent: React.FC = () => {
         );
         return data.map((c) => ({
           id: c._id,
-          user: `${c.createdBy.firstName} ${c.createdBy.lastName}`,
-          userId: c.createdBy._id,
+          user: c.createdBy
+            ? `${c.createdBy.firstName || "Unknown"} ${
+                c.createdBy.lastName || ""
+              }`.trim() || "Unknown"
+            : currentUserFullName,
+          userId: c.createdBy?._id || currentUserId,
           text: c.text,
           time: new Date(c.createdAt).toLocaleTimeString("en-US", {
             hour: "2-digit",
@@ -134,12 +147,16 @@ const GoefEvent: React.FC = () => {
           const comments = await fetchComments(q._id);
           return {
             id: q._id,
-            user: `${q.createdBy.firstName} ${q.createdBy.lastName}`,
-            userId: q.createdBy._id,
+            user: q.createdBy
+              ? `${q.createdBy.firstName || "Unknown"} ${
+                  q.createdBy.lastName || ""
+                }`.trim() || "Unknown"
+              : currentUserFullName,
+            userId: q.createdBy?._id || currentUserId,
             dept: "KUS",
             date: new Date(q.createdAt).toISOString().slice(0, 10),
             text: q.description,
-            country: q.country,
+            country: q.country || "Unknown",
             likes: q.likes.length,
             likedBy: q.likes,
             comments: comments.length,
@@ -164,24 +181,27 @@ const GoefEvent: React.FC = () => {
   // Add question
   const handleAddQuestion = async () => {
     const description = newQuestionText.trim();
-    const country = newQuestionCountry;
-    if (!description || country === "Select Country") return;
+    if (!description) return;
 
     try {
       const response = await apiFetch<AddQuestionResponse>(
         `/api/qna`,
         "POST",
-        { title: "GOEF Thought", description, country, type: "goef_event" },
+        { title: "GOEF Thought", description, type: "goef_event" },
         token
       );
       const newQ: Question = {
         id: response.qna._id,
-        user: "You",
+        user: response.qna.createdBy
+          ? `${response.qna.createdBy.firstName || "Unknown"} ${
+              response.qna.createdBy.lastName || ""
+            }`.trim() || "Unknown"
+          : currentUserFullName,
         userId: currentUserId,
         dept: "KUS",
         date: new Date(response.qna.createdAt).toISOString().slice(0, 10),
         text: response.qna.description,
-        country: response.qna.country,
+        country: response.qna.country || "Unknown",
         likes: response.qna.likes.length,
         likedBy: response.qna.likes,
         comments: 0,
@@ -191,7 +211,6 @@ const GoefEvent: React.FC = () => {
       setQuestions((prev) => [newQ, ...prev]);
       setShowInput(false);
       setNewQuestionText("");
-      setNewQuestionCountry("Select Country");
     } catch (err) {
       console.error("Error adding question:", err);
     }
@@ -325,7 +344,6 @@ const GoefEvent: React.FC = () => {
   const handleCancelQuestion = () => {
     setShowInput(false);
     setNewQuestionText("");
-    setNewQuestionCountry("Select Country");
   };
 
   if (!mounted) return null;
@@ -334,7 +352,9 @@ const GoefEvent: React.FC = () => {
     <div className="w-full min-h-screen bg-white px-6 md:px-16 py-12">
       <div className="bg-white relative shadow-2xl rounded-2xl w-full max-w-6xl m-6 p-8 md:p-14">
         <div className="w-full pt-6 pb-10 px-4">
-          <h1 className="text-3xl md:text-5xl text-gray-900 mb-2">Share & Win !</h1>
+          <h1 className="text-3xl md:text-5xl text-gray-900 mb-2">
+            Share & Win !
+          </h1>
           <div className="w-[542px]  h-[4px] text-[#000] bg-[#000] absolute top-35.5 right-0"></div>
           <h2 className="text-3xl md:text-5xl ml-40">EVENT</h2>
         </div>
@@ -381,20 +401,6 @@ const GoefEvent: React.FC = () => {
               <h2 className="text-xl font-semibold text-gray-900 mb-4">
                 Share Your Thoughts
               </h2>
-
-              {/* Country Selector */}
-              <select
-                title="Country"
-                className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-500 bg-white focus:outline-none focus:border-gray-400 transition-colors"
-                value={newQuestionCountry}
-                onChange={(e) => setNewQuestionCountry(e.target.value)}
-              >
-                {countries.map((country) => (
-                  <option key={country} value={country}>
-                    {country}
-                  </option>
-                ))}
-              </select>
 
               {/* Rich Text Editor */}
               <div className="border border-gray-300 rounded-lg overflow-hidden">
@@ -467,10 +473,7 @@ const GoefEvent: React.FC = () => {
                   <button
                     onClick={handleAddQuestion}
                     className="px-6 py-2 bg-gray-900 text-white rounded-md hover:bg-gray-800 transition-colors font-medium"
-                    disabled={
-                      !newQuestionText.trim() ||
-                      newQuestionCountry === "Select Country"
-                    }
+                    disabled={!newQuestionText.trim()}
                   >
                     Submit
                   </button>
@@ -492,10 +495,10 @@ const GoefEvent: React.FC = () => {
                 <div className="flex items-center">
                   <div className="w-10 h-10 rounded-full  flex items-center justify-center mr-3">
                     <img
-                    src={"/user.png"}
-                    alt={q.user}
-                    className="w-10 h-10 rounded-full mr-3"
-                  />
+                      src={"/user.png"}
+                      alt={q.user}
+                      className="w-10 h-10 rounded-full mr-3"
+                    />
                   </div>
                   <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-1 md:gap-3">
                     <div className="flex items-center gap-2 flex-wrap">

@@ -5,9 +5,15 @@ import dynamic from "next/dynamic";
 import { Heart, MessageSquare, Trash2 } from "lucide-react";
 import { apiFetch } from "@/config/api";
 import Image from "next/image";
+import toast from "react-hot-toast";
 
 // ----------- Types -----------
-type User = { firstName: string; lastName: string; _id?: string };
+type User = {
+  firstName: string;
+  lastName: string;
+  _id?: string;
+  email: string;
+};
 
 type Question = {
   id: string;
@@ -37,16 +43,16 @@ type CommentResponse = {
   _id: string;
   text: string;
   createdAt: string;
-  createdBy: User;
+  createdBy: User | null;
 };
 
 type QuestionResponse = {
   _id: string;
   title: string;
   description: string;
-  country: string;
+  country: string | null; // Allow null since backend middleware may fail
   createdAt: string;
-  createdBy: User;
+  createdBy: User | null;
   likes: string[];
 };
 
@@ -65,24 +71,32 @@ const AskKia: React.FC = () => {
   const [showInput, setShowInput] = useState(false);
   const [newQuestionTitle, setNewQuestionTitle] = useState("");
   const [newQuestionText, setNewQuestionText] = useState("");
-  const [newQuestionCountry, setNewQuestionCountry] =
-    useState("Select Country");
   const [commentEditorContent, setCommentEditorContent] = useState("");
-  const [countries] = useState([
-    "Select Country",
-    "USA",
-    "UK",
-    "Canada",
-    "India",
-  ]);
   const [loadingQuestions, setLoadingQuestions] = useState(false);
 
   const editorRef = useRef<HTMLDivElement>(null);
   const commentEditorRef = useRef<HTMLDivElement>(null);
   const token =
     typeof window !== "undefined" ? localStorage.getItem("token") || "" : "";
-  const currentUserId =
-    typeof window !== "undefined" ? localStorage.getItem("userId") || "" : "";
+  let currentUserId = "";
+  let currentUser: User | null = null;
+  let currentUserFullName = "Unknown";
+  if (typeof window !== "undefined") {
+    const userData = localStorage.getItem("user");
+    if (userData) {
+      try {
+        const parsed = JSON.parse(userData);
+        currentUserId =
+          typeof parsed === "string" ? parsed : parsed._id || parsed.id || "";
+        currentUser = typeof parsed === "object" ? (parsed as User) : null;
+        const firstName = (currentUser as any)?.firstName || "";
+        const lastName = (currentUser as any)?.lastName || "";
+        currentUserFullName = `${firstName} ${lastName}`.trim() || "Unknown";
+      } catch (err) {
+        console.error("Error parsing user data from localStorage:", err);
+      }
+    }
+  }
 
   // Fetch comments
   const fetchComments = useCallback(
@@ -96,8 +110,12 @@ const AskKia: React.FC = () => {
         );
         return data.map((c) => ({
           id: c._id,
-          user: `${c.createdBy.firstName} ${c.createdBy.lastName}`,
-          userId: c.createdBy._id,
+          user: c.createdBy
+            ? `${c.createdBy.firstName || "Unknown"} ${
+                c.createdBy.lastName || ""
+              }`.trim() || "Unknown"
+            : "Unknown",
+          userId: c.createdBy?._id || "",
           text: c.text,
           time: new Date(c.createdAt).toLocaleTimeString("en-US", {
             hour: "2-digit",
@@ -106,6 +124,7 @@ const AskKia: React.FC = () => {
         }));
       } catch (err) {
         console.error("Error fetching comments:", err);
+        toast.error("Failed to load comments");
         return [];
       }
     },
@@ -127,12 +146,16 @@ const AskKia: React.FC = () => {
           const comments = await fetchComments(q._id);
           return {
             id: q._id,
-            user: `${q.createdBy.firstName} ${q.createdBy.lastName}`,
-            userId: q.createdBy._id,
+            user: q.createdBy
+              ? `${q.createdBy.firstName || "Unknown"} ${
+                  q.createdBy.lastName || ""
+                }`.trim() || "Unknown"
+              : "Unknown",
+            userId: q.createdBy?._id || "",
             dept: "KUS",
             date: new Date(q.createdAt).toISOString().slice(0, 10),
             title: q.title,
-            country: q.country,
+            country: q.country || "Unknown", // Handle null country
             text: q.description,
             likes: q.likes.length,
             likedBy: q.likes,
@@ -144,7 +167,8 @@ const AskKia: React.FC = () => {
       );
       setQuestions(formatted);
     } catch (err) {
-      console.error(err);
+      console.error("Error fetching questions:", err);
+      toast.error("Failed to load questions");
     } finally {
       setLoadingQuestions(false);
     }
@@ -153,30 +177,36 @@ const AskKia: React.FC = () => {
   useEffect(() => {
     setMounted(true);
     fetchQuestions();
-  }, [token, fetchQuestions]);
+  }, [fetchQuestions]);
 
   // Add question
   const handleAddQuestion = async () => {
     const title = newQuestionTitle.trim();
     const description = newQuestionText.trim();
-    const country = newQuestionCountry;
-    if (!title || !description || country === "Select Country") return;
+    if (!title || !description) {
+      toast.error("Please fill all fields");
+      return;
+    }
 
     try {
       const response = await apiFetch<AddQuestionResponse>(
         "/api/qna",
         "POST",
-        { title, description, country, type: "ask_kia" },
+        { title, description, type: "ask_kia" },
         token
       );
       const newQ: Question = {
         id: response.qna._id,
-        user: "You",
-        userId: currentUserId,
+        user: response.qna.createdBy
+          ? `${response.qna.createdBy.firstName || "Unknown"} ${
+              response.qna.createdBy.lastName || ""
+            }`.trim() || "Unknown"
+          : currentUserFullName,
+        userId: response.qna.createdBy?._id || currentUserId,
         dept: "KUS",
         date: new Date(response.qna.createdAt).toISOString().slice(0, 10),
         title: response.qna.title,
-        country: response.qna.country,
+        country: response.qna.country || "Unknown",
         text: response.qna.description,
         likes: response.qna.likes.length,
         likedBy: response.qna.likes,
@@ -185,21 +215,24 @@ const AskKia: React.FC = () => {
         showCommentInput: false,
       };
 
-      console.log(newQ);
       setQuestions((prev) => [newQ, ...prev]);
       setShowInput(false);
       setNewQuestionTitle("");
       setNewQuestionText("");
-      setNewQuestionCountry("Select Country");
-    } catch (err) {
+      toast.success("Question posted successfully");
+    } catch (err: any) {
       console.error("Error adding question:", err);
+      toast.error(err.message || "Failed to post question");
     }
   };
 
   // Add comment
   const handleAddComment = async (id: string) => {
     const commentText = commentEditorContent.trim();
-    if (!commentText) return;
+    if (!commentText) {
+      toast.error("Comment cannot be empty");
+      return;
+    }
 
     try {
       const response = await apiFetch<AddCommentResponse>(
@@ -210,8 +243,12 @@ const AskKia: React.FC = () => {
       );
       const newComment: Comment = {
         id: response.comment._id,
-        user: "You",
-        userId: currentUserId,
+        user: response.comment.createdBy
+          ? `${response.comment.createdBy.firstName || "Unknown"} ${
+              response.comment.createdBy.lastName || ""
+            }`.trim() || "Unknown"
+          : "Unknown",
+        userId: response.comment.createdBy?._id || currentUserId,
         text: response.comment.text,
         time: new Date(response.comment.createdAt).toLocaleTimeString("en-US", {
           hour: "2-digit",
@@ -231,8 +268,10 @@ const AskKia: React.FC = () => {
         )
       );
       setCommentEditorContent("");
-    } catch (err) {
+      toast.success("Comment posted successfully");
+    } catch (err: any) {
       console.error("Error adding comment:", err);
+      toast.error(err.message || "Failed to post comment");
     }
   };
 
@@ -245,7 +284,10 @@ const AskKia: React.FC = () => {
         {},
         token
       );
-      if (!response.success) return;
+      if (!response.success) {
+        toast.error("Failed to toggle like");
+        return;
+      }
       setQuestions((prev) =>
         prev.map((q) =>
           q.id === id
@@ -257,8 +299,9 @@ const AskKia: React.FC = () => {
             : q
         )
       );
-    } catch (err) {
+    } catch (err: any) {
       console.error("Error toggling like:", err);
+      toast.error(err.message || "Failed to toggle like");
     }
   };
 
@@ -272,8 +315,10 @@ const AskKia: React.FC = () => {
         token
       );
       setQuestions((prev) => prev.filter((q) => q.id !== id));
-    } catch (err) {
+      toast.success("Question deleted successfully");
+    } catch (err: any) {
       console.error("Error deleting question:", err);
+      toast.error(err.message || "Failed to delete question");
     }
   };
 
@@ -297,8 +342,10 @@ const AskKia: React.FC = () => {
             : q
         )
       );
-    } catch (err) {
+      toast.success("Comment deleted successfully");
+    } catch (err: any) {
       console.error("Error deleting comment:", err);
+      toast.error(err.message || "Failed to delete comment");
     }
   };
 
@@ -314,7 +361,6 @@ const AskKia: React.FC = () => {
     setShowInput(false);
     setNewQuestionTitle("");
     setNewQuestionText("");
-    setNewQuestionCountry("Select Country");
   };
 
   if (!mounted) return null;
@@ -325,7 +371,6 @@ const AskKia: React.FC = () => {
         <div className="w-full pb-10 px-4">
           <h1 className="text-3xl mt-10 md:text-5xl text-gray-900 mb-2 inline-block">
             Questions on GOEF and our future
-            {/* Vertical black bar flush with top */}
           </h1>
         </div>
         <br />
@@ -376,6 +421,8 @@ const AskKia: React.FC = () => {
         {/* Loading State */}
         {loadingQuestions ? (
           <p className="text-gray-500 text-sm">Loading questions...</p>
+        ) : questions.length === 0 ? (
+          <p className="text-gray-500 text-sm">No questions available.</p>
         ) : (
           questions.map((q) => (
             <div
@@ -384,16 +431,12 @@ const AskKia: React.FC = () => {
             >
               {/* User info */}
               <div className="flex items-center justify-between px-4 py-3">
-                {/* Left: Avatar + User info */}
                 <div className="flex items-center">
-                  {/* Avatar */}
                   <img
                     src={"/user.png"}
                     alt={q.user}
                     className="w-10 h-10 rounded-full mr-3"
                   />
-
-                  {/* User Info */}
                   <div className="flex flex-col">
                     <div className="flex items-center gap-1 flex-wrap">
                       <span className="font-semibold text-gray-900 text-sm">
@@ -407,12 +450,10 @@ const AskKia: React.FC = () => {
                     <span className="text-xs text-gray-400 mt-1">{q.date}</span>
                   </div>
                 </div>
-
-                {/* Delete button (if owner) */}
                 {q.userId === currentUserId && (
                   <button
                     onClick={() => handleDeleteQuestion(q.id)}
-                    className="text-red-500 hover:text-red-700"
+                    className="text-red-500 hover:text-red-700 border-2 border-blue-500 p-1"
                   >
                     <Trash2 size={16} />
                   </button>
@@ -490,7 +531,7 @@ const AskKia: React.FC = () => {
                         {c.userId === currentUserId && (
                           <button
                             onClick={() => handleDeleteComment(q.id, c.id)}
-                            className="text-red-500 hover:text-red-700"
+                            className="text-red-500 hover:text-red-700 border-2 border-blue-500 p-1"
                           >
                             <Trash2 size={14} />
                           </button>
@@ -508,7 +549,7 @@ const AskKia: React.FC = () => {
           ))
         )}
 
-        {/* Write Post Section - Refined to match the design */}
+        {/* Write Post Section */}
         <div className="mb-8 mt-10 bg-white border border-gray-200 rounded-lg p-6">
           {!showInput ? (
             <div className="flex items-center justify-between">
@@ -527,20 +568,6 @@ const AskKia: React.FC = () => {
               <h2 className="text-xl font-semibold text-gray-900 mb-4">
                 Write Post
               </h2>
-              Country Selector
-              <select
-                title="Country"
-                className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-500 bg-white focus:outline-none focus:border-gray-400 transition-colors"
-                value={newQuestionCountry}
-                onChange={(e) => setNewQuestionCountry(e.target.value)}
-              >
-                {countries.map((country) => (
-                  <option key={country} value={country}>
-                    {country}
-                  </option>
-                ))}
-              </select>
-              {/* Title Input */}
               <input
                 type="text"
                 placeholder="제목을 입력해 주세요."
@@ -548,9 +575,7 @@ const AskKia: React.FC = () => {
                 onChange={(e) => setNewQuestionTitle(e.target.value)}
                 className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-400 transition-colors"
               />
-              {/* Rich Text Editor */}
               <div className="border border-gray-300 rounded-lg overflow-hidden">
-                {/* Editor Toolbar */}
                 <div className="bg-gray-50 border-b border-gray-300 px-4 py-2 flex items-center gap-1">
                   <select className="bg-white border border-gray-300 rounded px-3 py-1 text-sm text-gray-700">
                     <option>Heading</option>
@@ -595,8 +620,6 @@ const AskKia: React.FC = () => {
                     </button>
                   </div>
                 </div>
-
-                {/* Editor Content Area */}
                 <div className="min-h-[300px] p-4 bg-white">
                   <EditorComponent
                     onUpdate={setNewQuestionText}
@@ -604,7 +627,6 @@ const AskKia: React.FC = () => {
                   />
                 </div>
               </div>
-              {/* Character Count and Buttons */}
               <div className="flex items-center justify-between pt-2">
                 <span className="text-sm text-gray-400">0/1500</span>
                 <div className="flex gap-3">
@@ -618,9 +640,7 @@ const AskKia: React.FC = () => {
                     onClick={handleAddQuestion}
                     className="px-6 py-2 bg-gray-900 text-white rounded-md hover:bg-gray-800 transition-colors font-medium"
                     disabled={
-                      !newQuestionTitle.trim() ||
-                      !newQuestionText.trim() ||
-                      newQuestionCountry === "Select Country"
+                      !newQuestionTitle.trim() || !newQuestionText.trim()
                     }
                   >
                     Post
