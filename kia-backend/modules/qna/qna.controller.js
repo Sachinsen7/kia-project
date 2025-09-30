@@ -3,12 +3,17 @@ const Qna = require("./qna.model");
 exports.createQna = async (req, res) => {
   try {
     const { title, description, type } = req.body;
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
     const qna = await Qna.create({
       title,
       description,
       type,
       createdBy: req.user.id,
+      country: user.country,
     });
     res.status(201).json({ message: "Qna created", qna });
   } catch (err) {
