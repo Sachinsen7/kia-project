@@ -18,19 +18,7 @@ function HelpSupport() {
         </>
       ),
     },
-    {
-      question:
-        "I’m having trouble connecting to Teams. Is there an alternative way to watch the live session?",
-      answer: (
-        <>
-          In case the Teams connection is unstable, the session will also be
-          available via YouTube Live. Please note, however, that for
-          confidentiality reasons, certain content may not be streamed in real
-          time. <br />
-          <span className="font-medium">YouTube Link: xxxxxxxxxx</span>
-        </>
-      ),
-    },
+
     {
       question:
         "GOEF materials are very helpful. When and where can I receive them?",
