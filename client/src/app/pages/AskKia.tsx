@@ -184,6 +184,8 @@ const AskKia: React.FC = () => {
         commentList: [],
         showCommentInput: false,
       };
+
+      console.log(newQ);
       setQuestions((prev) => [newQ, ...prev]);
       setShowInput(false);
       setNewQuestionTitle("");
