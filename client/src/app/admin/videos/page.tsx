@@ -320,10 +320,11 @@ export default function ContentManagementVideosPage() {
               setCategory("greeting");
               setCurrentPage(1);
             }}
-            className={`px-4 py-2 rounded-lg font-medium ${category === "greeting"
-              ? "bg-[#05141f] text-white"
-              : "bg-gray-300 text-gray-800"
-              }`}
+            className={`px-4 py-2 rounded-lg font-medium ${
+              category === "greeting"
+                ? "bg-[#05141f] text-white"
+                : "bg-gray-300 text-gray-800"
+            }`}
           >
             Greeting Videos
           </button>
@@ -332,10 +333,11 @@ export default function ContentManagementVideosPage() {
               setCategory("bestpractices");
               setCurrentPage(1);
             }}
-            className={`px-4 py-2 rounded-lg font-medium ${category === "bestpractices"
-              ? "bg-[#05141f] text-white"
-              : "bg-gray-300 text-gray-800"
-              }`}
+            className={`px-4 py-2 rounded-lg font-medium ${
+              category === "bestpractices"
+                ? "bg-[#05141f] text-white"
+                : "bg-gray-300 text-gray-800"
+            }`}
           >
             Best Practices
           </button>
@@ -458,7 +460,9 @@ export default function ContentManagementVideosPage() {
                 {paginatedVideos.map((video, index) => (
                   <tr
                     key={video.id}
-                    className={`hover:bg-gray-50 transition-colors duration-200 ${index % 2 === 0 ? "bg-white" : "bg-gray-50"}`}
+                    className={`hover:bg-gray-50 transition-colors duration-200 ${
+                      index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                    }`}
                   >
                     <td className="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap">
                       {video.title || "Untitled video"}
@@ -621,5 +625,3 @@ export default function ContentManagementVideosPage() {
     </ProtectedRoute>
   );
 }
-
-
