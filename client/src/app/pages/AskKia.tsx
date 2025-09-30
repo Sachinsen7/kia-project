@@ -748,8 +748,8 @@ const AskKia: React.FC = () => {
         currentUserId =
           typeof parsed === "string" ? parsed : parsed._id || parsed.id || "";
         currentUser = typeof parsed === "object" ? (parsed as User) : null;
-        const firstName = (currentUser as any)?.firstName || "";
-        const lastName = (currentUser as any)?.lastName || "";
+        const firstName = currentUser?.firstName || "";
+        const lastName = currentUser?.lastName || "";
         currentUserFullName = `${firstName} ${lastName}`.trim() || "Unknown";
       } catch (err) {
         console.error("Error parsing user data from localStorage:", err);
@@ -879,9 +879,11 @@ const AskKia: React.FC = () => {
       setNewQuestionTitle("");
       setNewQuestionText("");
       toast.success("Question posted successfully");
-    } catch (err: any) {
+    } catch (err) {
       console.error("Error adding question:", err);
-      toast.error(err.message || "Failed to post question");
+      const message =
+        err instanceof Error ? err.message : "Failed to post question";
+      toast.error(message);
     }
   };
 
@@ -928,9 +930,11 @@ const AskKia: React.FC = () => {
       );
       setCommentEditorContent("");
       toast.success("Comment posted successfully");
-    } catch (err: any) {
+    } catch (err) {
       console.error("Error adding comment:", err);
-      toast.error(err.message || "Failed to post comment");
+      const message =
+        err instanceof Error ? err.message : "Failed to post comment";
+      toast.error(message);
     }
   };
 
@@ -958,9 +962,11 @@ const AskKia: React.FC = () => {
             : q
         )
       );
-    } catch (err: any) {
+    } catch (err) {
       console.error("Error toggling like:", err);
-      toast.error(err.message || "Failed to toggle like");
+      const message =
+        err instanceof Error ? err.message : "Failed to toggle like";
+      toast.error(message);
     }
   };
 
@@ -975,9 +981,11 @@ const AskKia: React.FC = () => {
       );
       setQuestions((prev) => prev.filter((q) => q.id !== id));
       toast.success("Question deleted successfully");
-    } catch (err: any) {
+    } catch (err) {
       console.error("Error deleting question:", err);
-      toast.error(err.message || "Failed to delete question");
+      const message =
+        err instanceof Error ? err.message : "Failed to delete question";
+      toast.error(message);
     }
   };
 
@@ -1002,9 +1010,11 @@ const AskKia: React.FC = () => {
         )
       );
       toast.success("Comment deleted successfully");
-    } catch (err: any) {
+    } catch (err) {
       console.error("Error deleting comment:", err);
-      toast.error(err.message || "Failed to delete comment");
+      const message =
+        err instanceof Error ? err.message : "Failed to delete comment";
+      toast.error(message);
     }
   };
 
