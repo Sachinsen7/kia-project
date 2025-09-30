@@ -322,7 +322,7 @@ const AskKia: React.FC = () => {
       <div className="bg-white relative shadow-2xl rounded-2xl w-full max-w-6xl m-6 p-8 md:p-14">
         <div className="w-full pb-10 px-4">
           <h1 className="text-3xl mt-10 md:text-5xl text-gray-900 mb-2 inline-block">
-            Questions that shape our futures
+            Questions on GOEF and our future
             {/* Vertical black bar flush with top */}
           </h1>
         </div>
