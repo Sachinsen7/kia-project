@@ -1,4 +1,15 @@
-"use client";
+import React, { Suspense } from "react";
+import SetPasswordClient from "./SetPasswordClient";
+
+export default function Page() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SetPasswordClient />
+    </Suspense>
+  );
+}
+
+("use client");
 
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -37,7 +48,7 @@ export default function SetPasswordPage() {
     setLoading(true);
     try {
       const res = await fetch(`${BASE_URL}/api/auth/set-password`, {
-      // const res = await fetch(`http://localhost:5000/api/auth/set-password`, {
+        // const res = await fetch(`http://localhost:5000/api/auth/set-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, token, newPassword }),
@@ -60,13 +71,15 @@ export default function SetPasswordPage() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-white px-4">
       <div className="w-full max-w-md bg-white border border-gray-200 rounded-lg shadow-md p-8">
-        <h2 className="text-2xl font-bold mb-4 text-center">Set Your Password</h2>
+        <h2 className="text-2xl font-bold mb-4 text-center">
+          Set Your Password
+        </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="password"
             placeholder="New Password"
             value={newPassword}
-            onChange={e => setNewPassword(e.target.value)}
+            onChange={(e) => setNewPassword(e.target.value)}
             className="w-full border border-gray-300 rounded px-4 py-2"
             required
           />
@@ -74,7 +87,7 @@ export default function SetPasswordPage() {
             type="password"
             placeholder="Confirm Password"
             value={confirmPassword}
-            onChange={e => setConfirmPassword(e.target.value)}
+            onChange={(e) => setConfirmPassword(e.target.value)}
             className="w-full border border-gray-300 rounded px-4 py-2"
             required
           />
