@@ -23,7 +23,7 @@ export default function SetPasswordClient() {
     setLoading(true);
 
     try {
-      const res = await fetch(`${BASE_URL}/api/auth/reset-password`, {
+      const res = await fetch(`${BASE_URL}/api/auth/set-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, code, newPassword }),
