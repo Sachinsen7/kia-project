@@ -657,10 +657,6 @@
 
 // export default AskKia;
 
-
-
-
-
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
@@ -683,10 +679,10 @@ type Question = {
   user: string;
   userId?: string;
   dept: string;
-  createdDate: string;
+  date: string;
   title: string;
-  country: string | null;
-  questionText: string;
+  country: string;
+  text: string;
   likes: number;
   likedBy: string[];
   comments: number;
@@ -698,8 +694,8 @@ type Comment = {
   id: string;
   user: string;
   userId?: string;
-  commentText: string;
-  createdTime: string;
+  text: string;
+  time: string;
 };
 
 type CommentResponse = {
@@ -736,32 +732,30 @@ const AskKia: React.FC = () => {
   const [newQuestionText, setNewQuestionText] = useState("");
   const [commentEditorContent, setCommentEditorContent] = useState("");
   const [loadingQuestions, setLoadingQuestions] = useState(false);
-  const [currentUserId, setCurrentUserId] = useState("");
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [currentUserFullName, setCurrentUserFullName] = useState("Unknown");
 
   const editorRef = useRef<HTMLDivElement>(null);
   const commentEditorRef = useRef<HTMLDivElement>(null);
-  const token = typeof window !== "undefined" ? localStorage.getItem("token") || "" : "";
-
-  // Fetch and parse user data from localStorage
-  const loadUserData = useCallback(() => {
-    if (typeof window === "undefined") return;
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("token") || "" : "";
+  let currentUserId = "";
+  let currentUser: User | null = null;
+  let currentUserFullName = "Unknown";
+  if (typeof window !== "undefined") {
     const userData = localStorage.getItem("user");
-    if (!userData) return;
-
-    try {
-      const parsed = JSON.parse(userData);
-      setCurrentUserId(typeof parsed === "string" ? parsed : parsed._id || parsed.id || "");
-      setCurrentUser(typeof parsed === "object" ? parsed : null);
-      const firstName = parsed?.firstName || "";
-      const lastName = parsed?.lastName || "";
-      setCurrentUserFullName(`${firstName} ${lastName}`.trim() || "Unknown");
-    } catch (err: unknown) {
-      console.error("Error parsing user data from localStorage:", err);
-      toast.error("Failed to load user data");
+    if (userData) {
+      try {
+        const parsed = JSON.parse(userData);
+        currentUserId =
+          typeof parsed === "string" ? parsed : parsed._id || parsed.id || "";
+        currentUser = typeof parsed === "object" ? (parsed as User) : null;
+        const firstName = (currentUser as any)?.firstName || "";
+        const lastName = (currentUser as any)?.lastName || "";
+        currentUserFullName = `${firstName} ${lastName}`.trim() || "Unknown";
+      } catch (err) {
+        console.error("Error parsing user data from localStorage:", err);
+      }
     }
-  }, []);
+  }
 
   // Fetch comments
   const fetchComments = useCallback(
@@ -781,16 +775,15 @@ const AskKia: React.FC = () => {
               }`.trim() || "Unknown"
             : "Unknown",
           userId: c.createdBy?._id || "",
-          commentText: c.text,
-          createdTime: new Date(c.createdAt).toLocaleTimeString("en-US", {
+          text: c.text,
+          time: new Date(c.createdAt).toLocaleTimeString("en-US", {
             hour: "2-digit",
             minute: "2-digit",
           }),
         }));
-      } catch (err: unknown) {
+      } catch (err) {
         console.error("Error fetching comments:", err);
-        const message = err instanceof Error ? err.message : "Failed to load comments";
-        toast.error(message);
+        toast.error("Failed to load comments");
         return [];
       }
     },
@@ -819,10 +812,10 @@ const AskKia: React.FC = () => {
               : "Unknown",
             userId: q.createdBy?._id || "",
             dept: "KUS",
-            createdDate: new Date(q.createdAt).toISOString().slice(0, 10),
+            date: new Date(q.createdAt).toISOString().slice(0, 10),
             title: q.title,
             country: q.country || "Unknown", // Handle null country
-            questionText: q.description,
+            text: q.description,
             likes: q.likes.length,
             likedBy: q.likes,
             comments: comments.length,
@@ -832,10 +825,9 @@ const AskKia: React.FC = () => {
         })
       );
       setQuestions(formatted);
-    } catch (err: unknown) {
+    } catch (err) {
       console.error("Error fetching questions:", err);
-      const message = err instanceof Error ? err.message : "Failed to load questions";
-      toast.error(message);
+      toast.error("Failed to load questions");
     } finally {
       setLoadingQuestions(false);
     }
@@ -843,9 +835,8 @@ const AskKia: React.FC = () => {
 
   useEffect(() => {
     setMounted(true);
-    loadUserData();
     fetchQuestions();
-  }, [loadUserData, fetchQuestions]);
+  }, [fetchQuestions]);
 
   // Add question
   const handleAddQuestion = async () => {
@@ -872,10 +863,10 @@ const AskKia: React.FC = () => {
           : currentUserFullName,
         userId: response.qna.createdBy?._id || currentUserId,
         dept: "KUS",
-        createdDate: new Date(response.qna.createdAt).toISOString().slice(0, 10),
+        date: new Date(response.qna.createdAt).toISOString().slice(0, 10),
         title: response.qna.title,
         country: response.qna.country || "Unknown",
-        questionText: response.qna.description,
+        text: response.qna.description,
         likes: response.qna.likes.length,
         likedBy: response.qna.likes,
         comments: 0,
@@ -888,10 +879,9 @@ const AskKia: React.FC = () => {
       setNewQuestionTitle("");
       setNewQuestionText("");
       toast.success("Question posted successfully");
-    } catch (err: unknown) {
+    } catch (err: any) {
       console.error("Error adding question:", err);
-      const message = err instanceof Error ? err.message : "Failed to post question";
-      toast.error(message);
+      toast.error(err.message || "Failed to post question");
     }
   };
 
@@ -918,8 +908,8 @@ const AskKia: React.FC = () => {
             }`.trim() || "Unknown"
           : "Unknown",
         userId: response.comment.createdBy?._id || currentUserId,
-        commentText: response.comment.text,
-        createdTime: new Date(response.comment.createdAt).toLocaleTimeString("en-US", {
+        text: response.comment.text,
+        time: new Date(response.comment.createdAt).toLocaleTimeString("en-US", {
           hour: "2-digit",
           minute: "2-digit",
         }),
@@ -938,10 +928,9 @@ const AskKia: React.FC = () => {
       );
       setCommentEditorContent("");
       toast.success("Comment posted successfully");
-    } catch (err: unknown) {
+    } catch (err: any) {
       console.error("Error adding comment:", err);
-      const message = err instanceof Error ? err.message : "Failed to post comment";
-      toast.error(message);
+      toast.error(err.message || "Failed to post comment");
     }
   };
 
@@ -969,10 +958,9 @@ const AskKia: React.FC = () => {
             : q
         )
       );
-    } catch (err: unknown) {
+    } catch (err: any) {
       console.error("Error toggling like:", err);
-      const message = err instanceof Error ? err.message : "Failed to toggle like";
-      toast.error(message);
+      toast.error(err.message || "Failed to toggle like");
     }
   };
 
@@ -987,10 +975,9 @@ const AskKia: React.FC = () => {
       );
       setQuestions((prev) => prev.filter((q) => q.id !== id));
       toast.success("Question deleted successfully");
-    } catch (err: unknown) {
+    } catch (err: any) {
       console.error("Error deleting question:", err);
-      const message = err instanceof Error ? err.message : "Failed to delete question";
-      toast.error(message);
+      toast.error(err.message || "Failed to delete question");
     }
   };
 
@@ -1015,10 +1002,9 @@ const AskKia: React.FC = () => {
         )
       );
       toast.success("Comment deleted successfully");
-    } catch (err: unknown) {
+    } catch (err: any) {
       console.error("Error deleting comment:", err);
-      const message = err instanceof Error ? err.message : "Failed to delete comment";
-      toast.error(message);
+      toast.error(err.message || "Failed to delete comment");
     }
   };
 
@@ -1120,7 +1106,7 @@ const AskKia: React.FC = () => {
                       </span>
                       <span className="text-gray-500 text-sm">| {q.dept}</span>
                     </div>
-                    <span className="text-xs text-gray-400 mt-1">{q.createdDate}</span>
+                    <span className="text-xs text-gray-400 mt-1">{q.date}</span>
                   </div>
                 </div>
                 {q.userId === currentUserId && (
@@ -1136,7 +1122,7 @@ const AskKia: React.FC = () => {
               {/* Question content */}
               <div className="px-4 pb-3 text-gray-800 text-sm">
                 <strong>{q.title}</strong> - <em>{q.country}</em>
-                <div dangerouslySetInnerHTML={{ __html: q.questionText }} />
+                <div dangerouslySetInnerHTML={{ __html: q.text }} />
               </div>
 
               {/* Actions */}
@@ -1198,7 +1184,7 @@ const AskKia: React.FC = () => {
                             {c.user}
                           </span>
                           <span className="text-xs text-gray-400">
-                            {c.createdTime}
+                            {c.time}
                           </span>
                         </div>
                         {c.userId === currentUserId && (
@@ -1212,7 +1198,7 @@ const AskKia: React.FC = () => {
                       </div>
                       <div
                         className="text-sm text-gray-700 ml-2"
-                        dangerouslySetInnerHTML={{ __html: c.commentText }}
+                        dangerouslySetInnerHTML={{ __html: c.text }}
                       />
                     </div>
                   ))}
