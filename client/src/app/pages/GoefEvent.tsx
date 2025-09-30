@@ -88,8 +88,8 @@ const GoefEvent: React.FC = () => {
         const parsed = JSON.parse(userData);
         currentUserId =
           typeof parsed === "string" ? parsed : parsed._id || parsed.id || "";
-        const firstName = (parsed as any)?.firstName || "";
-        const lastName = (parsed as any)?.lastName || "";
+        const firstName = (parsed as { firstName?: string })?.firstName || "";
+        const lastName = (parsed as { lastName?: string })?.lastName || "";
         currentUserFullName = `${firstName} ${lastName}`.trim() || "Unknown";
       } catch (err) {
         console.error("Error parsing user data from localStorage:", err);
