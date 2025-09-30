@@ -176,20 +176,20 @@ export default function CityScene({ onSelect }: CitySceneProps) {
       )}
 
       {/* Footer */}
-  <footer className="absolute bottom-0 flex justify-between px-20 w-full bg-white border-t border-gray-200 py-7 text-center text-sm text-gray-700">
-    <div>
-      <a href="/privacy-policy" className="hover:underline mx-2">
-        Privacy Policy
-      </a>
-      <a href="/cookies-policy" className="hover:underline mx-2">
-        Cookies Policy
-      </a>
-    </div>
-    <div>
+      <footer className="absolute bottom-0 flex justify-between px-20 w-full bg-white border-t border-gray-200 py-7 text-center text-sm text-gray-700">
+        <div>
+          <a href="/privacy-policy" className="hover:underline mx-2">
+            Privacy Policy
+          </a>
+          <a href="/cookies-policy" className="hover:underline mx-2">
+            Cookies Policy
+          </a>
+        </div>
+        <div>
 
-      © Kia Corporation
-    </div>
-  </footer>
+          © Kia Corporation
+        </div>
+      </footer>
     </div>
   );
 
