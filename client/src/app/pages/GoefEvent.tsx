@@ -490,10 +490,12 @@ const GoefEvent: React.FC = () => {
             >
               <div className="flex items-center justify-between px-4 py-3">
                 <div className="flex items-center">
-                  <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center mr-3">
-                    <span className="text-gray-500 font-bold">
-                      {q.user.charAt(0)}
-                    </span>
+                  <div className="w-10 h-10 rounded-full  flex items-center justify-center mr-3">
+                    <img
+                    src={"/user.png"}
+                    alt={q.user}
+                    className="w-10 h-10 rounded-full mr-3"
+                  />
                   </div>
                   <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-1 md:gap-3">
                     <div className="flex items-center gap-2 flex-wrap">
