@@ -4,7 +4,7 @@ let User;
 try {
   User = mongoose.model("User");
 } catch (error) {
-  User = require("../users/user.model");
+  User = require("../users/user.model.js");
 }
 
 const qnaSchema = new mongoose.Schema(
