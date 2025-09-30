@@ -26,7 +26,7 @@ export const links: CityLink[] = [
   //
   {
     id: "ask-kia",
-    name: "Questions that shape our future",
+    name: "Questions on GOEF and our future",
     x: 73,
     y: 65,
     icon: MessageCircle,
