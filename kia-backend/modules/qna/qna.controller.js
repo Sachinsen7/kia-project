@@ -2,12 +2,11 @@ const Qna = require("./qna.model");
 
 exports.createQna = async (req, res) => {
   try {
-    const { title, description, country, type } = req.body;
+    const { title, description, type } = req.body;
 
     const qna = await Qna.create({
       title,
       description,
-      country,
       type,
       createdBy: req.user.id,
     });
