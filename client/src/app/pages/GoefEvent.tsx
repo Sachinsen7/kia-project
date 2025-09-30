@@ -334,8 +334,8 @@ const GoefEvent: React.FC = () => {
     <div className="w-full min-h-screen bg-white px-6 md:px-16 py-12">
       <div className="bg-white relative shadow-2xl rounded-2xl w-full max-w-6xl m-6 p-8 md:p-14">
         <div className="w-full pt-6 pb-10 px-4">
-          <h1 className="text-3xl md:text-5xl text-gray-900 mb-2">2025 GOEF</h1>
-          <div className="w-[540px]  h-[4px] text-[#000] bg-[#000] absolute top-35.5 right-0"></div>
+          <h1 className="text-3xl md:text-5xl text-gray-900 mb-2">Share & Win !</h1>
+          <div className="w-[542px]  h-[4px] text-[#000] bg-[#000] absolute top-35.5 right-0"></div>
           <h2 className="text-3xl md:text-5xl ml-40">EVENT</h2>
         </div>
         <div className="px-4 w-[1098px] h-[126px] md:px-8 text-gray-700 leading-relaxed">
