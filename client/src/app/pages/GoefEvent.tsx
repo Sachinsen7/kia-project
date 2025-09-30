@@ -88,10 +88,10 @@ const GoefEvent: React.FC = () => {
         const parsed = JSON.parse(userData);
         currentUserId =
           typeof parsed === "string" ? parsed : parsed._id || parsed.id || "";
-        const firstName = (parsed as any)?.firstName || "";
-        const lastName = (parsed as any)?.lastName || "";
+        const firstName = (parsed as User)?.firstName || "";
+        const lastName = (parsed as User)?.lastName || "";
         currentUserFullName = `${firstName} ${lastName}`.trim() || "Unknown";
-      } catch (err) {
+      } catch (err: unknown) {
         console.error("Error parsing user data from localStorage:", err);
       }
     } else {
@@ -124,7 +124,7 @@ const GoefEvent: React.FC = () => {
             minute: "2-digit",
           }),
         }));
-      } catch (err) {
+      } catch (err: unknown) {
         console.error("Error fetching comments:", err);
         return [];
       }
@@ -166,7 +166,7 @@ const GoefEvent: React.FC = () => {
         })
       );
       setQuestions(formatted);
-    } catch (err) {
+    } catch (err: unknown) {
       console.error(err);
     } finally {
       setLoadingQuestions(false);
@@ -211,7 +211,7 @@ const GoefEvent: React.FC = () => {
       setQuestions((prev) => [newQ, ...prev]);
       setShowInput(false);
       setNewQuestionText("");
-    } catch (err) {
+    } catch (err: unknown) {
       console.error("Error adding question:", err);
     }
   };
@@ -252,7 +252,7 @@ const GoefEvent: React.FC = () => {
       );
       setCommentEditorContent("");
       setActiveCommentEditor(null);
-    } catch (err) {
+    } catch (err: unknown) {
       console.error("Error adding comment:", err);
     }
   };
@@ -278,7 +278,7 @@ const GoefEvent: React.FC = () => {
             : q
         )
       );
-    } catch (err) {
+    } catch (err: unknown) {
       console.error("Error toggling like:", err);
     }
   };
@@ -293,7 +293,7 @@ const GoefEvent: React.FC = () => {
         token
       );
       setQuestions((prev) => prev.filter((q) => q.id !== id));
-    } catch (err) {
+    } catch (err: unknown) {
       console.error("Error deleting question:", err);
     }
   };
@@ -318,7 +318,7 @@ const GoefEvent: React.FC = () => {
             : q
         )
       );
-    } catch (err) {
+    } catch (err: unknown) {
       console.error("Error deleting comment:", err);
     }
   };
