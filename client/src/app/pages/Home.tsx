@@ -34,7 +34,7 @@ function Home() {
               to enable richer exchanges without being restricted by time and
               location. This forum will be a valuable opportunity to do more
               than just share information; it will also be a time to
-              collectively envision Kia's future.
+              collectively envision Kia&apos;s future.
             </p>
             <p>
               We will share in-depth insights, from the core strategies of our
