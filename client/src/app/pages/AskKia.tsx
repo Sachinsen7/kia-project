@@ -386,7 +386,7 @@ const AskKia: React.FC = () => {
                 <div className="flex items-center">
                   {/* Avatar */}
                   <img
-                    src={"/default-avatar.png"}
+                    src={"/user.png"}
                     alt={q.user}
                     className="w-10 h-10 rounded-full mr-3"
                   />
