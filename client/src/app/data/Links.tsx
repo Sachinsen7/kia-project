@@ -40,7 +40,7 @@ export const links: CityLink[] = [
   },
   {
     id: "event",
-    name: "2025 GOEF Event",
+    name: "Share & Win ! (Event)",
     x: 65,
     y: 70,
     icon: Calendar,
