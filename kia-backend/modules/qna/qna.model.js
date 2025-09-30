@@ -22,7 +22,7 @@ const qnaSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    // country: { type: String },
+    country: { type: String },
     likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   },
   { timestamps: true }
