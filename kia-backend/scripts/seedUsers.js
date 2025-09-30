@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 const User = require("../modules/users/user.model");
 require("dotenv").config();
 
-
 const users = [
   {
     email: "sparshsahu8435@gmail.com",
@@ -13,7 +12,7 @@ const users = [
     country: "India",
     nationality: "Indian",
     isActive: false,
-    password: "", // No password yet
+    password: "",
   },
   {
     email: "sparshsahu004@gmail.com",
@@ -24,7 +23,7 @@ const users = [
     country: "India",
     nationality: "Indian",
     isActive: false,
-    password: "", // No password yet
+    password: "",
   },
   {
     email: "albusseverus816@gmail.com",
@@ -62,10 +61,9 @@ const users = [
   // ...add more users
 ];
 
-mongoose.connect(process.env.MONGO_URI)
-  .then(async () => {
-    await User.deleteMany({});
-    await User.insertMany(users);
-    console.log("Users seeded!");
-    process.exit();
-  });
+mongoose.connect(process.env.MONGO_URI).then(async () => {
+  await User.deleteMany({});
+  await User.insertMany(users);
+  console.log("Users seeded!");
+  process.exit();
+});
