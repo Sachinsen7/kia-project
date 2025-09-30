@@ -129,7 +129,7 @@ const AskKia: React.FC = () => {
             id: q._id,
             user: `${q.createdBy.firstName} ${q.createdBy.lastName}`,
             userId: q.createdBy._id,
-            dept: "GUEST",
+            dept: "KUS",
             date: new Date(q.createdAt).toISOString().slice(0, 10),
             title: q.title,
             country: q.country,
@@ -173,7 +173,7 @@ const AskKia: React.FC = () => {
         id: response.qna._id,
         user: "You",
         userId: currentUserId,
-        dept: "GUEST",
+        dept: "KUS",
         date: new Date(response.qna.createdAt).toISOString().slice(0, 10),
         title: response.qna.title,
         country: response.qna.country,
@@ -393,13 +393,16 @@ const AskKia: React.FC = () => {
 
                   {/* User Info */}
                   <div className="flex flex-col">
-                    <span className="font-semibold text-gray-900 text-sm">
-                      {q.user}{" "}
-                      <span className="font-normal text-gray-500">
-                        / {q.dept}
+                    <div className="flex items-center gap-1 flex-wrap">
+                      <span className="font-semibold text-gray-900 text-sm">
+                        {q.user}
                       </span>
-                    </span>
-                    <span className="text-xs text-gray-400">{q.date}</span>
+                      <span className="text-gray-500 text-sm">
+                        | {q.country}
+                      </span>
+                      <span className="text-gray-500 text-sm">| {q.dept}</span>
+                    </div>
+                    <span className="text-xs text-gray-400 mt-1">{q.date}</span>
                   </div>
                 </div>
 
@@ -522,8 +525,7 @@ const AskKia: React.FC = () => {
               <h2 className="text-xl font-semibold text-gray-900 mb-4">
                 Write Post
               </h2>
-
-              {/* Country Selector */}
+              Country Selector
               <select
                 title="Country"
                 className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-500 bg-white focus:outline-none focus:border-gray-400 transition-colors"
@@ -536,7 +538,6 @@ const AskKia: React.FC = () => {
                   </option>
                 ))}
               </select>
-
               {/* Title Input */}
               <input
                 type="text"
@@ -545,7 +546,6 @@ const AskKia: React.FC = () => {
                 onChange={(e) => setNewQuestionTitle(e.target.value)}
                 className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-400 transition-colors"
               />
-
               {/* Rich Text Editor */}
               <div className="border border-gray-300 rounded-lg overflow-hidden">
                 {/* Editor Toolbar */}
@@ -602,7 +602,6 @@ const AskKia: React.FC = () => {
                   />
                 </div>
               </div>
-
               {/* Character Count and Buttons */}
               <div className="flex items-center justify-between pt-2">
                 <span className="text-sm text-gray-400">0/1500</span>
