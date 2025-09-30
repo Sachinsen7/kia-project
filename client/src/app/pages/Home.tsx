@@ -24,23 +24,35 @@ function Home() {
         <div className="mt-20 flex justify-end">
           <div className="space-y-4 text-gray-700 leading-relaxed border-r-2 border-b-2 border-gray-300 pr-6 pb-6 max-w-3xl text-left">
             <p>
-              We are pleased to invite you to the 2025 Global Ownership
-              Experience Forum in recognition of your outstanding performance.
-              This year’s event is a virtual conference designed to bring us
-              together online.
+              It is with great honor that we extend this official invitation to
+              the 2025 Global Ownership Experience Forum, in sincere
+              appreciation of your exceptional performance and unwavering
+              dedication to Kia.
             </p>
             <p>
-              The forum provides in-depth insights into Kia’s 2026 business
-              plans, ownership programs, customer experience strategies, and
-              retention initiatives.
+              This year, we have specially designed a virtual conference format
+              to enable richer exchanges without being restricted by time and
+              location. This forum will be a valuable opportunity to do more
+              than just share information; it will also be a time to
+              collectively envision Kia's future.
             </p>
             <p>
-              We are excited to reconnect with you in the virtual space, share
-              perspectives, and strengthen our lasting partnerships.
+              We will share in-depth insights, from the core strategies of our
+              2026 business plans to new ownership programs designed to deliver
+              unforgettable customer experiences, as well as customer experience
+              strategies and retention initiatives for sustainable growth. Each
+              session will provide practical solutions and new inspiration for
+              your business growth.
             </p>
             <p>
-              Thank you for your continued dedication, and we look forward to
-              your participation in the 2025 Global Ownership Experience Forum.
+              We look forward to reconnecting in the virtual space to exchange
+              valuable opinions, share wisdom for our mutual success, and
+              further strengthen our long-standing partnership.
+            </p>
+            <p>
+              Thank you for your continued passion and partnership. We look
+              forward to your participation in the 2025 Global Ownership
+              Experience Forum.
             </p>
           </div>
         </div>
@@ -48,7 +60,7 @@ function Home() {
         {/* Video section */}
         <div className="mt-20">
           <h2 className="text-base uppercase text-gray-500 tracking-wide mb-4 text-center">
-            Greetings from the Vice President (or teaser video)
+            2025 GOEF Official Teaser
           </h2>
           <div className="w-full overflow-hidden rounded-xl shadow-md relative aspect-video">
             <iframe
