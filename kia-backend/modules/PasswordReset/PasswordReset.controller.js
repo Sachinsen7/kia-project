@@ -186,3 +186,29 @@ exports.resetPassword = async (req, res) => {
     });
   }
 };
+
+// POST /api/auth/set-password
+exports.setPassword = async (req, res) => {
+  try {
+    const { email, token, newPassword } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    const resetToken = await PasswordResetToken.findOne({
+      userId: user._id,
+      token,
+    });
+    if (!resetToken || resetToken.expiresAt < Date.now()) {
+      return res.status(400).json({ message: "Invalid or expired token" });
+    }
+
+    user.password = await bcrypt.hash(newPassword, 10);
+    user.isActive = true;
+    await user.save();
+    await PasswordResetToken.deleteMany({ userId: user._id });
+
+    res.json({ success: true, message: "Password set successfully" });
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};

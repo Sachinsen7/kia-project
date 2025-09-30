@@ -1,9 +1,12 @@
 // utils/sendEmail.js
-const nodemailer = require("nodemailer");
+const nodemailer = require("nodemailer")
+require("dotenv").config();
+console.log(process.env.EMAIL_USER, process.env.EMAIL_PASS); // just for testing, remove later
+;
 
 // ✅ Setup transporter
 const transporter = nodemailer.createTransport({
-  host: "smtp.office365.com", // or Gmail: "smtp.gmail.com"
+  host: "smtp.gmail.com", // or Gmail: "smtp.gmail.com"
   port: 587,
   secure: false, // true for port 465, false for 587
   auth: {
