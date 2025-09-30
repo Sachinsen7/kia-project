@@ -148,6 +148,7 @@ export default function Login() {
       });
 
       const data = await res.json();
+      // console.log(data.user.id, "user id hai ye dhyan karo");
 
       if (!res.ok) {
         // show toast error (inactive user / wrong creds / etc.)
@@ -159,6 +160,7 @@ export default function Login() {
       // success
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
+
       toast.success("Login successful!");
       router.push("/");
     } catch (err) {
