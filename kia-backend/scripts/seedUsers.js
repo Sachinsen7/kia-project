@@ -37,6 +37,28 @@ const users = [
     isActive: false,
     password: "", // No password yet
   },
+  {
+    email: "himankjanjire4@gmail.com",
+    title: "Mr.",
+    firstName: "himank",
+    lastName: "Doe",
+    region: "Asia",
+    country: "India",
+    nationality: "Indian",
+    isActive: false,
+    password: "", // No password yet
+  },
+  {
+    email: "himank@learning-crew.com",
+    title: "Mr.",
+    firstName: "himankOO",
+    lastName: "Doe",
+    region: "Asia",
+    country: "India",
+    nationality: "Indian",
+    isActive: false,
+    password: "", // No password yet
+  },
   // ...add more users
 ];
 
