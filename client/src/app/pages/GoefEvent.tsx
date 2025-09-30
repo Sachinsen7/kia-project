@@ -136,7 +136,7 @@ const GoefEvent: React.FC = () => {
             id: q._id,
             user: `${q.createdBy.firstName} ${q.createdBy.lastName}`,
             userId: q.createdBy._id,
-            dept: "GUEST",
+            dept: "KUS",
             date: new Date(q.createdAt).toISOString().slice(0, 10),
             text: q.description,
             country: q.country,
@@ -178,7 +178,7 @@ const GoefEvent: React.FC = () => {
         id: response.qna._id,
         user: "You",
         userId: currentUserId,
-        dept: "GUEST",
+        dept: "KUS",
         date: new Date(response.qna.createdAt).toISOString().slice(0, 10),
         text: response.qna.description,
         country: response.qna.country,
@@ -497,13 +497,16 @@ const GoefEvent: React.FC = () => {
                     className="w-10 h-10 rounded-full mr-3"
                   />
                   </div>
-                  <div>
-                    <span className="font-semibold text-gray-900 text-sm">
-                      {q.user}
-                    </span>
-                    <span className="mx-2 text-xs text-gray-500">
-                      / {q.dept}
-                    </span>
+                  <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-1 md:gap-3">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="font-semibold text-gray-900 text-sm">
+                        {q.user}
+                      </span>
+                      <span className="text-gray-500 text-sm">
+                        | {q.country}
+                      </span>
+                      <span className="text-gray-500 text-sm">| {q.dept}</span>
+                    </div>
                     <span className="text-xs text-gray-400">{q.date}</span>
                   </div>
                 </div>
