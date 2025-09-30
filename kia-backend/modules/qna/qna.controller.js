@@ -1,4 +1,5 @@
 const Qna = require("./qna.model");
+const User = require("../users/user.model");
 
 exports.createQna = async (req, res) => {
   try {
