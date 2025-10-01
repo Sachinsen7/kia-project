@@ -34,7 +34,7 @@ const users = [
     country: "India",
     nationality: "Indian",
     isActive: false,
-    password: "", // No password yet
+    password: "",
   },
   {
     email: "himankjanjire4@gmail.com",
@@ -45,7 +45,7 @@ const users = [
     country: "India",
     nationality: "Indian",
     isActive: false,
-    password: "", // No password yet
+    password: "",
   },
   {
     email: "himank@learning-crew.com",
