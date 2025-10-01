@@ -1,5 +1,5 @@
-const Admin = require("../admin/admin.model"); 
-const User = require("../users/user.model");   
+const Admin = require("../admin/admin.model");
+const User = require("../users/user.model");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
@@ -8,7 +8,7 @@ const loginAdmin = async (req, res) => {
   try {
     const { username, password } = req.body;
 
-    const admin = await Admin.findOne({ username }); 
+    const admin = await Admin.findOne({ username });
     if (!admin) {
       return res.status(404).json({ success: false, message: "Admin not found" });
     }
@@ -19,10 +19,11 @@ const loginAdmin = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { id: admin._id, username: admin.username },
+      { id: admin._id, username: admin.username, role: "admin" },
       process.env.JWT_SECRET,
       { expiresIn: "1d" }
     );
+
 
     res.status(200).json({
       success: true,
@@ -87,4 +88,4 @@ const declineUser = async (req, res) => {
 };
 
 
-module.exports = { getAllUsers, loginAdmin , approveUser, declineUser};
+module.exports = { getAllUsers, loginAdmin, approveUser, declineUser };
