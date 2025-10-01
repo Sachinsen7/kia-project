@@ -199,7 +199,7 @@ const CookiesPolicy: React.FC = () => {
             information about your webpage visits collected across websites when
             you have not interacted with that service on the page.
           </p>
-          <p className="text-base text-black-700 leading-relaxed mt-4">
+          {/* <p className="text-base text-black-700 leading-relaxed mt-4">
             <strong>Third-Party Analytics.</strong> We may use third-party
             analytics companies, for example Google Analytics and Adobe
             Analytics Cloud (see our{" "}
@@ -211,7 +211,7 @@ const CookiesPolicy: React.FC = () => {
             services, performance, and user experiences. These entities may use
             cookies and other tracking technologies, such as local storage
             objects, to perform their services.
-          </p>
+          </p> */}
         </section>
 
         <section className="mb-8">
@@ -260,10 +260,10 @@ const CookiesPolicy: React.FC = () => {
                   </td>
                   <td className="border border-gray-300 px-4 py-2">
                     <a
-                      href="https://www.kiagdc.com/policy_cookies.php"
+                      href="https://kia-project-eight.vercel.app/cookies-policy"
                       className="text-black-600 hover:underline"
                     >
-                      https://www.kiagdc.com/policy_cookies.php
+                      GOEF Cookie Policies 링크
                     </a>
                   </td>
                 </tr>
@@ -283,10 +283,10 @@ const CookiesPolicy: React.FC = () => {
                   </td>
                   <td className="border border-gray-300 px-4 py-2">
                     <a
-                      href="https://www.kiagdc.com/policy_cookies.php"
+                      href="https://kia-project-eight.vercel.app/cookies-policy"
                       className="text-black-600 hover:underline"
                     >
-                      https://www.kiagdc.com/policy_cookies.php
+                      GOEF Cookie Policies 링크
                     </a>
                   </td>
                 </tr>
@@ -411,7 +411,7 @@ const CookiesPolicy: React.FC = () => {
               href="mailto:support@kiagoef.com"
               className="text-black-600 hover:underline"
             >
-              support@kiagoef.com
+              kiagoef@kia.com
             </a>{" "}
             if you have any complaints or questions about this Cookies Policy or
             our information practices.
