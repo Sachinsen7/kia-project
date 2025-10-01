@@ -241,10 +241,15 @@ const GoefEvent: React.FC = () => {
         { text: commentText },
         token
       );
+      const displayNameFromUser = (response as any).comment?.createdBy
+        ? `${(response as any).comment.createdBy.firstName || "Unknown"} ${
+            (response as any).comment.createdBy.lastName || ""
+          }`.trim() || "Unknown"
+        : undefined;
       const newComment: Comment = {
         id: response.comment._id,
-        user: currentUserFullName,
-        userId: currentUserId,
+        user: displayNameFromUser || response.comment.createdByName || currentUserFullName,
+        userId: response.comment.createdBy?._id || currentUserId,
         text: response.comment.text,
         time: new Date(response.comment.createdAt).toLocaleTimeString("en-US", {
           hour: "2-digit",

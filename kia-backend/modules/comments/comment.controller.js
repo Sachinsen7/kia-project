@@ -10,16 +10,24 @@ exports.addComment = async (req, res) => {
     const qna = await Qna.findById(qnaId);
     if (!qna) return res.status(404).json({ message: "QnA not found" });
 
+    // Determine display name and user reference
+    let createdBy = undefined;
+    let createdByName = "Unknown";
+    if (req.user && req.user.role === "admin") {
+      createdByName = "Admin";
+    } else if (req.user && req.user.id) {
+      createdBy = req.user.id;
+    }
+
     const comment = await Comment.create({
       text,
       qna: qnaId,
-      createdBy: req.user.id,
+      createdBy,
+      createdByName,
     });
 
-    const populatedComment = await Comment.findById(comment._id).populate(
-      "createdBy",
-      "firstName lastName email"
-    );
+    const populatedComment = await Comment.findById(comment._id)
+      .populate("createdBy", "firstName lastName email");
 
     res
       .status(201)
@@ -34,10 +42,8 @@ exports.addComment = async (req, res) => {
 exports.getComments = async (req, res) => {
   try {
     const { qnaId } = req.params;
-    const comments = await Comment.find({ qna: qnaId }).populate(
-      "createdBy",
-      "firstName lastName email"
-    );
+    const comments = await Comment.find({ qna: qnaId })
+      .populate("createdBy", "firstName lastName email");
     res.json(comments);
   } catch (err) {
     console.error(err);
