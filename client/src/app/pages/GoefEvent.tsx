@@ -52,6 +52,7 @@ type QuestionResponse = {
   country: string | null;
   createdAt: string;
   createdBy: User | null;
+  createdByName?: string;
   likes: string[];
 };
 
@@ -230,12 +231,13 @@ const GoefEvent: React.FC = () => {
           ? `${response.qna.createdBy.firstName || "Unknown"} ${
               response.qna.createdBy.lastName || ""
             }`.trim() || "Unknown"
-          : (response.qna as any).createdByName || (isAdmin ? "Admin" : currentUserFullName),
+          : response.qna.createdByName ||
+            (isAdmin ? "Admin" : currentUserFullName),
         userId: isAdmin ? "admin" : currentUserId,
         dept: "KUS",
         date: new Date(response.qna.createdAt).toISOString().slice(0, 10),
         text: response.qna.description,
-        country: (response.qna as any).country || "",
+        country: response.qna.country || "",
         likes: response.qna.likes.length,
         likedBy: response.qna.likes,
         comments: 0,
