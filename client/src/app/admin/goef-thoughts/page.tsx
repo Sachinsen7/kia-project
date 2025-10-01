@@ -302,7 +302,7 @@ function CommentSection({ comments }: CommentSectionProps) {
     <div className="mt-3 border-t pt-3">
       <button
         onClick={() => setOpen((prev) => !prev)}
-        className="px-3 py-1 text-xs font-semibold text-white bg-blue-600 rounded hover:bg-blue-700 transition"
+        className="px-3 py-1 text-xs font-semibold text-white bg-gray-700 rounded hover:bg-gray-800 transition"
       >
         {open ? "Hide Comments" : `Show Comments (${comments.length})`}
       </button>
