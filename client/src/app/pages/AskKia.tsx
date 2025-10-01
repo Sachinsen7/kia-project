@@ -902,13 +902,15 @@ const AskKia: React.FC = () => {
         { text: commentText },
         token
       );
+      const displayNameFromUser = response.comment.createdBy
+        ? `${response.comment.createdBy.firstName || "Unknown"} ${
+            response.comment.createdBy.lastName || ""
+          }`.trim() || "Unknown"
+        : undefined;
+
       const newComment: Comment = {
         id: response.comment._id,
-        user: response.comment.createdBy
-          ? `${response.comment.createdBy.firstName || "Unknown"} ${
-              response.comment.createdBy.lastName || ""
-            }`.trim() || "Unknown"
-          : "Unknown",
+        user: displayNameFromUser || response.comment.createdByName || currentUserFullName || "Unknown",
         userId: response.comment.createdBy?._id || currentUserId,
         text: response.comment.text,
         time: new Date(response.comment.createdAt).toLocaleTimeString("en-US", {
