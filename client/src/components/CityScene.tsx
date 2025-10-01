@@ -3,13 +3,15 @@
 import { useState, useMemo } from "react";
 import Image from "next/image";
 import { links } from "@/app/data/Links";
+import { useRouter } from "next/navigation";
 
-type CityLink = {
+export type CityLink = {
   id: string;
   name: string;
-  icon: React.ElementType;
   x: number;
   y: number;
+  icon: React.ElementType;
+  svg: React.ReactElement;
   url?: string;
 };
 
@@ -51,6 +53,14 @@ async function fetchLiveData(token: string): Promise<{ url?: string } | null> {
 export default function CityScene({ onSelect }: CitySceneProps) {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const [isLoadingLive, setIsLoadingLive] = useState(false);
+  const [isEventOpen, setIsEventOpen] = useState(false);
+  const [eventPosts, setEventPosts] = useState<string[]>([
+    "To me, ownership is key... – John, USA",
+    "I love my Kia for reliability... – Anna, Germany",
+    "Driving Kia makes me proud... – Raj, India",
+  ]);
+
+  const router = useRouter();
 
   const memoizedIcons = useMemo(() => {
     return links.map((link: CityLink) => {
@@ -107,28 +117,21 @@ export default function CityScene({ onSelect }: CitySceneProps) {
           key={link.id}
           onClick={handleClick}
           disabled={link.id === "live-link" && isLoadingLive}
-          className={`absolute transform -translate-x-1/2 -translate-y-1/2 group ${isLoadingLive && link.id === "live-link"
-            ? "opacity-50 cursor-wait"
-            : ""
-            }`}
+          className={`absolute transform -translate-x-1/2 -translate-y-1/2 group ${
+            isLoadingLive && link.id === "live-link"
+              ? "opacity-50 cursor-wait"
+              : ""
+          }`}
           style={{
             left: `${link.x}%`,
             top: `${link.y}%`,
           }}
         >
-          <div className="relative flex items-center justify-center w-[4rem] h-[4rem] md:w-16 md:h-16">
+          <div className="relative flex items-center justify-center md:w-full md:h-full">
             <span className="absolute inline-flex h-full w-full rounded-full bg-[#05141f]/50 opacity-0 group-hover:opacity-100 group-hover:animate-ping transition-opacity"></span>
 
-            <div
-              className="absolute w-[4rem] h-[4rem] md:w-16 md:h-16 bg-white flex items-center justify-center shadow-lg transition-transform duration-300 group-hover:scale-110"
-              style={{
-                clipPath:
-                  "path('M32 0C49.673 0 64 14.327 64 32C64 51.2 32 64 32 64C32 64 0 51.2 0 32C0 14.327 14.327 0 32 0Z')",
-              }}
-            >
-              <div className="w-[2.5rem] h-[2.5rem] md:w-10 md:h-10 bg-[#05141f] rounded-full flex items-center justify-center transition-transform group-hover:animate-bounce duration-200">
-                <Icon className="text-white w-[1.25rem] h-[1.25rem] md:w-5 md:h-5" />
-              </div>
+P            <div className="w-24 h-24 md:w-40 md:h-40 flex items-center justify-center">
+              {link.svg}
             </div>
 
             {link.id === "live-link" && (
@@ -175,73 +178,67 @@ export default function CityScene({ onSelect }: CitySceneProps) {
         <div className="absolute inset-0 w-full h-full">{memoizedIcons}</div>
       )}
 
-      {/* Footer */}
-      <footer className="absolute bottom-0 flex justify-between px-20 w-full bg-white border-t border-gray-200 py-7 text-center text-sm text-gray-700">
-        <div>
-          <a href="/privacy-policy" className="hover:underline mx-2">
-            Privacy Policy
-          </a>
-          <a href="/cookies-policy" className="hover:underline mx-2">
-            Cookies Policy
-          </a>
-        </div>
-        <div>
+      {/* Event Page Interface (Bottom Left) */}
+      <div className="absolute bottom-24 left-4">
+        <button
+          onClick={() => setIsEventOpen(!isEventOpen)}
+          className="px-4 py-2 bg-[#05141f] text-white rounded-lg shadow-md cursor-pointer transition"
+        >
+          Share & Win
+        </button>
+      </div>
 
-          © Kia Corporation
+      {isEventOpen && (
+        <div
+          className="fixed inset-0 z-40 mb-10 flex items-end justify-start"
+          onClick={() => setIsEventOpen(false)}
+        >
+          <div className="absolute inset-0 bg-opacity-30" />
+
+          {/* Event Menu */}
+          <div
+            className="relative z-50 mb-36 ml-4 w-96 shadow-lg rounded-lg p-4 bg-white
+                 transform transition-all duration-300 ease-out
+                 opacity-0 translate-y-4 animate-fadeInUp"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 className="font-bold text-xl mb-4 text-[#05141f]">
+              Share & Win ! (Event)
+            </h3>
+            <p className="text-lg font-bold text-[#05141f] mb-6">
+              Join us and win a prize
+            </p>
+            <ul className="space-y-2 max-h-40 overflow-y-auto">
+              {eventPosts.map((post, idx) => (
+                <li
+                  key={idx}
+                  className="p-2 bg-gray-100 rounded cursor-pointer text-[#05141f] hover:bg-gray-200 transition"
+                  onClick={() => {
+                    router.push("/share-win");
+                    setIsEventOpen(false);
+                  }}
+                >
+                  {post}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      )}
+      {/* Footer */}
+      <footer className="absolute bottom-0 w-full bg-white border-t border-gray-200 py-4 px-4 md:px-20 text-center text-sm text-gray-700">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-2 md:gap-0">
+          <div className="flex flex-wrap justify-center md:justify-start">
+            <a href="/privacy-policy" className="hover:underline mx-2">
+              Privacy Policy
+            </a>
+            <a href="/cookies-policy" className="hover:underline mx-2">
+              Cookies Policy
+            </a>
+          </div>
+          <div className="mt-2 md:mt-0">© Kia Corporation</div>
         </div>
       </footer>
     </div>
   );
-
-
-  // shrinking landing page image
-
-  // return (
-  //   <div className="relative w-full h-full bg-white overflow-hidden flex flex-col min-h-screen">
-  //     {/* Image container */}
-  //     <div className="relative flex-1">
-  //       <Image
-  //         src="/landing-page.png"
-  //         alt="City Scene"
-  //         fill
-  //         priority
-  //         className="object-fill transition-opacity duration-500"
-  //         onLoadingComplete={() => {
-  //           console.timeEnd("imageLoadToIcons");
-  //           setIsImageLoaded(true);
-  //         }}
-  //       />
-
-  //       {/* Hidden preload for icons */}
-  //       <div className="absolute top-[-9999px] opacity-0">
-  //         {links.map((link: CityLink) => {
-  //           const Icon = link.icon;
-  //           return <Icon key={link.id} className="hidden" />;
-  //         })}
-  //       </div>
-
-  //       {/* Icons overlay after image is loaded */}
-  //       {isImageLoaded && (
-  //         <div className="absolute inset-0 w-full h-full">{memoizedIcons}</div>
-  //       )}
-  //     </div>
-
-  //     {/* Footer outside image container */}
-  //     <footer className="flex justify-between px-20 w-full bg-white border-t border-gray-200 py-7 text-center text-sm text-gray-700">
-  //       <div>
-  //         <a href="/privacy-policy" className="hover:underline mx-2">
-  //           Privacy Policy
-  //         </a>
-  //         <a href="/cookies-policy" className="hover:underline mx-2">
-  //           Cookies Policy
-  //         </a>
-  //       </div>
-  //       <div>
-
-  //         © Kia Corporation
-  //       </div>
-  //     </footer>
-  //   </div>
-  // );
-
 }
