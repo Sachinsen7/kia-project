@@ -17,11 +17,11 @@ const qnaSchema = new mongoose.Schema(
       enum: ["ask_kia", "goef_event"],
       default: "ask_kia",
     },
-    createdBy: {
+  createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true,
     },
+  createdByName: { type: String, default: "Unknown" },
     country: { type: String },
     likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   },
