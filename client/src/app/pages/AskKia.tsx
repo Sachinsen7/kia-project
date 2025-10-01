@@ -703,6 +703,7 @@ type CommentResponse = {
   text: string;
   createdAt: string;
   createdBy: User | null;
+  createdByName?: string;
 };
 
 type QuestionResponse = {
@@ -910,7 +911,11 @@ const AskKia: React.FC = () => {
 
       const newComment: Comment = {
         id: response.comment._id,
-        user: displayNameFromUser || response.comment.createdByName || currentUserFullName || "Unknown",
+        user:
+          displayNameFromUser ||
+          response.comment.createdByName ||
+          currentUserFullName ||
+          "Unknown",
         userId: response.comment.createdBy?._id || currentUserId,
         text: response.comment.text,
         time: new Date(response.comment.createdAt).toLocaleTimeString("en-US", {
@@ -1199,7 +1204,9 @@ const AskKia: React.FC = () => {
                             {c.time}
                           </span>
                         </div>
-                        {(c.userId === currentUserId || (localStorage.getItem("role")||"").toLowerCase()==="admin") && (
+                        {(c.userId === currentUserId ||
+                          (localStorage.getItem("role") || "").toLowerCase() ===
+                            "admin") && (
                           <button
                             onClick={() => handleDeleteComment(q.id, c.id)}
                             className="text-red-500 hover:text-red-700 border-2 border-blue-500 p-1"
