@@ -54,9 +54,7 @@ export default function AdminGoefThoughtsPage() {
   const [error, setError] = useState<string | null>(null);
 
   const token =
-    typeof window !== "undefined"
-      ? localStorage.getItem("admintoken") || ""
-      : "";
+    typeof window !== "undefined" ? localStorage.getItem("token") || "" : "";
 
   useEffect(() => {
     const load = async () => {

@@ -131,7 +131,7 @@ import { BASE_URL } from "@/config/api";
 import toast from "react-hot-toast";
 
 export default function Login() {
-  const [email, setEmail] = useState("");
+  const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -141,10 +141,10 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const res = await fetch(`${BASE_URL}/api/auth/login`, {
+      const res = await fetch(`${BASE_URL}/api/auth/universal-login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ identifier, password }),
       });
 
       const data = await res.json();
@@ -159,10 +159,21 @@ export default function Login() {
 
       // success
       localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
+      if (data.user) {
+        localStorage.setItem("user", JSON.stringify(data.user));
+      } else {
+        localStorage.removeItem("user");
+      }
+      if (data.role) {
+        localStorage.setItem("role", data.role);
+      }
 
       toast.success("Login successful!");
-      router.push("/");
+      if (data.role === "admin") {
+        router.push("/admin");
+      } else {
+        router.push("/");
+      }
     } catch (err) {
       toast.error("Network error. Please try again.");
     } finally {
@@ -199,16 +210,16 @@ export default function Login() {
                 <div className="w-[60%] mx-0 my-7">
                   <div className="flex items-center my-2">
                     <label className="block text-md font-medium mr-5 w-[20%] text-gray-700">
-                      E-mail
+                      E-mail or Username
                     </label>
                     <input
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
+                      type="text"
+                      value={identifier}
+                      onChange={(e) => setIdentifier(e.target.value)}
                       required
-                      aria-label="Email"
-                      title="Email"
-                      placeholder="Enter your email"
+                      aria-label="Identifier"
+                      title="Identifier"
+                      placeholder="Enter your email or admin username"
                       className="mt-1 text-black block w-[75%] border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-[#0a1b23]"
                     />
                   </div>

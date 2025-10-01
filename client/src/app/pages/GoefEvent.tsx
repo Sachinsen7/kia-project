@@ -92,14 +92,18 @@ const GoefEvent: React.FC = () => {
         const firstName = (parsed as { firstName?: string })?.firstName || "";
         const lastName = (parsed as { lastName?: string })?.lastName || "";
         currentUserFullName = `${firstName} ${lastName}`.trim() || "Unknown";
-        const role = (parsed as { role?: string })?.role || "";
-        isAdmin = role?.toLowerCase() === "admin";
+        const roleFromUser = (parsed as { role?: string })?.role || "";
+        const roleFromStorage = localStorage.getItem("role") || "";
+        const effectiveRole = (roleFromUser || roleFromStorage || "").toLowerCase();
+        isAdmin = effectiveRole === "admin";
       } catch (err) {
         console.error("Error parsing user data from localStorage:", err);
       }
     } else {
       // fallback to older storage key if present
       currentUserId = localStorage.getItem("userId") || "";
+      const role = (localStorage.getItem("role") || "").toLowerCase();
+      isAdmin = role === "admin";
     }
   }
 

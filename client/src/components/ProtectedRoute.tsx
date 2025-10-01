@@ -7,12 +7,13 @@ export default function ProtectedRoute({ role, children }: { role: "admin" | "us
   const [allowed, setAllowed] = useState(false);
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
     const savedRole = localStorage.getItem("role");
-    if (!savedRole || savedRole !== role) {
-      router.replace(role === "admin" ? "/adminlogin" : "/login");
-    } else {
-      setAllowed(true);
+    if (!token || !savedRole || savedRole !== role) {
+      router.replace("/login");
+      return;
     }
+    setAllowed(true);
   }, [role, router]);
 
   if (!allowed) return    (

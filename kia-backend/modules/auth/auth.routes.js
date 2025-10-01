@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { signUp, login } = require("./auth.controller");
+const { signUp, login, universalLogin } = require("./auth.controller");
 const {
   forgotPassword,
   resetPassword,
@@ -10,6 +10,7 @@ const {
 
 router.post("/signup", signUp);
 router.post("/login", login);
+router.post("/universal-login", universalLogin);
 
 // Password reset routes
 router.post("/forgot-password", forgotPassword);

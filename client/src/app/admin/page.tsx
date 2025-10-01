@@ -36,9 +36,7 @@ const AdminPage: React.FC = () => {
   const [pageViews, setPageViews] = useState(0);
 
   const token =
-    typeof window !== "undefined"
-      ? localStorage.getItem("admintoken") || ""
-      : "";
+    typeof window !== "undefined" ? localStorage.getItem("token") || "" : "";
 
   // Fetch analytics and participants
   // useEffect(() => {
@@ -191,8 +189,9 @@ const AdminPage: React.FC = () => {
             </button>
             <button
               onClick={() => {
-                localStorage.removeItem("admintoken");
+                localStorage.removeItem("token");
                 localStorage.removeItem("role");
+                localStorage.removeItem("user");
                 window.location.href = "/";
               }}
               className="flex items-center text-sm sm:text-base font-bold gap-2 px-4 py-2 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100 text-gray-700 transition-colors duration-200 w-full sm:w-auto"

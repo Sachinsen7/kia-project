@@ -1197,7 +1197,7 @@ const AskKia: React.FC = () => {
                             {c.time}
                           </span>
                         </div>
-                        {c.userId === currentUserId && (
+                        {(c.userId === currentUserId || (localStorage.getItem("role")||"").toLowerCase()==="admin") && (
                           <button
                             onClick={() => handleDeleteComment(q.id, c.id)}
                             className="text-red-500 hover:text-red-700 border-2 border-blue-500 p-1"

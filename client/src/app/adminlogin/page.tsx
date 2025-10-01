@@ -162,11 +162,11 @@ const AdminLogin: React.FC = () => {
       }
 
       const response = await fetch(
-        "https://kia-project-hlrv.onrender.com/api/admin/login",
+        `${process.env.NEXT_PUBLIC_API_BASE_URL || "https://kia-project-hlrv.onrender.com"}/api/auth/universal-login`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ username, password }),
+          body: JSON.stringify({ identifier: username, password }),
         }
       );
 
@@ -176,9 +176,9 @@ const AdminLogin: React.FC = () => {
       }
 
       const data = await response.json();
-      localStorage.setItem("admintoken", data.token);
-      localStorage.setItem("role", "admin");
-      router.push("/admin");
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("role", data.role || "admin");
+      router.push(data.role === "admin" ? "/admin" : "/");
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message);
