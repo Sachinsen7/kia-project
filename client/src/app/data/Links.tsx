@@ -44,6 +44,7 @@ export const links: CityLink[] = baseLinks.map((link, index) => ({
   ...link,
   svg: (
     <KiaLogoSvg
+      key={index}
       type={index + 1}
       width={64}
       height={26}
