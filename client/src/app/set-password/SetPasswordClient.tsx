@@ -11,6 +11,12 @@ export default function SetPasswordClient() {
   const email = searchParams.get("email") || "";
   const code = searchParams.get("token") || "";
 
+  // Debug logging
+  console.log("Set Password Debug:", {
+    email,
+    code: code.substring(0, 10) + "...",
+  });
+
   const [newPassword, setNewPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -23,11 +29,18 @@ export default function SetPasswordClient() {
     setSuccess("");
     setLoading(true);
 
+    // Validate password confirmation
+    if (newPassword !== confirmPassword) {
+      setError("Passwords do not match");
+      setLoading(false);
+      return;
+    }
+
     try {
       const res = await fetch(`${BASE_URL}/api/auth/set-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, code, newPassword }),
+        body: JSON.stringify({ email, token: code, newPassword }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -80,4 +93,3 @@ export default function SetPasswordClient() {
     </div>
   );
 }
-
