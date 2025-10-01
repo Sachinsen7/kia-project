@@ -64,16 +64,35 @@ exports.toggleLike = async (req, res) => {
   }
 };
 
+// exports.deleteQna = async (req, res) => {
+//   try {
+//     const qna = await Qna.findById(req.params.id);
+//     if (!qna) return res.status(404).json({ message: "QnA not found" });
+//     if (qna.createdBy.toString() !== req.user.id) {
+//       return res.status(403).json({ message: "Not authorized to delete" });
+//     }
+//     await Qna.findByIdAndDelete(req.params.id);
+//     res.json({ message: "Qna deleted" });
+//   } catch (err) {
+//     res.status(500).json({ message: "Server error", error: err.message });
+//   }
+// };
+
+
 exports.deleteQna = async (req, res) => {
   try {
     const qna = await Qna.findById(req.params.id);
     if (!qna) return res.status(404).json({ message: "QnA not found" });
-    if (qna.createdBy.toString() !== req.user.id) {
+
+    // allow if admin OR owner
+    if (req.user.role !== "admin" && qna.createdBy.toString() !== req.user.id) {
       return res.status(403).json({ message: "Not authorized to delete" });
     }
+
     await Qna.findByIdAndDelete(req.params.id);
-    res.json({ message: "Qna deleted" });
+    res.json({ success: true, message: "Qna deleted" });
   } catch (err) {
     res.status(500).json({ message: "Server error", error: err.message });
   }
 };
+

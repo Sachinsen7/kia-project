@@ -7,7 +7,7 @@ import { apiFetch } from "@/config/api";
 import Image from "next/image";
 
 // ----------- Types -----------
-type User = { firstName: string; lastName: string; _id?: string };
+type User = { firstName: string; lastName: string; _id?: string; email?: string; role?: string };
 
 type Question = {
   id: string;
@@ -81,6 +81,7 @@ const GoefEvent: React.FC = () => {
     typeof window !== "undefined" ? localStorage.getItem("token") || "" : "";
   let currentUserId = "";
   let currentUserFullName = "Unknown";
+  let isAdmin = false;
   if (typeof window !== "undefined") {
     const userData = localStorage.getItem("user");
     if (userData) {
@@ -91,6 +92,8 @@ const GoefEvent: React.FC = () => {
         const firstName = (parsed as { firstName?: string })?.firstName || "";
         const lastName = (parsed as { lastName?: string })?.lastName || "";
         currentUserFullName = `${firstName} ${lastName}`.trim() || "Unknown";
+        const role = (parsed as { role?: string })?.role || "";
+        isAdmin = role?.toLowerCase() === "admin";
       } catch (err) {
         console.error("Error parsing user data from localStorage:", err);
       }
@@ -110,20 +113,24 @@ const GoefEvent: React.FC = () => {
           undefined,
           token
         );
-        return data.map((c) => ({
-          id: c._id,
-          user: c.createdBy
-            ? `${c.createdBy.firstName || "Unknown"} ${
-                c.createdBy.lastName || ""
-              }`.trim() || "Unknown"
-            : currentUserFullName,
-          userId: c.createdBy?._id || currentUserId,
-          text: c.text,
-          time: new Date(c.createdAt).toLocaleTimeString("en-US", {
-            hour: "2-digit",
-            minute: "2-digit",
-          }),
-        }));
+        return data.map((c) => {
+          const hasName = c.createdBy && (c.createdBy.firstName || c.createdBy.lastName);
+          const nameFromEmail = c.createdBy?.email ? c.createdBy.email.split("@")[0] : "";
+          return {
+            id: c._id,
+            user: hasName
+              ? `${c.createdBy!.firstName || ""} ${c.createdBy!.lastName || ""}`.trim()
+              : c.createdBy
+              ? nameFromEmail || "Unknown"
+              : "Unknown",
+            userId: c.createdBy?._id || "",
+            text: c.text,
+            time: new Date(c.createdAt).toLocaleTimeString("en-US", {
+              hour: "2-digit",
+              minute: "2-digit",
+            }),
+          };
+        });
       } catch (err) {
         console.error("Error fetching comments:", err);
         return [];
@@ -145,14 +152,16 @@ const GoefEvent: React.FC = () => {
       const formatted = await Promise.all(
         data.map(async (q) => {
           const comments = await fetchComments(q._id);
+          const hasName = q.createdBy && (q.createdBy.firstName || q.createdBy.lastName);
+          const nameFromEmail = q.createdBy?.email ? q.createdBy.email.split("@")[0] : "";
           return {
             id: q._id,
-            user: q.createdBy
-              ? `${q.createdBy.firstName || "Unknown"} ${
-                  q.createdBy.lastName || ""
-                }`.trim() || "Unknown"
-              : currentUserFullName,
-            userId: q.createdBy?._id || currentUserId,
+            user: hasName
+              ? `${q.createdBy!.firstName || ""} ${q.createdBy!.lastName || ""}`.trim()
+              : q.createdBy
+              ? nameFromEmail || "Unknown"
+              : "Unknown",
+            userId: q.createdBy?._id || "",
             dept: "KUS",
             date: new Date(q.createdAt).toISOString().slice(0, 10),
             text: q.description,
@@ -230,7 +239,7 @@ const GoefEvent: React.FC = () => {
       );
       const newComment: Comment = {
         id: response.comment._id,
-        user: "You",
+        user: currentUserFullName,
         userId: currentUserId,
         text: response.comment.text,
         time: new Date(response.comment.createdAt).toLocaleTimeString("en-US", {
@@ -406,7 +415,7 @@ const GoefEvent: React.FC = () => {
               <div className="border border-gray-300 rounded-lg overflow-hidden">
                 {/* Editor Toolbar */}
                 <div className="bg-gray-50 border-b border-gray-300 px-4 py-2 flex items-center gap-1">
-                  <select className="bg-white border border-gray-300 rounded px-3 py-1 text-sm text-gray-700">
+                  <select aria-label="Text style" title="Text style" className="bg-white border border-gray-300 rounded px-3 py-1 text-sm text-gray-700">
                     <option>Heading</option>
                     <option>Paragraph</option>
                     <option>H1</option>
@@ -414,37 +423,37 @@ const GoefEvent: React.FC = () => {
                     <option>H3</option>
                   </select>
                   <div className="flex items-center gap-1 ml-2">
-                    <button className="p-2 hover:bg-gray-200 rounded text-gray-700 font-bold">
+                    <button type="button" aria-label="Bold" title="Bold" className="p-2 hover:bg-gray-200 rounded text-gray-700 font-bold">
                       B
                     </button>
-                    <button className="p-2 hover:bg-gray-200 rounded text-gray-700 italic">
+                    <button type="button" aria-label="Italic" title="Italic" className="p-2 hover:bg-gray-200 rounded text-gray-700 italic">
                       I
                     </button>
-                    <button className="p-2 hover:bg-gray-200 rounded text-gray-700">
+                    <button type="button" aria-label="Insert link" title="Insert link" className="p-2 hover:bg-gray-200 rounded text-gray-700">
                       🔗
                     </button>
-                    <button className="p-2 hover:bg-gray-200 rounded text-gray-700">
+                    <button type="button" aria-label="List" title="List" className="p-2 hover:bg-gray-200 rounded text-gray-700">
                       ≡
                     </button>
-                    <button className="p-2 hover:bg-gray-200 rounded text-gray-700">
+                    <button type="button" aria-label="More" title="More" className="p-2 hover:bg-gray-200 rounded text-gray-700">
                       ⋮
                     </button>
-                    <button className="p-2 hover:bg-gray-200 rounded text-gray-700">
+                    <button type="button" aria-label="Highlight" title="Highlight" className="p-2 hover:bg-gray-200 rounded text-gray-700">
                       H
                     </button>
-                    <button className="p-2 hover:bg-gray-200 rounded text-gray-700">
+                    <button type="button" aria-label="Quote" title="Quote" className="p-2 hover:bg-gray-200 rounded text-gray-700">
                       ❝
                     </button>
-                    <button className="p-2 hover:bg-gray-200 rounded text-gray-700">
+                    <button type="button" aria-label="Code" title="Code" className="p-2 hover:bg-gray-200 rounded text-gray-700">
                       ‹›
                     </button>
-                    <button className="p-2 hover:bg-gray-200 rounded text-gray-700">
+                    <button type="button" aria-label="Insert image" title="Insert image" className="p-2 hover:bg-gray-200 rounded text-gray-700">
                       🖼
                     </button>
-                    <button className="p-2 hover:bg-gray-200 rounded text-gray-700">
+                    <button type="button" aria-label="Quick actions" title="Quick actions" className="p-2 hover:bg-gray-200 rounded text-gray-700">
                       ⚡
                     </button>
-                    <button className="p-2 hover:bg-gray-200 rounded text-gray-700">
+                    <button type="button" aria-label="Insert media" title="Insert media" className="p-2 hover:bg-gray-200 rounded text-gray-700">
                       🖼
                     </button>
                   </div>
@@ -515,6 +524,9 @@ const GoefEvent: React.FC = () => {
                 </div>
                 {q.userId === currentUserId && (
                   <button
+                    type="button"
+                    aria-label="Delete question"
+                    title="Delete question"
                     onClick={() => handleDeleteQuestion(q.id)}
                     className="text-red-500 hover:text-red-700"
                   >
@@ -587,8 +599,11 @@ const GoefEvent: React.FC = () => {
                             {c.time}
                             <div dangerouslySetInnerHTML={{ __html: c.text }} />
                           </div>
-                          {c.userId === currentUserId && (
+                          {(c.userId === currentUserId || isAdmin) && (
                             <button
+                              type="button"
+                              aria-label="Delete comment"
+                              title="Delete comment"
                               onClick={() => handleDeleteComment(q.id, c.id)}
                               className="text-red-500 hover:text-red-700"
                             >
@@ -610,3 +625,5 @@ const GoefEvent: React.FC = () => {
 };
 
 export default GoefEvent;
+
+

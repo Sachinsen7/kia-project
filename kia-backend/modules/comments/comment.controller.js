@@ -51,7 +51,8 @@ exports.deleteComment = async (req, res) => {
     const comment = await Comment.findById(req.params.id);
     if (!comment) return res.status(404).json({ message: "Comment not found" });
 
-    if (comment.createdBy.toString() !== req.user.id) {
+    // allow if admin OR owner
+    if (req.user.role !== "admin" && comment.createdBy.toString() !== req.user.id) {
       return res.status(403).json({ message: "Not authorized to delete" });
     }
 
