@@ -184,6 +184,12 @@ const AdminPage: React.FC = () => {
               <Video size={18} /> Manage Contents
             </button>
             <button
+              onClick={() => (window.location.href = "/admin/goef-thoughts")}
+              className="flex items-center gap-2 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800 text-sm sm:text-base font-bold transition-colors duration-200 w-full sm:w-auto"
+            >
+              GOEF Thoughts
+            </button>
+            <button
               onClick={() => {
                 localStorage.removeItem("admintoken");
                 localStorage.removeItem("role");
