@@ -7,7 +7,13 @@ import { apiFetch } from "@/config/api";
 import Image from "next/image";
 
 // ----------- Types -----------
-type User = { firstName: string; lastName: string; _id?: string; email?: string; role?: string };
+type User = {
+  firstName: string;
+  lastName: string;
+  _id?: string;
+  email?: string;
+  role?: string;
+};
 
 type Question = {
   id: string;
@@ -37,6 +43,7 @@ type CommentResponse = {
   text: string;
   createdAt: string;
   createdBy: User | null;
+  createdByName?: string;
 };
 
 type QuestionResponse = {
@@ -94,7 +101,11 @@ const GoefEvent: React.FC = () => {
         currentUserFullName = `${firstName} ${lastName}`.trim() || "Unknown";
         const roleFromUser = (parsed as { role?: string })?.role || "";
         const roleFromStorage = localStorage.getItem("role") || "";
-        const effectiveRole = (roleFromUser || roleFromStorage || "").toLowerCase();
+        const effectiveRole = (
+          roleFromUser ||
+          roleFromStorage ||
+          ""
+        ).toLowerCase();
         isAdmin = effectiveRole === "admin";
       } catch (err) {
         console.error("Error parsing user data from localStorage:", err);
@@ -118,12 +129,17 @@ const GoefEvent: React.FC = () => {
           token
         );
         return data.map((c) => {
-          const hasName = c.createdBy && (c.createdBy.firstName || c.createdBy.lastName);
-          const nameFromEmail = c.createdBy?.email ? c.createdBy.email.split("@")[0] : "";
+          const hasName =
+            c.createdBy && (c.createdBy.firstName || c.createdBy.lastName);
+          const nameFromEmail = c.createdBy?.email
+            ? c.createdBy.email.split("@")[0]
+            : "";
           return {
             id: c._id,
             user: hasName
-              ? `${c.createdBy!.firstName || ""} ${c.createdBy!.lastName || ""}`.trim()
+              ? `${c.createdBy!.firstName || ""} ${
+                  c.createdBy!.lastName || ""
+                }`.trim()
               : c.createdBy
               ? nameFromEmail || "Unknown"
               : "Unknown",
@@ -156,12 +172,17 @@ const GoefEvent: React.FC = () => {
       const formatted = await Promise.all(
         data.map(async (q) => {
           const comments = await fetchComments(q._id);
-          const hasName = q.createdBy && (q.createdBy.firstName || q.createdBy.lastName);
-          const nameFromEmail = q.createdBy?.email ? q.createdBy.email.split("@")[0] : "";
+          const hasName =
+            q.createdBy && (q.createdBy.firstName || q.createdBy.lastName);
+          const nameFromEmail = q.createdBy?.email
+            ? q.createdBy.email.split("@")[0]
+            : "";
           return {
             id: q._id,
             user: hasName
-              ? `${q.createdBy!.firstName || ""} ${q.createdBy!.lastName || ""}`.trim()
+              ? `${q.createdBy!.firstName || ""} ${
+                  q.createdBy!.lastName || ""
+                }`.trim()
               : q.createdBy
               ? nameFromEmail || "Unknown"
               : "Unknown",
@@ -241,14 +262,17 @@ const GoefEvent: React.FC = () => {
         { text: commentText },
         token
       );
-      const displayNameFromUser = (response as any).comment?.createdBy
-        ? `${(response as any).comment.createdBy.firstName || "Unknown"} ${
-            (response as any).comment.createdBy.lastName || ""
+      const displayNameFromUser = response.comment?.createdBy
+        ? `${response.comment.createdBy.firstName || "Unknown"} ${
+            response.comment.createdBy.lastName || ""
           }`.trim() || "Unknown"
         : undefined;
       const newComment: Comment = {
         id: response.comment._id,
-        user: displayNameFromUser || response.comment.createdByName || currentUserFullName,
+        user:
+          displayNameFromUser ||
+          response.comment.createdByName ||
+          currentUserFullName,
         userId: response.comment.createdBy?._id || currentUserId,
         text: response.comment.text,
         time: new Date(response.comment.createdAt).toLocaleTimeString("en-US", {
@@ -424,7 +448,11 @@ const GoefEvent: React.FC = () => {
               <div className="border border-gray-300 rounded-lg overflow-hidden">
                 {/* Editor Toolbar */}
                 <div className="bg-gray-50 border-b border-gray-300 px-4 py-2 flex items-center gap-1">
-                  <select aria-label="Text style" title="Text style" className="bg-white border border-gray-300 rounded px-3 py-1 text-sm text-gray-700">
+                  <select
+                    aria-label="Text style"
+                    title="Text style"
+                    className="bg-white border border-gray-300 rounded px-3 py-1 text-sm text-gray-700"
+                  >
                     <option>Heading</option>
                     <option>Paragraph</option>
                     <option>H1</option>
@@ -432,37 +460,92 @@ const GoefEvent: React.FC = () => {
                     <option>H3</option>
                   </select>
                   <div className="flex items-center gap-1 ml-2">
-                    <button type="button" aria-label="Bold" title="Bold" className="p-2 hover:bg-gray-200 rounded text-gray-700 font-bold">
+                    <button
+                      type="button"
+                      aria-label="Bold"
+                      title="Bold"
+                      className="p-2 hover:bg-gray-200 rounded text-gray-700 font-bold"
+                    >
                       B
                     </button>
-                    <button type="button" aria-label="Italic" title="Italic" className="p-2 hover:bg-gray-200 rounded text-gray-700 italic">
+                    <button
+                      type="button"
+                      aria-label="Italic"
+                      title="Italic"
+                      className="p-2 hover:bg-gray-200 rounded text-gray-700 italic"
+                    >
                       I
                     </button>
-                    <button type="button" aria-label="Insert link" title="Insert link" className="p-2 hover:bg-gray-200 rounded text-gray-700">
+                    <button
+                      type="button"
+                      aria-label="Insert link"
+                      title="Insert link"
+                      className="p-2 hover:bg-gray-200 rounded text-gray-700"
+                    >
                       🔗
                     </button>
-                    <button type="button" aria-label="List" title="List" className="p-2 hover:bg-gray-200 rounded text-gray-700">
+                    <button
+                      type="button"
+                      aria-label="List"
+                      title="List"
+                      className="p-2 hover:bg-gray-200 rounded text-gray-700"
+                    >
                       ≡
                     </button>
-                    <button type="button" aria-label="More" title="More" className="p-2 hover:bg-gray-200 rounded text-gray-700">
+                    <button
+                      type="button"
+                      aria-label="More"
+                      title="More"
+                      className="p-2 hover:bg-gray-200 rounded text-gray-700"
+                    >
                       ⋮
                     </button>
-                    <button type="button" aria-label="Highlight" title="Highlight" className="p-2 hover:bg-gray-200 rounded text-gray-700">
+                    <button
+                      type="button"
+                      aria-label="Highlight"
+                      title="Highlight"
+                      className="p-2 hover:bg-gray-200 rounded text-gray-700"
+                    >
                       H
                     </button>
-                    <button type="button" aria-label="Quote" title="Quote" className="p-2 hover:bg-gray-200 rounded text-gray-700">
+                    <button
+                      type="button"
+                      aria-label="Quote"
+                      title="Quote"
+                      className="p-2 hover:bg-gray-200 rounded text-gray-700"
+                    >
                       ❝
                     </button>
-                    <button type="button" aria-label="Code" title="Code" className="p-2 hover:bg-gray-200 rounded text-gray-700">
+                    <button
+                      type="button"
+                      aria-label="Code"
+                      title="Code"
+                      className="p-2 hover:bg-gray-200 rounded text-gray-700"
+                    >
                       ‹›
                     </button>
-                    <button type="button" aria-label="Insert image" title="Insert image" className="p-2 hover:bg-gray-200 rounded text-gray-700">
+                    <button
+                      type="button"
+                      aria-label="Insert image"
+                      title="Insert image"
+                      className="p-2 hover:bg-gray-200 rounded text-gray-700"
+                    >
                       🖼
                     </button>
-                    <button type="button" aria-label="Quick actions" title="Quick actions" className="p-2 hover:bg-gray-200 rounded text-gray-700">
+                    <button
+                      type="button"
+                      aria-label="Quick actions"
+                      title="Quick actions"
+                      className="p-2 hover:bg-gray-200 rounded text-gray-700"
+                    >
                       ⚡
                     </button>
-                    <button type="button" aria-label="Insert media" title="Insert media" className="p-2 hover:bg-gray-200 rounded text-gray-700">
+                    <button
+                      type="button"
+                      aria-label="Insert media"
+                      title="Insert media"
+                      className="p-2 hover:bg-gray-200 rounded text-gray-700"
+                    >
                       🖼
                     </button>
                   </div>
@@ -634,5 +717,3 @@ const GoefEvent: React.FC = () => {
 };
 
 export default GoefEvent;
-
-
