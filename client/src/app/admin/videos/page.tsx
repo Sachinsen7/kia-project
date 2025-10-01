@@ -54,8 +54,8 @@ export default function ContentManagementVideosPage() {
     setLoading(true);
     setError(null);
     try {
-      const admintoken = localStorage.getItem("admintoken");
-      if (!admintoken) throw new Error("No admin token found. Please log in.");
+      const admintoken = localStorage.getItem("token");
+      if (!admintoken) throw new Error("No token found. Please log in.");
 
       const response = await fetch(
         "https://kia-project-hlrv.onrender.com/api/uploads/videos",
@@ -114,8 +114,8 @@ export default function ContentManagementVideosPage() {
     if (!confirm("Are you sure you want to delete this video?")) return;
     setDeletingId(id);
     try {
-      const admintoken = localStorage.getItem("admintoken");
-      if (!admintoken) throw new Error("No admin token found. Please log in.");
+      const admintoken = localStorage.getItem("token");
+      if (!admintoken) throw new Error("No token found. Please log in.");
 
       await apiFetch(
         `/api/uploads/video`,
@@ -141,8 +141,8 @@ export default function ContentManagementVideosPage() {
   async function handleDeleteLink(linkId: string) {
     if (!confirm("Are you sure you want to delete this link?")) return;
     try {
-      const admintoken = localStorage.getItem("admintoken");
-      if (!admintoken) throw new Error("No admin token found. Please log in.");
+      const admintoken = localStorage.getItem("token");
+      if (!admintoken) throw new Error("No token found. Please log in.");
 
       const response = await fetch(
         `https://kia-project.onrender.com/api/Link/${linkId}`,
@@ -174,7 +174,7 @@ export default function ContentManagementVideosPage() {
 
   // async function handleDownload(id: string, filename: string) {
   //   try {
-  //     const admintoken = localStorage.getItem("admintoken");
+  //     const admintoken = localStorage.getItem("token");
   //     if (!admintoken) throw new Error("No admin token found. Please log in.");
 
   //     const response = await fetch(
@@ -220,8 +220,8 @@ export default function ContentManagementVideosPage() {
 
     setLinkUploading(true);
     try {
-      const admintoken = localStorage.getItem("admintoken");
-      if (!admintoken) throw new Error("No admin token found. Please log in.");
+      const admintoken = localStorage.getItem("token");
+      if (!admintoken) throw new Error("No token found. Please log in.");
 
       const response = await fetch(
         "https://kia-project.onrender.com/api/Link/",
