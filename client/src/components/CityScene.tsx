@@ -128,12 +128,11 @@ export default function CityScene({ onSelect }: CitySceneProps) {
           }}
         >
           <div className="relative flex items-center justify-center md:w-full md:h-full">
-            <span className="absolute inline-flex h-full w-full rounded-full bg-[#05141f]/50 opacity-0 group-hover:opacity-100 group-hover:animate-ping transition-opacity"></span>
-
-P            <div className="w-24 h-24 md:w-40 md:h-40 flex items-center justify-center">
+            {/* <span className="absolute inline-flex h-full w-full rounded-full bg-[#05141f]/50 opacity-0 group-hover:opacity-100 group-hover:animate-ping transition-opacity"></span> */}
+            P{" "}
+            <div className="w-24 h-24 md:w-40 md:h-40 flex items-center justify-center">
               {link.svg}
             </div>
-
             {link.id === "live-link" && (
               <span className="absolute -top-5 text-xs font-bold px-2 py-1 rounded bg-red-600 text-white animate-pulse">
                 {isLoadingLive ? "LOADING" : "LIVE"}
