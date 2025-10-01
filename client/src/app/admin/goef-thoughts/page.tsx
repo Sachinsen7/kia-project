@@ -4,6 +4,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import { apiFetch } from "@/config/api";
 import { Download } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 type User = { firstName?: string; lastName?: string; _id?: string } | null;
 
@@ -163,7 +164,6 @@ export default function AdminGoefThoughtsPage() {
     const csv = [header, ...lines]
       .map((row) => row.map(esc).join(","))
       .join("\n");
-    // Prepend BOM for Excel UTF-8 support
     return "\uFEFF" + csv;
   }, [rows]);
 
@@ -257,29 +257,7 @@ export default function AdminGoefThoughtsPage() {
                         dangerouslySetInnerHTML={{ __html: r.descriptionHtml }}
                       />
                       {r.comments.length > 0 && (
-                        <div className="mt-3 border-t pt-3">
-                          <div className="text-xs font-semibold text-gray-700 mb-2">
-                            Comments ({r.comments.length})
-                          </div>
-                          <div className="space-y-2">
-                            {r.comments.map((c) => (
-                              <div
-                                key={c.id}
-                                className="bg-gray-50 rounded p-2"
-                              >
-                                <div className="text-xs text-gray-600 mb-1">
-                                  {c.user} — {c.time}
-                                </div>
-                                <div
-                                  className="prose prose-xs max-w-none"
-                                  dangerouslySetInnerHTML={{
-                                    __html: c.textHtml,
-                                  }}
-                                />
-                              </div>
-                            ))}
-                          </div>
-                        </div>
+                        <CommentSection comments={r.comments} />
                       )}
                     </td>
                   </tr>
@@ -300,5 +278,56 @@ export default function AdminGoefThoughtsPage() {
         )}
       </div>
     </ProtectedRoute>
+  );
+}
+
+// ----------------------
+// Comment Section
+// ----------------------
+type CommentSectionProps = {
+  comments: {
+    id: string;
+    user: string;
+    time: string;
+    textHtml: string;
+  }[];
+};
+
+function CommentSection({ comments }: CommentSectionProps) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div className="mt-3 border-t pt-3">
+      <button
+        onClick={() => setOpen((prev) => !prev)}
+        className="px-3 py-1 text-xs font-semibold text-white bg-gray-700 rounded hover:bg-gray-800 transition"
+      >
+        {open ? "Hide Comments" : `Show Comments (${comments.length})`}
+      </button>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}
+            className="space-y-2 mt-3 overflow-hidden"
+          >
+            {comments.map((c) => (
+              <div key={c.id} className="bg-gray-50 rounded p-2">
+                <div className="text-xs text-gray-600 mb-1">
+                  {c.user} — {c.time}
+                </div>
+                <div
+                  className="prose prose-xs max-w-none"
+                  dangerouslySetInnerHTML={{ __html: c.textHtml }}
+                />
+              </div>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 }

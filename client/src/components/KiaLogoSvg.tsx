@@ -889,6 +889,7 @@ export const KiaLogoSvg: React.FC<KiaLogoSvgProps> = ({
     // upload you contents
 
     <svg
+      key="key-9"
       width="789"
       height="323"
       viewBox="0 0 789 323"
