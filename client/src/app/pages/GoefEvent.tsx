@@ -230,12 +230,12 @@ const GoefEvent: React.FC = () => {
           ? `${response.qna.createdBy.firstName || "Unknown"} ${
               response.qna.createdBy.lastName || ""
             }`.trim() || "Unknown"
-          : currentUserFullName,
-        userId: currentUserId,
+          : (response.qna as any).createdByName || (isAdmin ? "Admin" : currentUserFullName),
+        userId: isAdmin ? "admin" : currentUserId,
         dept: "KUS",
         date: new Date(response.qna.createdAt).toISOString().slice(0, 10),
         text: response.qna.description,
-        country: response.qna.country || "Unknown",
+        country: (response.qna as any).country || "",
         likes: response.qna.likes.length,
         likedBy: response.qna.likes,
         comments: 0,
@@ -614,7 +614,7 @@ const GoefEvent: React.FC = () => {
                     <span className="text-xs text-gray-400">{q.date}</span>
                   </div>
                 </div>
-                {q.userId === currentUserId && (
+                {(q.userId === currentUserId || isAdmin) && (
                   <button
                     type="button"
                     aria-label="Delete question"
