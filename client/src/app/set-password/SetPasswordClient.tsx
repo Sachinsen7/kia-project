@@ -68,7 +68,7 @@ export default function SetPasswordClient() {
             placeholder="New Password"
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
-            className="w-full border border-gray-300 rounded px-4 py-2"
+            className="w-full border text-black border-gray-300 rounded px-4 py-2"
             required
           />
           <input
@@ -76,7 +76,7 @@ export default function SetPasswordClient() {
             placeholder="Confirm Password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            className="w-full border border-gray-300 rounded px-4 py-2"
+            className="w-full border text-black border-gray-300 rounded px-4 py-2"
             required
           />
           <button
