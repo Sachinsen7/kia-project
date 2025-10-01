@@ -206,6 +206,9 @@ export default function Login() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
+                      aria-label="Email"
+                      title="Email"
+                      placeholder="Enter your email"
                       className="mt-1 text-black block w-[75%] border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-[#0a1b23]"
                     />
                   </div>
@@ -218,6 +221,9 @@ export default function Login() {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       required
+                      aria-label="Password"
+                      title="Password"
+                      placeholder="Enter your password"
                       className="mt-1 text-black block w-[75%] border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-[#0a1b23]"
                     />
                   </div>
