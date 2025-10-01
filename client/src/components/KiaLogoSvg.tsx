@@ -17,6 +17,7 @@ export const KiaLogoSvg: React.FC<KiaLogoSvgProps> = ({
     // svg1 live link
 
     <svg
+      key="svg-1"
       width="789"
       height="323"
       viewBox="0 0 789 323"
@@ -112,6 +113,7 @@ export const KiaLogoSvg: React.FC<KiaLogoSvgProps> = ({
     // svg2 welcome
 
     <svg
+      key="svg-2"
       width="789"
       height="323"
       viewBox="0 0 789 323"
@@ -231,6 +233,7 @@ export const KiaLogoSvg: React.FC<KiaLogoSvgProps> = ({
     // svg 3 about
 
     <svg
+      key="svg-3"
       width="789"
       height="323"
       viewBox="0 0 789 323"
@@ -330,6 +333,7 @@ export const KiaLogoSvg: React.FC<KiaLogoSvgProps> = ({
     //svg4 history
 
     <svg
+      key="svg-4"
       width="789"
       height="323"
       viewBox="0 0 789 323"
@@ -461,6 +465,7 @@ export const KiaLogoSvg: React.FC<KiaLogoSvgProps> = ({
     // svg5 ask kia
 
     <svg
+      key="svg-5"
       width="789"
       height="323"
       viewBox="0 0 789 323"
@@ -620,6 +625,7 @@ export const KiaLogoSvg: React.FC<KiaLogoSvgProps> = ({
     // svg6 help and support
 
     <svg
+      key="svg-6"
       width="789"
       height="323"
       viewBox="0 0 789 323"
@@ -719,6 +725,7 @@ export const KiaLogoSvg: React.FC<KiaLogoSvgProps> = ({
     // svg 7 event page
 
     <svg
+      key="svg-7"
       width="789"
       height="323"
       viewBox="0 0 789 323"
@@ -999,6 +1006,7 @@ export const KiaLogoSvg: React.FC<KiaLogoSvgProps> = ({
     </svg>,
 
     <svg
+      key="svg-8"
       width={width}
       height={height}
       viewBox="0 0 789 324"
