@@ -275,7 +275,9 @@ export default function Login() {
           <h2 className="text-3xl mx-auto font-bold text-center text-gray-900 mb-4">
             Administrator Sign In
           </h2>
-          <div className="text-gray-900 text-sm mx-auto px-auto">GOEF File Management System</div>
+          <div className="text-gray-900 text-sm mx-auto px-auto">
+            GOEF File Management System
+          </div>
         </div>
 
         {/* Form */}
@@ -318,6 +320,22 @@ export default function Login() {
           >
             {loading ? "Sign In..." : "Sign In"}
           </button>
+
+          <div className="flex items-center my-4">
+            <span className="text-gray-400 font-semibold">
+              Security Reminder
+            </span>
+            <div className="flex-grow border-t-2 border-gray-400 ml-3"></div>
+          </div>
+
+          <div className="mt-6 bg-gray-50 border border-gray-200 rounded-md p-4 text-sm text-gray-700">
+            <p className="font-semibold mb-2 text-center">Best Practices</p>
+            <ul className="list-disc list-inside space-y-1 text-left">
+              <li>Use a strong password</li>
+              <li>Avoid signing in on shared devices</li>
+              <li>Always sign out after each session</li>
+            </ul>
+          </div>
         </form>
 
         {/* Forgot Password */}
@@ -333,7 +351,4 @@ export default function Login() {
       </div>
     </div>
   );
-
-
 }
-
