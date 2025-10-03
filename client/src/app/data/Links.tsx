@@ -23,13 +23,6 @@ const baseLinks = [
     y: 65,
     icon: MessageCircle,
   },
-  {
-    id: "help-support",
-    name: "Help and support",
-    x: 83,
-    y: 47,
-    icon: LifeBuoy,
-  },
   { id: "event", name: "Share & Win ! (Event)", x: 65, y: 70, icon: Calendar },
   {
     id: "dashboard",
@@ -37,6 +30,13 @@ const baseLinks = [
     x: 33,
     y: 10,
     icon: LayoutDashboard,
+  },
+  {
+    id: "help-support",
+    name: "Help and support",
+    x: 83,
+    y: 47,
+    icon: LifeBuoy,
   },
 ];
 
