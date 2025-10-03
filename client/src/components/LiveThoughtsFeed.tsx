@@ -93,7 +93,7 @@ const LiveThoughtsFeed: React.FC<LiveThoughtsFeedProps> = ({ onSelect }) => {
         <div
           key={q.id}
           onClick={() => onSelect?.(q.id)}
-          className="cursor-pointer w-full border rounded p-3 hover:bg-gray-50 transition-all duration-700 ease-in-out break-words"
+          className="cursor-pointer w-full border rounded p-3 bg-gray-50 transition-all duration-700 ease-in-out break-words"
           style={{
             transitionDelay: `${index * 200}ms`, // small stagger
           }}
