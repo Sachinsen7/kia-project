@@ -21,16 +21,19 @@ type SidebarLeftProps = {
 export default function SidebarLeft({ selectedId, onClose }: SidebarLeftProps) {
   if (!selectedId) return null;
 
-  const pageMap: Record<string, ComponentType | undefined> = {
+  const pageMap: Record<
+    string,
+    ComponentType<{ onClose?: () => void }> | undefined
+  > = {
     welcome: Home,
     about: About,
     strategy: Ownership,
     "best-practices": BestPractices,
     "ask-kia": AskKia,
     "help-support": HelpSupport,
-    "history-goef": HistoryGOEF,
     dashboard: Dashboard,
     event: GoefEvent,
+    "history-goef": HistoryGOEF,
   };
 
   const PageComponent = pageMap[selectedId];
@@ -54,17 +57,10 @@ export default function SidebarLeft({ selectedId, onClose }: SidebarLeftProps) {
 
       {PageComponent ? (
         <div className="relative px-0 py-0">
-          <button
-            onClick={onClose}
-            className="absolute top-3 right-3 z-10 p-2 rounded-full hover:bg-gray-100"
-            aria-label="Close"
-          >
-            <X size={22} className="text-gray-600" />
-          </button>
           {PageComponent === Dashboard ? (
             <Dashboard onClose={onClose} />
           ) : (
-            <PageComponent />
+            <PageComponent onClose={onClose} />
           )}
         </div>
       ) : (

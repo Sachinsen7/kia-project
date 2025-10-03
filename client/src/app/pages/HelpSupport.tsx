@@ -1,10 +1,14 @@
 "use client";
 
 import React, { useState } from "react";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp, X } from "lucide-react";
 import Image from "next/image";
 
-function HelpSupport() {
+type HelpSupportProps = {
+  onClose?: () => void;
+};
+
+function HelpSupport({ onClose }: HelpSupportProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   const faqs = [
@@ -40,6 +44,16 @@ function HelpSupport() {
   return (
     <div className="relative w-full min-h-screen bg-white px-6 md:px-16 py-12">
       <div className="bg-white relative shadow-2xl rounded-2xl w-full max-w-6xl m-6 p-8 md:p-14">
+        {/* Cross Button */}
+        {onClose && (
+          <button
+            onClick={onClose}
+            className="absolute top-3 right-3 z-10 p-2 rounded-full hover:bg-gray-100"
+            aria-label="Close"
+          >
+            <X size={22} className="text-gray-600" />
+          </button>
+        )}
         {/* Title */}
         <div className="w-full pt-6 pb-10 px-4 mt-10">
           <h1 className="text-3xl mt-10 md:text-5xl text-gray-900 mb-2 inline-block">

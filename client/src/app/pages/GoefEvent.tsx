@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import dynamic from "next/dynamic";
-import { Heart, MessageSquare, Trash2 } from "lucide-react";
+import { Heart, MessageSquare, Trash2, X } from "lucide-react";
 import { apiFetch } from "@/config/api";
 import Image from "next/image";
 
@@ -72,7 +72,11 @@ const EditorComponent = dynamic(
   }
 );
 
-const GoefEvent: React.FC = () => {
+type GoefEventProps = {
+  onClose?: () => void;
+};
+
+const GoefEvent: React.FC<GoefEventProps> = ({ onClose }) => {
   const [mounted, setMounted] = useState(false);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [showInput, setShowInput] = useState(false);
@@ -391,6 +395,16 @@ const GoefEvent: React.FC = () => {
   return (
     <div className="w-full min-h-screen bg-white px-6 md:px-16 py-12">
       <div className="bg-white relative shadow-2xl rounded-2xl w-full max-w-6xl m-6 p-8 md:p-14">
+        {/* Cross Button */}
+        {onClose && (
+          <button
+            onClick={onClose}
+            className="absolute top-3 right-3 z-10 p-2 rounded-full hover:bg-gray-100"
+            aria-label="Close"
+          >
+            <X size={22} className="text-gray-600" />
+          </button>
+        )}
         <div className="w-full pt-6 pb-10 px-4">
           <div className="w-[4px] h-[150px] text-[#000] bg-[#000] absolute -top-7.5 left-26.5"></div>
 
