@@ -34,8 +34,6 @@ async function fetchLiveData(token: string): Promise<{ url?: string } | null> {
       }
     );
 
-    
-
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
@@ -146,9 +144,9 @@ export default function CityScene({ onSelect }: CitySceneProps) {
             )}
           </div>
 
-          <div className="absolute top-30 left-1/2 transform -translate-x-1/2 bg-black/80 text-white px-3 py-1 rounded text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+          {/* <div className="absolute top-30 left-1/2 transform -translate-x-1/2 bg-black/80 text-white px-3 py-1 rounded text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
             {link.name}
-          </div>
+          </div> */}
         </button>
       );
     });
