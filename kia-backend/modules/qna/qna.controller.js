@@ -78,7 +78,6 @@ exports.toggleLike = async (req, res) => {
 //   }
 // };
 
-
 exports.deleteQna = async (req, res) => {
   try {
     const qna = await Qna.findById(req.params.id);
@@ -95,4 +94,3 @@ exports.deleteQna = async (req, res) => {
     res.status(500).json({ message: "Server error", error: err.message });
   }
 };
-
