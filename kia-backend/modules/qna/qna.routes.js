@@ -9,7 +9,7 @@ const {
 const authMiddlewares = require("../../middleware/authMiddleware");
 
 router.post("/", authMiddlewares, createQna);
-router.get("/", authMiddlewares, getAllQna);
+router.get("/", getAllQna);
 router.put("/:id/like", authMiddlewares, toggleLike);
 router.delete("/:id", authMiddlewares, deleteQna);
 
