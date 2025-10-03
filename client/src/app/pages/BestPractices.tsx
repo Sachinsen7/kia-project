@@ -1,10 +1,25 @@
 "use client";
 
 import React from "react";
+import { X } from "lucide-react";
 
-function BestPractices() {
+type BestPracticesProps = {
+  onClose?: () => void;
+};
+
+function BestPractices({ onClose }: BestPracticesProps) {
   return (
     <div className="relative w-full min-h-screen bg-white p-6 md:p-30">
+      {/* Cross Button */}
+      {onClose && (
+        <button
+          onClick={onClose}
+          className="absolute top-3 right-3 z-10 p-2 rounded-full hover:bg-gray-100"
+          aria-label="Close"
+        >
+          <X size={22} className="text-gray-600" />
+        </button>
+      )}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div>
           <h1 className="text-2xl md:text-3xl font-bold mb-4">
