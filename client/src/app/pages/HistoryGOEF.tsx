@@ -2,8 +2,13 @@
 
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
+import { X } from "lucide-react";
 
-function HistoryGOEF() {
+type HistoryGOEFProps = {
+  onClose?: () => void;
+};
+
+function HistoryGOEF({ onClose }: HistoryGOEFProps) {
   const images = [
     "/history/gallery-left.png",
     "/history/gallery-image.png",
@@ -34,6 +39,16 @@ function HistoryGOEF() {
     <div className="relative w-full min-h-screen bg-white px-6 md:px-16 py-12">
       {/* Border Wrapper */}
       <div className="bg-white relative shadow-2xl rounded-2xl w-full max-w-6xl m-6 p-8 md:p-14">
+        {/* Cross Button */}
+        {onClose && (
+          <button
+            onClick={onClose}
+            className="absolute top-3 right-3 z-10 p-2 rounded-full hover:bg-gray-100"
+            aria-label="Close"
+          >
+            <X size={22} className="text-gray-600" />
+          </button>
+        )}
         {/* Heading */}
         <div className="w-full pt-6 pb-10 px-4 mt-10">
           <h1 className="text-3xl mt-10 md:text-5xl text-gray-900 mb-2 inline-block">
@@ -80,7 +95,7 @@ function HistoryGOEF() {
 
           {/* Big Highlight Image */}
           <Image
-            src="/about/main-image.png"
+            src="/history/new-car.png"
             alt="2024 GOEF Highlight"
             width={1200}
             height={600}
