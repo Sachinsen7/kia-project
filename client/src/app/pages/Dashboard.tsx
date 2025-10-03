@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { toast, Toaster } from "react-hot-toast";
 import Image from "next/image";
+import { X } from "lucide-react";
 
 type DashboardProps = {
   onClose?: () => void;
@@ -10,7 +11,7 @@ type DashboardProps = {
 
 type Category = "Best Practices" | "Greeting Videos";
 
-export default function Dashboard({}: DashboardProps) {
+export default function Dashboard({ onClose }: DashboardProps) {
   const [contentViews, setContentViews] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
 
@@ -93,6 +94,16 @@ export default function Dashboard({}: DashboardProps) {
     <div className="relative w-full min-h-screen bg-white px-6 md:px-16 py-12">
       {/* Toaster */}
       <div className="bg-white relative shadow-2xl rounded-2xl w-full max-w-6xl m-6 p-8 md:p-14">
+        {/* Cross Button */}
+        {onClose && (
+          <button
+            onClick={onClose}
+            className="absolute top-3 right-3 z-10 p-2 rounded-full hover:bg-gray-100"
+            aria-label="Close"
+          >
+            <X size={22} className="text-gray-600" />
+          </button>
+        )}
         <Toaster
           position="top-right"
           reverseOrder={false}
