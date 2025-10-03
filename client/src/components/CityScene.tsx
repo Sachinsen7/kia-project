@@ -4,6 +4,7 @@ import { useState, useMemo } from "react";
 import Image from "next/image";
 import { links } from "@/app/data/Links";
 import { useRouter } from "next/navigation";
+import LiveThoughtsFeed from "./LiveThoughtsFeed";
 
 export type CityLink = {
   id: string;
@@ -181,23 +182,31 @@ export default function CityScene({ onSelect }: CitySceneProps) {
       )}
 
       {/* Event Page Interface (Bottom Left) */}
-      <div className="absolute bottom-24 left-4">
+      {/* <div className="absolute bottom-24 left-4">
         <button
           onClick={() => setIsEventOpen(!isEventOpen)}
           className="px-4 py-2 bg-[#05141f] text-white rounded-lg shadow-md cursor-pointer transition"
         >
           Share & Win
         </button>
+      </div> */}
+
+      <div className="absolute bottom-25 left-4 w-80">
+        <LiveThoughtsFeed
+          onSelect={(id) => {
+            console.log("Jump to thought with id:", id);
+            router.push("/share-win");
+          }}
+        />
       </div>
 
-      {isEventOpen && (
+      {/* {isEventOpen && (
         <div
           className="fixed inset-0 z-40 mb-10 flex items-end justify-start"
           onClick={() => setIsEventOpen(false)}
         >
           <div className="absolute inset-0 bg-opacity-30" />
 
-          {/* Event Menu */}
           <div
             className="relative z-50 mb-36 ml-4 w-96 shadow-lg rounded-lg p-4 bg-white
                  transform transition-all duration-300 ease-out
@@ -226,7 +235,7 @@ export default function CityScene({ onSelect }: CitySceneProps) {
             </ul>
           </div>
         </div>
-      )}
+      )} */}
       {/* Footer */}
       <footer className="absolute bottom-0 w-full bg-white border-t border-gray-200 py-4 px-4 md:px-20 text-center text-sm text-gray-700">
         <div className="flex flex-col md:flex-row items-center justify-between gap-2 md:gap-0">
