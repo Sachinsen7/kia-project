@@ -135,24 +135,18 @@ const login = async (req, res) => {
   }
 };
 
-// Universal login: accepts identifier (email for users or username for admin) and password
 const universalLogin = async (req, res) => {
   try {
     const { identifier, password } = req.body;
-
     if (!identifier || !password) {
-      return res
-        .status(400)
-        .json({ message: "Identifier and password are required" });
+      return res.status(400).json({ message: "Identifier and password are required" });
     }
 
-    // Try admin by username first
+    // --- Admin login ---
     const admin = await Admin.findOne({ username: identifier });
     if (admin) {
       const adminMatch = await bcrypt.compare(password, admin.password);
-      if (!adminMatch) {
-        return res.status(400).json({ message: "Invalid credentials" });
-      }
+      if (!adminMatch) return res.status(400).json({ message: "Invalid credentials" });
 
       const token = jwt.sign(
         { id: admin._id, username: admin.username, role: "admin" },
@@ -160,35 +154,49 @@ const universalLogin = async (req, res) => {
         { expiresIn: "1d" }
       );
 
-      return res.status(200).json({
-        message: "Login successful",
-        role: "admin",
-        token,
+      // Set cookies
+      res.cookie("PHPSESSID", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "Strict",
+        maxAge: 24 * 60 * 60 * 1000,
       });
+
+      res.cookie("ck_visit_ip", req.ip, {
+        httpOnly: false,
+        maxAge: 24 * 60 * 60 * 1000,
+      });
+
+      return res.status(200).json({ message: "Login successful", role: "admin", token });
     }
 
-    // Fallback to user by email
+    // --- User login ---
     const user = await User.findOne({ email: identifier });
-    if (!user) {
-      return res.status(400).json({ message: "Invalid credentials" });
-    }
-
-    if (!user.isActive) {
-      return res.status(403).json({
-        message: "Your account is not yet approved. Please contact admin.",
-      });
-    }
+    if (!user) return res.status(400).json({ message: "Invalid credentials" });
+    if (!user.isActive)
+      return res.status(403).json({ message: "Your account is not yet approved. Please contact admin." });
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ message: "Invalid credentials" });
-    }
+    if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
 
     const token = jwt.sign(
       { id: user._id, email: user.email, role: "user" },
       process.env.JWT_SECRET,
       { expiresIn: "1d" }
     );
+
+    // Set cookies
+    res.cookie("PHPSESSID", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "Strict",
+      maxAge: 24 * 60 * 60 * 1000,
+    });
+
+    res.cookie("ck_visit_ip", req.ip, {
+      httpOnly: false,
+      maxAge: 24 * 60 * 60 * 1000,
+    });
 
     return res.status(200).json({
       message: "Login successful",
@@ -206,5 +214,7 @@ const universalLogin = async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 };
+
+
 
 module.exports = { signUp, login, universalLogin };

@@ -266,22 +266,22 @@ export default function Login() {
   // );
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      {/* Login Box */}
-      <div className="w-full max-w-md bg-white my-auto shadow-2xl rounded-lg p-8 border border-gray-200">
+    <div className="h-screen flex items-center justify-center bg-gray-100 ">
+      <div className="w-full max-w-md bg-white shadow-2xl rounded-lg p-12 border border-gray-200
+                  flex flex-col justify-center min-h-[400px] max-h-[90%] overflow-hidden">
         {/* Title */}
-        <div className="text-center mb-8 ">
-          <Shield className="mx-auto mb-6 text-gray-700" size={48} />
-          <h2 className="text-3xl mx-auto font-bold text-center text-gray-900 mb-4">
+        <div className="text-center my-4">
+          <Shield className="mx-auto mb-3 text-gray-700" size={48} />
+          <h2 className="text-3xl font-bold text-gray-900 mb-2">
             Administrator Sign In
           </h2>
-          <div className="text-gray-900 text-sm mx-auto px-auto">
+          <div className="text-gray-900 text-sm">
             GOEF File Management System
           </div>
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-3 flex-grow ">
           {/* Identifier */}
           <div>
             <label className="block text-sm font-medium text-gray-900 mb-1">
@@ -293,7 +293,7 @@ export default function Login() {
               onChange={(e) => setIdentifier(e.target.value)}
               required
               placeholder="Enter your username"
-              className="w-full placeholder-gray-500 border border-gray-300 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+              className="w-full text-black placeholder-gray-500 border border-gray-300 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
             />
           </div>
 
@@ -308,7 +308,7 @@ export default function Login() {
               onChange={(e) => setPassword(e.target.value)}
               required
               placeholder="Enter your password"
-              className="w-full border placeholder-gray-500 border-gray-300 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+              className="w-full text-black border placeholder-gray-500 border-gray-300 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
             />
           </div>
 
@@ -316,19 +316,19 @@ export default function Login() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-black text-white py-3 rounded-md font-semibold hover:bg-gray-800 disabled:opacity-50 transition-colors duration-200"
+            className="w-full bg-black text-white py-2 rounded-md font-semibold hover:bg-gray-800 disabled:opacity-50 transition-colors duration-200"
           >
             {loading ? "Sign In..." : "Sign In"}
           </button>
 
+          {/* Security Reminder Line */}
           <div className="flex items-center my-4">
-            <span className="text-gray-400 font-semibold">
-              Security Reminder
-            </span>
+            <span className="text-gray-400 text-sm font-medium">Security Reminder</span>
             <div className="flex-grow border-t-2 border-gray-400 ml-3"></div>
           </div>
 
-          <div className="mt-6 bg-gray-50 border border-gray-200 rounded-md p-4 text-sm text-gray-700">
+          {/* Best Practices */}
+          <div className="bg-gray-50 border border-gray-200 rounded-md p-4 text-sm text-gray-700">
             <p className="font-semibold mb-2 text-center">Best Practices</p>
             <ul className="list-disc list-inside space-y-1 text-left">
               <li>Use a strong password</li>
@@ -339,16 +339,18 @@ export default function Login() {
         </form>
 
         {/* Forgot Password */}
-        <div className="text-center text-sm text-gray-600 mt-6">
-          <p>Forgot your password?</p>
-          <a
+        <div className="text-center text-sm text-gray-600 mt-4">
+          <p>Forgot your password? <a
             href="/forgot-password"
             className="text-black underline hover:text-gray-700"
           >
             Reset via E-mail
-          </a>
+          </a></p>
+          
         </div>
       </div>
     </div>
+
+
   );
 }

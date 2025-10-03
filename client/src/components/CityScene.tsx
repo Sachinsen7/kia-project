@@ -34,6 +34,8 @@ async function fetchLiveData(token: string): Promise<{ url?: string } | null> {
       }
     );
 
+    
+
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
