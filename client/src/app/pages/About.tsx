@@ -2,11 +2,26 @@
 
 import React from "react";
 import Image from "next/image";
+import { X } from "lucide-react";
 
-function About() {
+type AboutProps = {
+  onClose?: () => void;
+};
+
+function About({ onClose }: AboutProps) {
   return (
     <div className="w-full min-h-screen bg-white px-6 md:px-16 py-12">
       <div className="bg-white relative shadow-2xl rounded-2xl w-full max-w-6xl m-6 p-8 md:p-14">
+        {/* Cross Button */}
+        {onClose && (
+          <button
+            onClick={onClose}
+            className="absolute top-3 right-3 z-10 p-2 rounded-full hover:bg-gray-100"
+            aria-label="Close"
+          >
+            <X size={22} className="text-gray-600" />
+          </button>
+        )}
         <div className="w-full pt-6 pb-10 px-4">
           <h1 className="text-3xl md:text-5xl text-gray-900 mb-2">
             ABOUT 2025
