@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { BASE_URL } from "@/config/api";
+import toast from "react-hot-toast";
 
 export default function ForgotPassword() {
   const [step, setStep] = useState(1);
@@ -36,6 +37,7 @@ export default function ForgotPassword() {
       }
 
       setSuccess("Password reset token sent to your email.");
+      toast.success("Password reset token sent to your email.");
       setStep(2);
     } catch (err) {
       setError("Network error. Please try again.");
@@ -66,6 +68,7 @@ export default function ForgotPassword() {
       }
 
       setSuccess("Code verified. Please enter your new password.");
+      toast.success("Code verified successfully!");
       setStep(3);
     } catch (err) {
       setError("Network error. Please try again.");
@@ -96,6 +99,7 @@ export default function ForgotPassword() {
       }
 
       setSuccess("Password reset successful. Redirecting to login...");
+      toast.success("Password reset successful!");
       setTimeout(() => router.push("/login"), 2000);
     } catch (err) {
       setError("Network error. Please try again.");
@@ -184,7 +188,7 @@ export default function ForgotPassword() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="bg-black text-white h-[94px] my-10 w-[10%] font-semibold hover:bg-gray-800 disabled:opacity-50"
+                  className="bg-black text-white h-[40px] my-10 w-[10%] font-semibold hover:bg-gray-800 disabled:opacity-50"
                 >
                   {loading
                     ? "Processing..."
@@ -195,11 +199,6 @@ export default function ForgotPassword() {
                     : "Reset Password"}
                 </button>
               </div>
-
-              {error && <p className="text-red-600 text-sm mt-2">{error}</p>}
-              {success && (
-                <p className="text-green-600 text-sm mt-2">{success}</p>
-              )}
             </form>
 
             {/* Back to Login */}
