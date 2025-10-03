@@ -293,7 +293,7 @@ export default function Login() {
               onChange={(e) => setIdentifier(e.target.value)}
               required
               placeholder="Enter your username"
-              className="w-full placeholder-gray-500 border border-gray-300 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+              className="w-full text-black placeholder-gray-500 border border-gray-300 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
             />
           </div>
 
@@ -308,7 +308,7 @@ export default function Login() {
               onChange={(e) => setPassword(e.target.value)}
               required
               placeholder="Enter your password"
-              className="w-full border placeholder-gray-500 border-gray-300 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+              className="w-full text-black border placeholder-gray-500 border-gray-300 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
             />
           </div>
 
