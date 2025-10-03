@@ -10,7 +10,10 @@ const PrivacyPolicy: React.FC = () => {
         <p className="mb-4">2025 Global Ownership Experience Forum</p>
 
         <h2 className="text-2xl font-semibold mt-8 mb-4">Privacy Policy</h2>
-        <p className="mb-4">Effective Date: October 1st, 2025</p>
+        <p className="mb-4">
+          {" "}
+          Effective Date: October 1 <sup>st</sup>, 2025
+        </p>
         <p className="mb-4">
           Your privacy is important to Kia Corporation and its subsidiaries and
           affiliates (collectively, “Kia”, “we,” “us” or “our”), as is your
