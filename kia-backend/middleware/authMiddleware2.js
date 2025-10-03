@@ -7,7 +7,7 @@ const authMiddleware = (req, res, next) => {
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return res
         .status(401)
-        .json({ success: false, message: "No token provided" });
+        .json({ success: false, message: "Please Login to continue" });
     }
 
     const token = authHeader.split(" ")[1];
