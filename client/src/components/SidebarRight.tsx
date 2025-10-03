@@ -99,10 +99,10 @@ export default function SidebarRight({ onSelect }: SidebarRightProps) {
             "strategy",
             "best-practices",
             "ask-kia",
-            "help-support",
             "history-goef",
             "event",
             "dashboard",
+            "help-support",
           ]
             .map((id) => links.find((l) => l.id === id))
             .filter(Boolean)
