@@ -4,6 +4,19 @@ const User = require("../users/user.model.js");
 exports.createQna = async (req, res) => {
   try {
     const { title, description, type } = req.body;
+
+    // Admin can create without a user; set display name
+    if (req.user.role === "admin") {
+      const qna = await Qna.create({
+        title,
+        description,
+        type,
+        createdByName: "Admin",
+        country: undefined,
+      });
+      return res.status(201).json({ message: "Qna created", qna });
+    }
+
     const user = await User.findById(req.user.id);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -16,9 +29,9 @@ exports.createQna = async (req, res) => {
       createdBy: req.user.id,
       country: user.country,
     });
-    res.status(201).json({ message: "Qna created", qna });
+    return res.status(201).json({ message: "Qna created", qna });
   } catch (err) {
-    res.status(500).json({ message: "Server error", error: err.message });
+    return res.status(500).json({ message: "Server error", error: err.message });
   }
 };
 

@@ -52,6 +52,7 @@ type QuestionResponse = {
   country: string | null;
   createdAt: string;
   createdBy: User | null;
+  createdByName?: string;
   likes: string[];
 };
 
@@ -230,12 +231,13 @@ const GoefEvent: React.FC = () => {
           ? `${response.qna.createdBy.firstName || "Unknown"} ${
               response.qna.createdBy.lastName || ""
             }`.trim() || "Unknown"
-          : currentUserFullName,
-        userId: currentUserId,
+          : response.qna.createdByName ||
+            (isAdmin ? "Admin" : currentUserFullName),
+        userId: isAdmin ? "admin" : currentUserId,
         dept: "KUS",
         date: new Date(response.qna.createdAt).toISOString().slice(0, 10),
         text: response.qna.description,
-        country: response.qna.country || "Unknown",
+        country: response.qna.country || "",
         likes: response.qna.likes.length,
         likedBy: response.qna.likes,
         comments: 0,
@@ -446,110 +448,7 @@ const GoefEvent: React.FC = () => {
 
               {/* Rich Text Editor */}
               <div className="border border-gray-300 rounded-lg overflow-hidden">
-                {/* Editor Toolbar */}
-                <div className="bg-gray-50 border-b border-gray-300 px-4 py-2 flex items-center gap-1">
-                  <select
-                    aria-label="Text style"
-                    title="Text style"
-                    className="bg-white border border-gray-300 rounded px-3 py-1 text-sm text-gray-700"
-                  >
-                    <option>Heading</option>
-                    <option>Paragraph</option>
-                    <option>H1</option>
-                    <option>H2</option>
-                    <option>H3</option>
-                  </select>
-                  <div className="flex items-center gap-1 ml-2">
-                    <button
-                      type="button"
-                      aria-label="Bold"
-                      title="Bold"
-                      className="p-2 hover:bg-gray-200 rounded text-gray-700 font-bold"
-                    >
-                      B
-                    </button>
-                    <button
-                      type="button"
-                      aria-label="Italic"
-                      title="Italic"
-                      className="p-2 hover:bg-gray-200 rounded text-gray-700 italic"
-                    >
-                      I
-                    </button>
-                    <button
-                      type="button"
-                      aria-label="Insert link"
-                      title="Insert link"
-                      className="p-2 hover:bg-gray-200 rounded text-gray-700"
-                    >
-                      🔗
-                    </button>
-                    <button
-                      type="button"
-                      aria-label="List"
-                      title="List"
-                      className="p-2 hover:bg-gray-200 rounded text-gray-700"
-                    >
-                      ≡
-                    </button>
-                    <button
-                      type="button"
-                      aria-label="More"
-                      title="More"
-                      className="p-2 hover:bg-gray-200 rounded text-gray-700"
-                    >
-                      ⋮
-                    </button>
-                    <button
-                      type="button"
-                      aria-label="Highlight"
-                      title="Highlight"
-                      className="p-2 hover:bg-gray-200 rounded text-gray-700"
-                    >
-                      H
-                    </button>
-                    <button
-                      type="button"
-                      aria-label="Quote"
-                      title="Quote"
-                      className="p-2 hover:bg-gray-200 rounded text-gray-700"
-                    >
-                      ❝
-                    </button>
-                    <button
-                      type="button"
-                      aria-label="Code"
-                      title="Code"
-                      className="p-2 hover:bg-gray-200 rounded text-gray-700"
-                    >
-                      ‹›
-                    </button>
-                    <button
-                      type="button"
-                      aria-label="Insert image"
-                      title="Insert image"
-                      className="p-2 hover:bg-gray-200 rounded text-gray-700"
-                    >
-                      🖼
-                    </button>
-                    <button
-                      type="button"
-                      aria-label="Quick actions"
-                      title="Quick actions"
-                      className="p-2 hover:bg-gray-200 rounded text-gray-700"
-                    >
-                      ⚡
-                    </button>
-                    <button
-                      type="button"
-                      aria-label="Insert media"
-                      title="Insert media"
-                      className="p-2 hover:bg-gray-200 rounded text-gray-700"
-                    >
-                      🖼
-                    </button>
-                  </div>
-                </div>
+                
 
                 {/* Editor Content Area */}
                 <div className="min-h-[300px] p-4 bg-white">
@@ -614,7 +513,7 @@ const GoefEvent: React.FC = () => {
                     <span className="text-xs text-gray-400">{q.date}</span>
                   </div>
                 </div>
-                {q.userId === currentUserId && (
+                {(q.userId === currentUserId || isAdmin) && (
                   <button
                     type="button"
                     aria-label="Delete question"
