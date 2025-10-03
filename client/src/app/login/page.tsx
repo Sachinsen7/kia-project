@@ -266,22 +266,22 @@ export default function Login() {
   // );
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      {/* Login Box */}
-      <div className="w-full max-w-md bg-white my-auto shadow-2xl rounded-lg p-8 border border-gray-200">
+    <div className="h-screen flex items-center justify-center bg-gray-100">
+      <div className="w-full max-w-md bg-white shadow-2xl rounded-lg p-7 border border-gray-200
+                  flex flex-col justify-center min-h-[400px] max-h-[90%] overflow-hidden">
         {/* Title */}
-        <div className="text-center mb-8 ">
-          <Shield className="mx-auto mb-6 text-gray-700" size={48} />
-          <h2 className="text-3xl mx-auto font-bold text-center text-gray-900 mb-4">
+        <div className="text-center mb-6">
+          <Shield className="mx-auto mb-4 text-gray-700" size={48} />
+          <h2 className="text-3xl font-bold text-gray-900 mb-2">
             Administrator Sign In
           </h2>
-          <div className="text-gray-900 text-sm mx-auto px-auto">
+          <div className="text-gray-900 text-sm">
             GOEF File Management System
           </div>
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-4 flex-grow overflow-auto">
           {/* Identifier */}
           <div>
             <label className="block text-sm font-medium text-gray-900 mb-1">
@@ -321,14 +321,14 @@ export default function Login() {
             {loading ? "Sign In..." : "Sign In"}
           </button>
 
+          {/* Security Reminder Line */}
           <div className="flex items-center my-4">
-            <span className="text-gray-400 font-semibold">
-              Security Reminder
-            </span>
+            <span className="text-gray-400 font-semibold">Security Reminder</span>
             <div className="flex-grow border-t-2 border-gray-400 ml-3"></div>
           </div>
 
-          <div className="mt-6 bg-gray-50 border border-gray-200 rounded-md p-4 text-sm text-gray-700">
+          {/* Best Practices */}
+          <div className="bg-gray-50 border border-gray-200 rounded-md p-4 text-sm text-gray-700">
             <p className="font-semibold mb-2 text-center">Best Practices</p>
             <ul className="list-disc list-inside space-y-1 text-left">
               <li>Use a strong password</li>
@@ -339,7 +339,7 @@ export default function Login() {
         </form>
 
         {/* Forgot Password */}
-        <div className="text-center text-sm text-gray-600 mt-6">
+        <div className="text-center text-sm text-gray-600 mt-4">
           <p>Forgot your password?</p>
           <a
             href="/forgot-password"
@@ -350,5 +350,7 @@ export default function Login() {
         </div>
       </div>
     </div>
+
+
   );
 }

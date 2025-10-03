@@ -275,7 +275,30 @@ const CookiesPolicy: React.FC = () => {
                     ck_visit_ip
                   </td>
                   <td className="border border-gray-300 px-4 py-2">
-                    Used to analyze the number of website visitors.
+                    Tracks the visitor IP to analyze unique website visits per day.
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2">1 day</td>
+                  <td className="border border-gray-300 px-4 py-2">
+                    First Party
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2">
+                    <a
+                      href="https://kia-project-eight.vercel.app/cookies-policy"
+                      className="text-black-600 hover:underline"
+                    >
+                      GOEF Cookie Policies 링크
+                    </a>
+                  </td>
+                </tr>
+                <tr>
+                  <td className="border border-gray-300 px-4 py-2">
+                    Essential Cookies
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2">
+                    ck_visit_ip_counted
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2">
+                    Marks that a visitor has been counted today to prevent duplicate counts.
                   </td>
                   <td className="border border-gray-300 px-4 py-2">1 day</td>
                   <td className="border border-gray-300 px-4 py-2">
