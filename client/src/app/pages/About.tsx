@@ -6,6 +6,7 @@ import Image from "next/image";
 function About() {
   return (
     <div className="w-full min-h-screen bg-white px-6 md:px-16 py-12">
+
       <div className="bg-white relative shadow-2xl rounded-2xl w-full max-w-6xl m-6 p-8 md:p-14">
         <div className="w-full pt-6 pb-10 px-4">
           <h1 className="text-3xl md:text-5xl text-gray-900 mb-2">
@@ -16,8 +17,8 @@ function About() {
         </div>
 
         {/* Content */}
-        <div className="relative px-6 md:px-12 text-gray-700 leading-relaxed border-l border-r border-b border-gray-600">
-          <div className="mb-52">
+        <div className="relative px-6 md:px-12 text-gray-700 leading-relaxed border-l  border-r  border-gray-500">
+          <div className="mb-32">
             <p className="mb-4">
               The 2025 GOEF focuses on establishing a sustainable ownership
               ecosystem, aligning with the goal of Vision to Reality. This forum
@@ -31,7 +32,7 @@ function About() {
               loyalty, ultimately maximizing profitability for NSC, dealers, and
               Kia.
             </p>
-            <p className="mb-6">
+            <p className="mb-1">
               Under the slogan{" "}
               <span className="italic">“Synergy in Action”</span>, and with a
               customer-centric mindset, we aim to connect Kia and its customers.
@@ -41,17 +42,10 @@ function About() {
             </p>
           </div>
 
-          <Image
-            src="/about/main-image.png"
-            alt="Car Showcase"
-            width={1200}
-            height={600}
-            className="absolute top-80 left-11 w-[90%] items-center mt-10 mb-20 h-auto object-cover "
-          />
-        </div>
 
-        {/* Quote & Diagram */}
-        <div className="text-center mx-auto max-w-2xl px-6 py-12 mt-96">
+          {/* Quote & Diagram */}
+        </div>
+        <div className="text-center mx-auto max-w-2xl z-500 px-6 py-2 ">
           <div className="relative w-full max-w-4xl mx-auto">
             {/* Top-left opening braces */}
             <Image
@@ -107,9 +101,10 @@ function About() {
           </div>
         </div>
 
+
         {/* Table Section */}
         <div className="mt-20">
-          <h2 className="text-2xl md:text-3xl font-bold mb-6 text-gray-900">
+          <h2 className="text-2xl md:text-3xl underline font-bold mb-6 text-gray-900">
             2025 GOEF Schedule
           </h2>
 
@@ -126,36 +121,42 @@ function About() {
                 <tr>
                   <td className="border px-4 py-2">Welcome to Kia GOEF</td>
                   <td className="border px-4 py-2">
-                    2024 GOEF Greeting <br />
-                    Official Opening Video <br />
-                    Opening Speech
+                    -2024 GOEF Greeting <br />
+                    -Official Opening Video <br />
+                    -Opening Speech
                   </td>
                   <td className="border px-4 py-2">09:00 - 09:30</td>
                 </tr>
                 <tr>
                   <td className="border px-4 py-2">Kia Brand</td>
-                  <td className="border px-4 py-2">Brand Strategy</td>
+                  <td className="border px-4 py-2">-Brand Strategy Overview <br />
+                    -Explanation of brand direction, brand
+                    strategy, and the role of ownership/dealers
+                  </td>
                   <td className="border px-4 py-2">09:30 - 10:00</td>
                 </tr>
                 <tr>
                   <td className="border px-4 py-2">
-                    Ownership Initiatives & Core
+                    Ownership Strategy & Core Initiatives
                   </td>
                   <td className="border px-4 py-2">
-                    A/S Parts Supply Enhancement Program <br />
-                    Data-Based Service Reinforcement <br />
-                    Digital Owner’s Manual
+                    - Ownership Strategy & Core Initiatives
+                    - Overseas Production Vehicle Ownership
+                    & Management Enhancement
+                    - A/S Parts Supply Enhancement Program
+                    - Data-Based Service Reinforcement
+                    - Digital Owners Manual
                   </td>
                   <td className="border px-4 py-2">10:00 - 11:20</td>
                 </tr>
                 <tr>
                   <td className="border px-4 py-2">
-                    Digitalized & Faithful Care
+                    Digitalized & Faithful Customer Care
                   </td>
                   <td className="border px-4 py-2">
-                    Digitalized & Faithful Customer Care <br />
-                    Kia Connect Diagnosis <br />
-                    Dealer Service Capacity Reinforcement
+                    - Digitalized & Faithful Customer Care <br />
+                    - Kia Connect Diagnosis <br />
+                    - Dealer Service Capacity Reinforcement
                   </td>
                   <td className="border px-4 py-2">11:20 - 12:00</td>
                 </tr>
