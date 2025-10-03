@@ -116,8 +116,7 @@ const AskKia: React.FC<AskKiaProps> = ({ onClose }) => {
         return data.map((c) => ({
           id: c._id,
           user: c.createdBy
-            ? `${c.createdBy.firstName || "Unknown"} ${
-                c.createdBy.lastName || ""
+            ? `${c.createdBy.firstName || "Unknown"} ${c.createdBy.lastName || ""
               }`.trim() || "Unknown"
             : "Unknown",
           userId: c.createdBy?._id || "",
@@ -152,8 +151,7 @@ const AskKia: React.FC<AskKiaProps> = ({ onClose }) => {
           return {
             id: q._id,
             user: q.createdBy
-              ? `${q.createdBy.firstName || "Unknown"} ${
-                  q.createdBy.lastName || ""
+              ? `${q.createdBy.firstName || "Unknown"} ${q.createdBy.lastName || ""
                 }`.trim() || "Unknown"
               : "Unknown",
             userId: q.createdBy?._id || "",
@@ -203,8 +201,7 @@ const AskKia: React.FC<AskKiaProps> = ({ onClose }) => {
       const newQ: Question = {
         id: response.qna._id,
         user: response.qna.createdBy
-          ? `${response.qna.createdBy.firstName || "Unknown"} ${
-              response.qna.createdBy.lastName || ""
+          ? `${response.qna.createdBy.firstName || "Unknown"} ${response.qna.createdBy.lastName || ""
             }`.trim() || "Unknown"
           : currentUserFullName,
         userId: response.qna.createdBy?._id || currentUserId,
@@ -249,8 +246,7 @@ const AskKia: React.FC<AskKiaProps> = ({ onClose }) => {
         token
       );
       const displayNameFromUser = response.comment.createdBy
-        ? `${response.comment.createdBy.firstName || "Unknown"} ${
-            response.comment.createdBy.lastName || ""
+        ? `${response.comment.createdBy.firstName || "Unknown"} ${response.comment.createdBy.lastName || ""
           }`.trim() || "Unknown"
         : undefined;
 
@@ -272,11 +268,11 @@ const AskKia: React.FC<AskKiaProps> = ({ onClose }) => {
         prev.map((q) =>
           q.id === id
             ? {
-                ...q,
-                comments: q.comments + 1,
-                commentList: [...q.commentList, newComment],
-                showCommentInput: false,
-              }
+              ...q,
+              comments: q.comments + 1,
+              commentList: [...q.commentList, newComment],
+              showCommentInput: false,
+            }
             : q
         )
       );
@@ -307,10 +303,10 @@ const AskKia: React.FC<AskKiaProps> = ({ onClose }) => {
         prev.map((q) =>
           q.id === id
             ? {
-                ...q,
-                likes: response.likesCount,
-                likedBy: response.likes,
-              }
+              ...q,
+              likes: response.likesCount,
+              likedBy: response.likes,
+            }
             : q
         )
       );
@@ -354,10 +350,10 @@ const AskKia: React.FC<AskKiaProps> = ({ onClose }) => {
         prev.map((q) =>
           q.id === questionId
             ? {
-                ...q,
-                comments: q.comments - 1,
-                commentList: q.commentList.filter((c) => c.id !== commentId),
-              }
+              ...q,
+              comments: q.comments - 1,
+              commentList: q.commentList.filter((c) => c.id !== commentId),
+            }
             : q
         )
       );
@@ -401,9 +397,9 @@ const AskKia: React.FC<AskKiaProps> = ({ onClose }) => {
         )}
         <div className="w-full pt-6 pb-10 px-4 mt-10">
           <h1 className="text-3xl mt-10 md:text-5xl text-gray-900 mb-2 inline-block">
-            Question on GOEF and
-            {/* Vertical black bar flush with top */}
-            <div className="w-[4px] h-[200px] text-[#000] bg-[#000] absolute top-0 left-48"></div>
+            <div className="w-[4px] h-[150px] text-[#000] bg-[#000] absolute -top-9 left-47.5"></div>
+
+            Questions on GOEF and our future
           </h1>
           <h2 className="text-3xl md:text-5xl ml-40 font-bold">Our Future</h2>
         </div>
@@ -564,14 +560,14 @@ const AskKia: React.FC<AskKiaProps> = ({ onClose }) => {
                         </div>
                         {(c.userId === currentUserId ||
                           (localStorage.getItem("role") || "").toLowerCase() ===
-                            "admin") && (
-                          <button
-                            onClick={() => handleDeleteComment(q.id, c.id)}
-                            className="text-red-500 hover:text-red-700 border-2 border-blue-500 p-1"
-                          >
-                            <Trash2 size={14} />
-                          </button>
-                        )}
+                          "admin") && (
+                            <button
+                              onClick={() => handleDeleteComment(q.id, c.id)}
+                              className="text-red-500 hover:text-red-700 border-2 border-blue-500 p-1"
+                            >
+                              <Trash2 size={14} />
+                            </button>
+                          )}
                       </div>
                       <div
                         className="text-sm text-gray-700 ml-2"
@@ -612,6 +608,7 @@ const AskKia: React.FC<AskKiaProps> = ({ onClose }) => {
                 className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-400 transition-colors"
               />
               <div className="border border-gray-300 rounded-lg overflow-hidden">
+
                 <div className="min-h-[300px] p-4 bg-white">
                   <EditorComponent
                     onUpdate={setNewQuestionText}

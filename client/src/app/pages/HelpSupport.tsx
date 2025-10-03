@@ -67,15 +67,16 @@ function HelpSupport({ onClose }: HelpSupportProps) {
         <div className="px-4 w-[1098px] h-[126px] md:px-8 text-gray-700 leading-relaxed">
           <div className="mt-15">
             <p className="text-gray-700 leading-relaxed mb-8 ml-35">
-              We are committed to making sure you enjoy this event. If you can’t
-              find the answer <br /> you’re looking for, or if you need
-              personalized help, please contact us via email.
+              We are committed to making sure you enjoy this event. If you cant
+              find the answer <br /> you&apos;re looking for, or if you need
+              personalized help, please contact us via email. <br />
+              Contact email: <a className="underline text-blue-500" href="mailto:pieta21@kia.com">pieta21@kia.com</a>
             </p>
             <Image
-              className="absolute top-86 right-0 object-cover"
+              className="absolute top-84 right-0 object-cover"
               width={600}
-              height={300}
-              src="/helpsupport/border.png"
+              height={500}
+              src="/new border.png"
               alt=""
             />
           </div>

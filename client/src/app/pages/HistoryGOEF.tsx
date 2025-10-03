@@ -15,8 +15,6 @@ function HistoryGOEF({ onClose }: HistoryGOEFProps) {
     "/history/gallery-right.png",
   ];
 
-  // Duplicate for seamless infinite loop
-  const loopImages = [...images, ...images];
   const [currentIndex, setCurrentIndex] = useState(0);
 
   // Auto slide
@@ -52,7 +50,7 @@ function HistoryGOEF({ onClose }: HistoryGOEFProps) {
         {/* Heading */}
         <div className="w-full pt-6 pb-10 px-4 mt-10">
           <h1 className="text-3xl mt-10 md:text-5xl text-gray-900 mb-2 inline-block">
-            HISTORY OF
+            History of
             {/* Vertical black bar flush with top */}
             <div className="w-[4px] h-[200px] text-[#000] bg-[#000] absolute top-0 left-19"></div>
           </h1>
@@ -88,7 +86,7 @@ function HistoryGOEF({ onClose }: HistoryGOEFProps) {
               our vision.
             </p>
 
-            <h2 className="text-center mt-20 text-[24px] font-bold text-gray-400">
+            <h2 className="text-center mt-20 text-[24px] mb-2 font-bold text-gray-400">
               2024 GOEF HIGHLIGHT
             </h2>
           </div>
@@ -99,70 +97,58 @@ function HistoryGOEF({ onClose }: HistoryGOEFProps) {
             alt="2024 GOEF Highlight"
             width={1200}
             height={600}
-            className="absolute top-100 left-11 w-[90%] items-center mt-10 mb-20 h-auto object-cover"
+            className="absolute  top-100 left-11 w-[90%] items-center mt-12 mb-20 h-auto object-cover"
           />
         </div>
 
         {/* Highlight Section */}
-        <div className="text-center px-6 py-12 mt-96">
+        <div className="text-center px-6 py-12 mt-30">
           <h2 className="text-3xl mt-10 md:text-5xl text-gray-900 mb-10">
             Gallery
           </h2>
 
           {/* Carousel */}
           <div className="relative w-full max-w-4xl mx-auto">
-            <div className="overflow-hidden">
-              <div
-                className="flex transition-transform duration-500 ease-in-out"
-                style={{
-                  transform: `translateX(-${
-                    currentIndex * (100 / images.length)
-                  }%)`,
-                  width: `${(loopImages.length / images.length) * 100}%`,
-                }}
+            <div className="flex items-center h-[400px]">
+              <div 
+                className="relative w-[15%] h-full cursor-pointer" 
+                onClick={handlePrev}
               >
-                {loopImages.map((src, index) => (
-                  <div
-                    key={index}
-                    className="w-1/3 flex-shrink-0 flex justify-center"
-                  >
-                    <Image
-                      src={src}
-                      alt={`GOEF Gallery ${index + 1}`}
-                      width={300}
-                      height={200}
-                      className="rounded-lg shadow-md object-cover"
-                    />
-                  </div>
-                ))}
+                <Image
+                  src="/history/gallery-left.png"
+                  alt="Left Panel"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+              <div className="relative w-[70%] h-full mx-4">
+                <Image
+                  src={images[currentIndex]}
+                  alt={`GOEF Gallery ${currentIndex + 1}`}
+                  fill
+                  className="object-cover rounded-lg shadow-md"
+                />
+              </div>
+              <div 
+                className="relative w-[15%] h-full cursor-pointer" 
+                onClick={handleNext}
+              >
+                <Image
+                  src="/history/gallery-right.png"
+                  alt="Right Panel"
+                  fill
+                  className="object-contain"
+                />
               </div>
             </div>
-
-            {/* Buttons */}
-            <button
-              onClick={handlePrev}
-              className="absolute left-0 top-1/2 -translate-y-1/2 p-2"
-            >
-              <Image
-                src="/history/left_opacity.png"
-                alt="Previous"
-                width={50}
-                height={50}
-                className="object-contain"
-              />
-            </button>
-            <button
-              onClick={handleNext}
-              className="absolute right-0 top-1/2 -translate-y-1/2 p-2"
-            >
-              <Image
-                src="/history/right_opacity.png"
-                alt="Next"
-                width={50}
-                height={50}
-                className="object-contain"
-              />
-            </button>
+            <div className="flex justify-center mt-6 space-x-2">
+              {images.map((_, index) => (
+                <div
+                  key={index}
+                  className={`w-3 h-3 rounded-full ${currentIndex === index ? 'bg-black' : 'bg-gray-300'}`}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>

@@ -74,7 +74,7 @@ function Home({ onClose }: HomeProps) {
 
         {/* Video section */}
         <div className="mt-20">
-          <h2 className="text-base uppercase text-gray-500 tracking-wide mb-4 text-center">
+          <h2 className="text-lg  uppercase font-bold text-black-500 tracking-wide mb-4 text-center">
             2025 GOEF Official Teaser
           </h2>
           <div className="w-full overflow-hidden rounded-xl shadow-md relative aspect-video">
