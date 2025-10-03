@@ -52,30 +52,20 @@ const EditorComponent: React.FC<EditorComponentProps> = ({
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleBold().run()}
-          className={`px-3 py-1 text-sm border rounded hover:bg-gray-100 transition-colors ${
-            editor.isActive("bold") ? "bg-gray-200 font-bold" : ""
-          }`}
+          className={`px-3 py-1 text-sm border rounded hover:bg-gray-100 transition-colors ${editor.isActive("bold") ? "bg-gray-200 font-bold" : ""
+            }`}
         >
           B
         </button>
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleItalic().run()}
-          className={`px-3 py-1 text-sm border rounded hover:bg-gray-100 transition-colors italic ${
-            editor.isActive("italic") ? "bg-gray-200" : ""
-          }`}
+          className={`px-3 py-1 text-sm border rounded hover:bg-gray-100 transition-colors italic ${editor.isActive("italic") ? "bg-gray-200" : ""
+            }`}
         >
           I
         </button>
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleStrike().run()}
-          className={`px-3 py-1 text-sm border rounded hover:bg-gray-100 transition-colors ${
-            editor.isActive("strike") ? "bg-gray-200 line-through" : ""
-          }`}
-        >
-          S
-        </button>
+
       </div>
 
       <div className="p-2">
