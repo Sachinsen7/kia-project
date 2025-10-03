@@ -1,12 +1,27 @@
 "use client";
 
 import React from "react";
+import { X } from "lucide-react";
 
-function Home() {
+type HomeProps = {
+  onClose?: () => void;
+};
+
+function Home({ onClose }: HomeProps) {
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6 md:p-12">
       {/* Floating Card */}
       <div className="relative bg-white shadow-2xl rounded-2xl w-full max-w-6xl m-6 p-8 md:p-14">
+        {/* Cross Button */}
+        {onClose && (
+          <button
+            onClick={onClose}
+            className="absolute top-3 right-3 z-10 p-2 rounded-full hover:bg-gray-100"
+            aria-label="Close"
+          >
+            <X size={22} className="text-gray-600" />
+          </button>
+        )}
         {/* Heading */}
         <h1 className="text-3xl ml-10 md:text-5xl text-gray-900 mb-2">
           WELCOME TO
