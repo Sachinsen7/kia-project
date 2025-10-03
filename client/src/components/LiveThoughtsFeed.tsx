@@ -62,7 +62,7 @@ const LiveThoughtsFeed: React.FC<LiveThoughtsFeedProps> = ({ onSelect }) => {
       });
 
       setQuestions(formatted);
-      setVisibleQuestions(formatted.slice(0, 3)); // show first 3 initially
+      setVisibleQuestions(formatted.slice(0, 3));
     } catch (err) {
       console.error("Error fetching live thoughts:", err);
     }
@@ -72,7 +72,7 @@ const LiveThoughtsFeed: React.FC<LiveThoughtsFeedProps> = ({ onSelect }) => {
     fetchQuestions();
   }, [fetchQuestions]);
 
-  // Rotate one question at a time
+  // rotation kept as is
   useEffect(() => {
     if (questions.length <= 3) return;
 
@@ -80,34 +80,45 @@ const LiveThoughtsFeed: React.FC<LiveThoughtsFeedProps> = ({ onSelect }) => {
       setVisibleQuestions((prev) => {
         const nextIndex = questions.indexOf(prev[0]) + 3;
         const nextQuestion = questions[nextIndex % questions.length];
-        return [...prev.slice(1), nextQuestion]; // remove first, add next
+        return [...prev.slice(1), nextQuestion];
       });
-    }, 3000); // change every 3s
+    }, 3000);
 
     return () => clearInterval(interval);
   }, [questions]);
 
   return (
-    <div className="flex flex-col w-full space-y-2 text-[#05141F] overflow-hidden">
-      {visibleQuestions.map((q, index) => (
-        <div
-          key={q.id}
-          onClick={() => onSelect?.(q.id)}
-          className="cursor-pointer w-full border rounded p-3 bg-gray-50 transition-all duration-700 ease-in-out break-words"
-          style={{
-            transitionDelay: `${index * 200}ms`, // small stagger
-          }}
-        >
-          <div
-            className="text-sm mb-1 opacity-100 animate-fadeInOut"
-            dangerouslySetInnerHTML={{ __html: q.description }}
-          />
-          <p className="text-sm font-semibold text-right">
-            {q.user} | {q.country}
-          </p>
-        </div>
-      ))}
+    <div className="w-full max-w-2xl p-3 text-black font-sans">
+      {/* Heading */}
+      <h2 className="text-xl font-bold underline underline-offset-4">
+        Share & Win ! (Event)
+      </h2>
+      <p className="text-sm font-semibold mb-2 mt-2">Join us and win a prize</p>
 
+      {/* Messages */}
+      <div className="w-[500px]">
+        {visibleQuestions.map((q, index) => (
+          <div
+            key={q.id}
+            onClick={() => onSelect?.(q.id)}
+            className="cursor-pointer bg-[#d6deeb] flex items-center justify-between p-2 text-sm transition-all duration-700 ease-in-out"
+            style={{ transitionDelay: `${index * 200}ms` }}
+          >
+            {/* Description (ellipses if too long) */}
+            <p
+              className="text-sm opacity-100 animate-fadeInOut flex-1 mr-2 overflow-hidden text-ellipsis whitespace-nowrap"
+              dangerouslySetInnerHTML={{ __html: q.description }}
+            />
+
+            {/* User + country */}
+            <p className="text-xs font-medium text-gray-700 whitespace-nowrap">
+              / {q.user}, {q.country}
+            </p>
+          </div>
+        ))}
+      </div>
+
+      {/* Keep animation */}
       <style jsx>{`
         @keyframes fadeInOut {
           0% {
