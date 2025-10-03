@@ -266,12 +266,12 @@ export default function Login() {
   // );
 
   return (
-    <div className="h-screen flex items-center justify-center bg-gray-100">
-      <div className="w-full max-w-md bg-white shadow-2xl rounded-lg p-7 border border-gray-200
+    <div className="h-screen flex items-center justify-center bg-gray-100 ">
+      <div className="w-full max-w-md bg-white shadow-2xl rounded-lg p-12 border border-gray-200
                   flex flex-col justify-center min-h-[400px] max-h-[90%] overflow-hidden">
         {/* Title */}
-        <div className="text-center mb-6">
-          <Shield className="mx-auto mb-4 text-gray-700" size={48} />
+        <div className="text-center my-4">
+          <Shield className="mx-auto mb-3 text-gray-700" size={48} />
           <h2 className="text-3xl font-bold text-gray-900 mb-2">
             Administrator Sign In
           </h2>
@@ -281,7 +281,7 @@ export default function Login() {
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-4 flex-grow overflow-auto">
+        <form onSubmit={handleSubmit} className="space-y-3 flex-grow ">
           {/* Identifier */}
           <div>
             <label className="block text-sm font-medium text-gray-900 mb-1">
@@ -316,14 +316,14 @@ export default function Login() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-black text-white py-3 rounded-md font-semibold hover:bg-gray-800 disabled:opacity-50 transition-colors duration-200"
+            className="w-full bg-black text-white py-2 rounded-md font-semibold hover:bg-gray-800 disabled:opacity-50 transition-colors duration-200"
           >
             {loading ? "Sign In..." : "Sign In"}
           </button>
 
           {/* Security Reminder Line */}
           <div className="flex items-center my-4">
-            <span className="text-gray-400 font-semibold">Security Reminder</span>
+            <span className="text-gray-400 text-sm font-medium">Security Reminder</span>
             <div className="flex-grow border-t-2 border-gray-400 ml-3"></div>
           </div>
 
@@ -340,13 +340,13 @@ export default function Login() {
 
         {/* Forgot Password */}
         <div className="text-center text-sm text-gray-600 mt-4">
-          <p>Forgot your password?</p>
-          <a
+          <p>Forgot your password? <a
             href="/forgot-password"
             className="text-black underline hover:text-gray-700"
           >
             Reset via E-mail
-          </a>
+          </a></p>
+          
         </div>
       </div>
     </div>
