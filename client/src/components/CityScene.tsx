@@ -128,11 +128,14 @@ export default function CityScene({ onSelect }: CitySceneProps) {
           }}
         >
           <div className="relative flex items-center justify-center md:w-full md:h-full">
-            {/* <span className="absolute inline-flex h-full w-full rounded-full bg-[#05141f]/50 opacity-0 group-hover:opacity-100 group-hover:animate-ping transition-opacity"></span> */}
-            P{" "}
-            <div className="w-24 h-24 md:w-40 md:h-40 flex items-center justify-center">
+            {/* <span className="absolute inline-flex h-full w-full rounded-full bg-[#05141f]/50 opacity-0 group-hover:opacity-100 group-hover:animate-ping transition-opacity"></span>{" "} */}
+            <div
+              className="w-24 h-24 md:w-40 md:h-40 flex items-center justify-center 
+             cursor-pointer hover:scale-110 transition-transform duration-300 animate-shimmer-bounce"
+            >
               {link.svg}
             </div>
+
             {link.id === "live-link" && (
               <span className="absolute -top-5 text-xs font-bold px-2 py-1 rounded bg-red-600 text-white animate-pulse">
                 {isLoadingLive ? "LOADING" : "LIVE"}
@@ -140,7 +143,7 @@ export default function CityScene({ onSelect }: CitySceneProps) {
             )}
           </div>
 
-          <div className="absolute top-20 left-1/2 transform -translate-x-1/2 bg-black/80 text-white px-3 py-1 rounded text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+          <div className="absolute top-30 left-1/2 transform -translate-x-1/2 bg-black/80 text-white px-3 py-1 rounded text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
             {link.name}
           </div>
         </button>
