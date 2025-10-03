@@ -1,9 +1,8 @@
-
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import dynamic from "next/dynamic";
-import { Heart, MessageSquare, Trash2 } from "lucide-react";
+import { Heart, MessageSquare, Trash2, X } from "lucide-react";
 import { apiFetch } from "@/config/api";
 import Image from "next/image";
 import toast from "react-hot-toast";
@@ -67,7 +66,11 @@ const EditorComponent = dynamic(
   { ssr: false }
 );
 
-const AskKia: React.FC = () => {
+type AskKiaProps = {
+  onClose?: () => void;
+};
+
+const AskKia: React.FC<AskKiaProps> = ({ onClose }) => {
   const [mounted, setMounted] = useState(false);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [showInput, setShowInput] = useState(false);
@@ -386,13 +389,26 @@ const AskKia: React.FC = () => {
   return (
     <div className="relative w-full min-h-screen bg-white px-6 md:px-16 py-12">
       <div className="bg-white relative shadow-2xl rounded-2xl w-full max-w-6xl m-6 p-8 md:p-14">
-        <div className="w-full pb-10 px-4">
+        {/* Cross Button */}
+        {onClose && (
+          <button
+            onClick={onClose}
+            className="absolute top-3 right-3 z-10 p-2 rounded-full hover:bg-gray-100"
+            aria-label="Close"
+          >
+            <X size={22} className="text-gray-600" />
+          </button>
+        )}
+        <div className="w-full pt-6 pb-10 px-4 mt-10">
           <h1 className="text-3xl mt-10 md:text-5xl text-gray-900 mb-2 inline-block">
-            Questions on GOEF and our future
+            Question on GOEF and
+            {/* Vertical black bar flush with top */}
+            <div className="w-[4px] h-[200px] text-[#000] bg-[#000] absolute top-0 left-48"></div>
           </h1>
+          <h2 className="text-3xl md:text-5xl ml-40 font-bold">Our Future</h2>
         </div>
         <br />
-        <div className="px-4 w-[1108px] h-[312px] md:px-8 text-gray-700 leading-relaxed">
+        <div className="px-4 mt-20 w-[1108px] h-[312px] md:px-8 text-gray-700 leading-relaxed">
           <div>
             <p className="text-gray-700 text-[15px]">
               The GOEF event is where the future of Kia takes shape, and we want
@@ -426,7 +442,7 @@ const AskKia: React.FC = () => {
 
             <div className="">
               <Image
-                className="absolute top-49 right-0 object-cover"
+                className="absolute top-99 right-0 object-cover"
                 width={600}
                 height={1000}
                 src="/askkia/border.png"
@@ -596,7 +612,6 @@ const AskKia: React.FC = () => {
                 className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-400 transition-colors"
               />
               <div className="border border-gray-300 rounded-lg overflow-hidden">
-                
                 <div className="min-h-[300px] p-4 bg-white">
                   <EditorComponent
                     onUpdate={setNewQuestionText}
