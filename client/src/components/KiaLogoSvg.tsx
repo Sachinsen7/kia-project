@@ -906,7 +906,6 @@ export const KiaLogoSvg: React.FC<KiaLogoSvgProps> = ({
       />
     </svg>,
 
-
     // svg6 help and support
   ];
 
