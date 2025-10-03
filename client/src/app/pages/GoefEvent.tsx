@@ -138,12 +138,11 @@ const GoefEvent: React.FC = () => {
           return {
             id: c._id,
             user: hasName
-              ? `${c.createdBy!.firstName || ""} ${
-                  c.createdBy!.lastName || ""
+              ? `${c.createdBy!.firstName || ""} ${c.createdBy!.lastName || ""
                 }`.trim()
               : c.createdBy
-              ? nameFromEmail || "Unknown"
-              : "Unknown",
+                ? nameFromEmail || "Unknown"
+                : "Unknown",
             userId: c.createdBy?._id || "",
             text: c.text,
             time: new Date(c.createdAt).toLocaleTimeString("en-US", {
@@ -181,12 +180,11 @@ const GoefEvent: React.FC = () => {
           return {
             id: q._id,
             user: hasName
-              ? `${q.createdBy!.firstName || ""} ${
-                  q.createdBy!.lastName || ""
+              ? `${q.createdBy!.firstName || ""} ${q.createdBy!.lastName || ""
                 }`.trim()
               : q.createdBy
-              ? nameFromEmail || "Unknown"
-              : "Unknown",
+                ? nameFromEmail || "Unknown"
+                : "Unknown",
             userId: q.createdBy?._id || "",
             dept: "KUS",
             date: new Date(q.createdAt).toISOString().slice(0, 10),
@@ -228,11 +226,10 @@ const GoefEvent: React.FC = () => {
       const newQ: Question = {
         id: response.qna._id,
         user: response.qna.createdBy
-          ? `${response.qna.createdBy.firstName || "Unknown"} ${
-              response.qna.createdBy.lastName || ""
+          ? `${response.qna.createdBy.firstName || "Unknown"} ${response.qna.createdBy.lastName || ""
             }`.trim() || "Unknown"
           : response.qna.createdByName ||
-            (isAdmin ? "Admin" : currentUserFullName),
+          (isAdmin ? "Admin" : currentUserFullName),
         userId: isAdmin ? "admin" : currentUserId,
         dept: "KUS",
         date: new Date(response.qna.createdAt).toISOString().slice(0, 10),
@@ -265,8 +262,7 @@ const GoefEvent: React.FC = () => {
         token
       );
       const displayNameFromUser = response.comment?.createdBy
-        ? `${response.comment.createdBy.firstName || "Unknown"} ${
-            response.comment.createdBy.lastName || ""
+        ? `${response.comment.createdBy.firstName || "Unknown"} ${response.comment.createdBy.lastName || ""
           }`.trim() || "Unknown"
         : undefined;
       const newComment: Comment = {
@@ -286,11 +282,11 @@ const GoefEvent: React.FC = () => {
         prev.map((q) =>
           q.id === id
             ? {
-                ...q,
-                comments: q.comments + 1,
-                commentList: [...q.commentList, newComment],
-                showCommentInput: false,
-              }
+              ...q,
+              comments: q.comments + 1,
+              commentList: [...q.commentList, newComment],
+              showCommentInput: false,
+            }
             : q
         )
       );
@@ -315,10 +311,10 @@ const GoefEvent: React.FC = () => {
         prev.map((q) =>
           q.id === id
             ? {
-                ...q,
-                likes: response.likesCount,
-                likedBy: response.likes,
-              }
+              ...q,
+              likes: response.likesCount,
+              likedBy: response.likes,
+            }
             : q
         )
       );
@@ -355,10 +351,10 @@ const GoefEvent: React.FC = () => {
         prev.map((q) =>
           q.id === questionId
             ? {
-                ...q,
-                comments: q.comments - 1,
-                commentList: q.commentList.filter((c) => c.id !== commentId),
-              }
+              ...q,
+              comments: q.comments - 1,
+              commentList: q.commentList.filter((c) => c.id !== commentId),
+            }
             : q
         )
       );
@@ -396,11 +392,12 @@ const GoefEvent: React.FC = () => {
     <div className="w-full min-h-screen bg-white px-6 md:px-16 py-12">
       <div className="bg-white relative shadow-2xl rounded-2xl w-full max-w-6xl m-6 p-8 md:p-14">
         <div className="w-full pt-6 pb-10 px-4">
+          <div className="w-[4px] h-[150px] text-[#000] bg-[#000] absolute -top-7.5 left-26.5"></div>
+
           <h1 className="text-3xl md:text-5xl text-gray-900 mb-2">
-            Share & Win !
+            Share & <span className="font-semibold">Win!</span>
           </h1>
-          <div className="w-[542px]  h-[4px] text-[#000] bg-[#000] absolute top-35.5 right-0"></div>
-          <h2 className="text-3xl md:text-5xl ml-40">EVENT</h2>
+          <h2 className="text-3xl md:text-5xl ml-40">(Event)</h2>
         </div>
         <div className="px-4 w-[1098px] h-[126px] md:px-8 text-gray-700 leading-relaxed">
           <div className="mt-15">
@@ -448,7 +445,7 @@ const GoefEvent: React.FC = () => {
 
               {/* Rich Text Editor */}
               <div className="border border-gray-300 rounded-lg overflow-hidden">
-                
+
 
                 {/* Editor Content Area */}
                 <div className="min-h-[300px] p-4 bg-white">
