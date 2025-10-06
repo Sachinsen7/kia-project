@@ -86,7 +86,7 @@ function HistoryGOEF({ onClose }: HistoryGOEFProps) {
               our vision.
             </p>
 
-            <h2 className="text-center mt-20 text-[24px] mb-2 font-bold text-gray-400">
+            <h2 className="text-center mt-5 text-[24px] mb-2 font-bold text-black">
               2024 GOEF HIGHLIGHT
             </h2>
           </div>
