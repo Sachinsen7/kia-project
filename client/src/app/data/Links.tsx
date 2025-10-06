@@ -18,7 +18,7 @@ const baseLinks = [
   { id: "history-goef", name: "History of GOEF", x: 30, y: 52, icon: Archive },
   {
     id: "ask-kia",
-    name: "Questions on GOEF and our future",
+    name: "Questions on GOEF and Our Future",
     x: 73,
     y: 65,
     icon: MessageCircle,
@@ -33,7 +33,7 @@ const baseLinks = [
   },
   {
     id: "help-support",
-    name: "Help and support",
+    name: "Help & Support",
     x: 83,
     y: 47,
     icon: LifeBuoy,
