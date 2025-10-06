@@ -93,7 +93,7 @@ const LiveThoughtsFeed: React.FC = () => {
 
   return (
     <div
-      className="w-full max-w-lg md:max-w-md p-4 text-black font-sans cursor-pointer overflow-hidden bg-[#d6deeb] rounded-lg shadow-sm"
+      className="w-full max-w-lg md:max-w-md p-4 text-black font-sans cursor-pointer overflow-hidden  rounded-lg shadow-sm"
       onClick={handleClick}
     >
       <h2 className="text-xl font-bold underline underline-offset-4 mb-1">
@@ -102,7 +102,7 @@ const LiveThoughtsFeed: React.FC = () => {
       <p className="text-sm font-semibold mb-2">Join us and win a prize</p>
 
       {/* Animated messages */}
-      <div className="relative flex h-[70px] overflow-hidden">
+      <div className="relative bg-[#d6deeb] flex h-[70px] overflow-hidden">
         {currentQuestion && (
           <div
             key={currentQuestion.id}
