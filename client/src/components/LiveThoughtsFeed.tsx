@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, useCallback } from "react";
 import { apiFetch } from "@/config/api";
+import { useRouter } from "next/navigation";
 
 type User = {
   firstName?: string;
@@ -24,15 +25,18 @@ type Question = {
   description: string;
 };
 
-type LiveThoughtsFeedProps = {
-  onSelect?: (id: string) => void;
-};
-
-const LiveThoughtsFeed: React.FC<LiveThoughtsFeedProps> = ({ onSelect }) => {
+const LiveThoughtsFeed: React.FC = () => {
   const [questions, setQuestions] = useState<Question[]>([]);
-  const [visibleQuestions, setVisibleQuestions] = useState<Question[]>([]);
-  const token =
-    typeof window !== "undefined" ? localStorage.getItem("token") || "" : "";
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [token, setToken] = useState<string | null>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const savedToken = localStorage.getItem("token");
+      setToken(savedToken);
+    }
+  }, []);
 
   const fetchQuestions = useCallback(async () => {
     if (!token) return;
@@ -62,84 +66,82 @@ const LiveThoughtsFeed: React.FC<LiveThoughtsFeedProps> = ({ onSelect }) => {
       });
 
       setQuestions(formatted);
-      setVisibleQuestions(formatted.slice(0, 3));
     } catch (err) {
       console.error("Error fetching live thoughts:", err);
     }
   }, [token]);
 
   useEffect(() => {
-    fetchQuestions();
-  }, [fetchQuestions]);
+    if (token) fetchQuestions();
+  }, [fetchQuestions, token]);
 
-  // rotation kept as is
   useEffect(() => {
-    if (questions.length <= 3) return;
-
+    if (questions.length <= 1) return;
     const interval = setInterval(() => {
-      setVisibleQuestions((prev) => {
-        const nextIndex = questions.indexOf(prev[0]) + 3;
-        const nextQuestion = questions[nextIndex % questions.length];
-        return [...prev.slice(1), nextQuestion];
-      });
-    }, 3000);
-
+      setCurrentIndex((prev) => (prev + 1) % questions.length);
+    }, 2500); // every 2.5s
     return () => clearInterval(interval);
   }, [questions]);
 
+  const currentQuestion = questions[currentIndex];
+
+  const handleClick = () => {
+    router.push("/share-win"); // update this path
+  };
+
+  // If not logged in — render nothing at all
+  if (!token) return null;
+
   return (
-    <div className="w-full max-w-2xl p-3 text-black font-sans">
-      {/* Heading */}
-      <h2 className="text-xl font-bold underline underline-offset-4">
-        Share & Win ! (Event)
+    <div
+      className="w-[500px] max-w-md p-3 text-black font-sans cursor-pointer overflow-hidden bg-[#d6deeb] rounded-lg shadow-sm"
+      onClick={handleClick}
+    >
+      {/* Static heading (always visible after login) */}
+      <h2 className="text-xl font-bold underline underline-offset-4 mb-1">
+        Share & Win! (Event)
       </h2>
-      <p className="text-sm font-semibold mb-2 mt-2">Join us and win a prize</p>
+      <p className="text-sm font-semibold mb-2">Join us and win a prize</p>
 
-      {/* Messages */}
-      <div className="w-[500px]">
-        {visibleQuestions.map((q, index) => (
+      {/* Animated messages */}
+      <div className="relative h-[70px] overflow-hidden">
+        {currentQuestion && (
           <div
-            key={q.id}
-            onClick={() => onSelect?.(q.id)}
-            className="cursor-pointer bg-[#d6deeb] flex items-center justify-between p-2 text-sm transition-all duration-700 ease-in-out"
-            style={{ transitionDelay: `${index * 200}ms` }}
+            key={currentQuestion.id}
+            className="absolute inset-0 animate-slideUp"
           >
-            {/* Description (ellipses if too long) */}
             <p
-              className="text-sm opacity-100 animate-fadeInOut flex-1 mr-2 overflow-hidden text-ellipsis whitespace-nowrap"
-              dangerouslySetInnerHTML={{ __html: q.description }}
+              className="text-sm overflow-hidden text-ellipsis whitespace-nowrap"
+              dangerouslySetInnerHTML={{ __html: currentQuestion.description }}
             />
-
-            {/* User + country */}
-            <p className="text-xs font-medium text-gray-700 whitespace-nowrap">
-              / {q.user}, {q.country}
+            <p className="text-xs font-medium text-gray-700 whitespace-nowrap mt-1">
+              / {currentQuestion.user}, {currentQuestion.country}
             </p>
           </div>
-        ))}
+        )}
       </div>
 
-      {/* Keep animation */}
       <style jsx>{`
-        @keyframes fadeInOut {
+        @keyframes slideUp {
           0% {
+            transform: translateY(100%);
             opacity: 0;
-            transform: translateY(10px);
           }
-          10% {
-            opacity: 1;
+          20% {
             transform: translateY(0);
+            opacity: 1;
           }
-          90% {
-            opacity: 1;
+          80% {
             transform: translateY(0);
+            opacity: 1;
           }
           100% {
+            transform: translateY(-100%);
             opacity: 0;
-            transform: translateY(-10px);
           }
         }
-        .animate-fadeInOut {
-          animation: fadeInOut 3s ease-in-out infinite;
+        .animate-slideUp {
+          animation: slideUp 2.5s ease-in-out forwards;
         }
       `}</style>
     </div>
