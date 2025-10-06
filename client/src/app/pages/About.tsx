@@ -11,7 +11,6 @@ type AboutProps = {
 function About({ onClose }: AboutProps) {
   return (
     <div className="w-full min-h-screen bg-white px-6 md:px-16 py-12">
-
       <div className="bg-white relative shadow-2xl rounded-2xl w-full max-w-6xl m-6 p-8 md:p-14">
         {/* Cross Button */}
         {onClose && (
@@ -20,7 +19,14 @@ function About({ onClose }: AboutProps) {
             className="absolute top-3 right-3 z-10 p-2 rounded-full hover:bg-gray-100"
             aria-label="Close"
           >
-            <X size={22} className="text-gray-600" />
+            {" "}
+            <Image
+              width={22}
+              height={22}
+              src="/askkia/cross.png"
+              alt="Close sidebar"
+              className="cursor-pointer"
+            />
           </button>
         )}
         <div className="w-full pt-6 pb-10 px-4">
@@ -56,7 +62,6 @@ function About({ onClose }: AboutProps) {
               value and unique experiences for our Kia customers.
             </p>
           </div>
-
 
           {/* Quote & Diagram */}
         </div>
@@ -116,7 +121,6 @@ function About({ onClose }: AboutProps) {
           </div>
         </div>
 
-
         {/* Table Section */}
         <div className="mt-20">
           <h2 className="text-2xl md:text-3xl underline font-bold mb-6 text-gray-900">
@@ -144,9 +148,10 @@ function About({ onClose }: AboutProps) {
                 </tr>
                 <tr>
                   <td className="border px-4 py-2">Kia Brand</td>
-                  <td className="border px-4 py-2">-Brand Strategy Overview <br />
-                    -Explanation of brand direction, brand
-                    strategy, and the role of ownership/dealers
+                  <td className="border px-4 py-2">
+                    -Brand Strategy Overview <br />
+                    -Explanation of brand direction, brand strategy, and the
+                    role of ownership/dealers
                   </td>
                   <td className="border px-4 py-2">09:30 - 10:00</td>
                 </tr>
@@ -155,12 +160,10 @@ function About({ onClose }: AboutProps) {
                     Ownership Strategy & Core Initiatives
                   </td>
                   <td className="border px-4 py-2">
-                    - Ownership Strategy & Core Initiatives
-                    - Overseas Production Vehicle Ownership
-                    & Management Enhancement
-                    - A/S Parts Supply Enhancement Program
-                    - Data-Based Service Reinforcement
-                    - Digital Owners Manual
+                    - Ownership Strategy & Core Initiatives - Overseas
+                    Production Vehicle Ownership & Management Enhancement - A/S
+                    Parts Supply Enhancement Program - Data-Based Service
+                    Reinforcement - Digital Owners Manual
                   </td>
                   <td className="border px-4 py-2">10:00 - 11:20</td>
                 </tr>
@@ -170,8 +173,8 @@ function About({ onClose }: AboutProps) {
                   </td>
                   <td className="border px-4 py-2">
                     - Digitalized & Faithful Customer Care <br />
-                    - Kia Connect Diagnosis <br />
-                    - Dealer Service Capacity Reinforcement
+                    - Kia Connect Diagnosis <br />- Dealer Service Capacity
+                    Reinforcement
                   </td>
                   <td className="border px-4 py-2">11:20 - 12:00</td>
                 </tr>
