@@ -89,11 +89,19 @@ const LiveThoughtsFeed: React.FC = () => {
     router.push("/share-win");
   };
 
-  if (!token) return null;
+  if (!token) {
+    return (
+      <div className="w-full p-4 text-black font-sans rounded-lg">
+        <p className="text-sm text-gray-600">
+          Please log in to view live thoughts.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div
-      className="w-full max-w-lg md:max-w-md p-4 text-black font-sans cursor-pointer overflow-hidden  rounded-lg shadow-sm"
+      className="w-full p-4 text-black font-sans cursor-pointer rounded-lg"
       onClick={handleClick}
     >
       <h2 className="text-xl font-bold underline underline-offset-4 mb-1">
@@ -101,32 +109,26 @@ const LiveThoughtsFeed: React.FC = () => {
       </h2>
       <p className="text-sm font-semibold mb-2">Join us and win a prize</p>
 
-      {/* Animated messages */}
-      <div className="relative bg-[#d6deeb] flex h-[70px] overflow-hidden">
-        {currentQuestion && (
-          <div
-            key={currentQuestion.id}
-            className="absolute inset-0 animate-slideUp"
-          >
-            {/* Description: wrap max 2 lines */}
-            <div
-              key={currentQuestion.id}
-              className="absolute inset-0 animate-slideUp"
-            >
-              {/* Description: wrap normally or clamp lines */}
-              <p
-                className="text-sm text-gray-800 line-clamp-2 mb-1"
-                dangerouslySetInnerHTML={{
-                  __html: currentQuestion.description,
-                }}
-              />
+      {/* Animated message container */}
+      <div className="relative bg-[#d6deeb] w-full h-[70px] overflow-hidden rounded-lg p-3">
+        {currentQuestion ? (
+          <div className="absolute inset-0 animate-slideUp">
+            {/* Description */}
+            <p
+              className="text-sm text-gray-800 line-clamp-2 mb-1 overflow-hidden text-ellipsis"
+              style={{ display: "-webkit-box", WebkitBoxOrient: "vertical" }}
+              dangerouslySetInnerHTML={{ __html: currentQuestion.description }}
+            />
 
-              {/* Name and country in one row */}
-              <div className="flex items-center gap-2 text-xs font-medium text-gray-700 overflow-hidden">
-                <span className="truncate">{currentQuestion.user}</span>
-                <span className="truncate">, {currentQuestion.country}</span>
-              </div>
+            {/* Name and country in one row */}
+            <div className="flex items-center gap-2 text-xs font-medium text-gray-700 flex-nowrap">
+              <span className="truncate">{currentQuestion.user}</span>
+              <span className="truncate">, {currentQuestion.country}</span>
             </div>
+          </div>
+        ) : (
+          <div className="flex items-center justify-center h-full text-sm text-gray-600">
+            No thoughts available yet.
           </div>
         )}
       </div>
@@ -152,6 +154,18 @@ const LiveThoughtsFeed: React.FC = () => {
         }
         .animate-slideUp {
           animation: slideUp 2.5s ease-in-out forwards;
+        }
+        .line-clamp-2 {
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        .truncate {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
       `}</style>
     </div>
