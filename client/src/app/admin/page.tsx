@@ -5,6 +5,7 @@ import { apiFetch } from "@/config/api";
 import { LogOut, CheckCircle, XCircle, Clock, Video } from "lucide-react";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import toast from "react-hot-toast";
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 
 type ApiUsersResponse = {
   success: boolean;
@@ -32,43 +33,16 @@ const AdminPage: React.FC = () => {
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [loading, setLoading] = useState(true);
   const [totalUsers, setTotalUsers] = useState(0);
-  const [visits, setVisits] = useState(0);
   const [pageViews, setPageViews] = useState(0);
+  const [visits, setVisits] = useState(0);
+  const [dailyVisits, setDailyVisits] = useState(0);
+  const [recentVisits, setRecentVisits] = useState<{ date: string; count: number }[]>([]);
+
+  // In fetchData():
 
   const token =
     typeof window !== "undefined" ? localStorage.getItem("token") || "" : "";
 
-  // Fetch analytics and participants
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await apiFetch<ApiUsersResponse>(
-  //         "/api/admin/all",
-  //         "GET",
-  //         undefined,
-  //         token
-  //       );
-
-  //       const participantList: Participant[] = response.users.map((u) => ({
-  //         id: u._id,
-  //         firstName: u.firstName,
-  //         lastName: u.lastName,
-  //         email: u.email,
-  //         country: u.country,
-  //         isActive: u.isActive ?? null,
-  //       }));
-
-  //       setParticipants(participantList);
-  //       setTotalUsers(participantList.length);
-  //     } catch (err) {
-  //       console.error(err);
-  //       toast.error("Failed to load participants");
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-  //   fetchData();
-  // }, [token]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -93,13 +67,26 @@ const AdminPage: React.FC = () => {
         setParticipants(participantList);
         setTotalUsers(participantList.length);
 
-        // Fetch total visits from your visits API
+        // ✅ Fetch total visits
         const visitsResponse = await apiFetch<{ count: number }>(
           "/api/visit/count",
           "GET"
         );
-
         setVisits(visitsResponse.count);
+
+        // ✅ Fetch daily visits
+        const dailyResponse = await apiFetch<{ count: number }>(
+          "/api/visit/today",
+          "GET"
+        );
+        setDailyVisits(dailyResponse.count);
+
+        const recentResponse = await apiFetch<{ data: { date: string; count: number }[] }>(
+          "/api/visit/daily?limit=7",
+          "GET"
+        );
+        setRecentVisits(recentResponse.data);
+
       } catch (err) {
         console.error(err);
         toast.error("Failed to load data");
@@ -110,6 +97,7 @@ const AdminPage: React.FC = () => {
 
     fetchData();
   }, [token]);
+
 
   const handleApprove = async (id: string) => {
     try {
@@ -206,7 +194,7 @@ const AdminPage: React.FC = () => {
           <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6">
             Analytics Overview
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-6">
             {/* Total Users */}
             <div className="bg-gray-100 shadow-lg rounded-xl p-4 sm:p-6 flex flex-col items-center transform hover:scale-105 transition-transform duration-200">
               <p className="text-gray-500 text-sm sm:text-md font-bold">
@@ -226,7 +214,28 @@ const AdminPage: React.FC = () => {
                 {visits}
               </p>
             </div>
+            {/* Daily Views */}
+            <div className="bg-gray-100 shadow-lg rounded-xl p-4 sm:p-6 flex flex-col items-center transform hover:scale-105 transition-transform duration-200">
+              <p className="text-gray-500 text-sm sm:text-md font-bold">
+                Daily Visits
+              </p>
+              <p className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-600">
+                {dailyVisits}
+              </p>
+            </div>
           </div>
+        </section>
+
+        <section className="mt-10 bg-white p-4 rounded-xl shadow-md">
+          <h3 className="text-lg font-semibold mb-3">Last 7 Days Visits</h3>
+          <ResponsiveContainer width="100%" height={250}>
+            <LineChart data={recentVisits}>
+              <XAxis dataKey="date" />
+              <YAxis />
+              <Tooltip />
+              <Line type="monotone" dataKey="count" stroke="#2563eb" strokeWidth={2} />
+            </LineChart>
+          </ResponsiveContainer>
         </section>
 
         {/* Participants Management */}
@@ -289,19 +298,18 @@ const AdminPage: React.FC = () => {
                           <Clock className="text-yellow-600" size={16} />
                         )}
                         <span
-                          className={`text-xs sm:text-sm font-medium ${
-                            p.isActive === true
-                              ? "text-green-800"
-                              : p.isActive === false
+                          className={`text-xs sm:text-sm font-medium ${p.isActive === true
+                            ? "text-green-800"
+                            : p.isActive === false
                               ? "text-red-800"
                               : "text-yellow-800"
-                          }`}
+                            }`}
                         >
                           {p.isActive === true
                             ? "Approved"
                             : p.isActive === false
-                            ? "Declined"
-                            : "Pending"}
+                              ? "Declined"
+                              : "Pending"}
                         </span>
                       </td>
                       <td className="p-2 sm:p-4">
