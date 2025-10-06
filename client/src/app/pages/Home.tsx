@@ -37,7 +37,7 @@ function Home({ onClose }: HomeProps) {
 
         {/* Intro paragraphs - aligned end */}
         <div className="mt-20 flex justify-end">
-          <div className="space-y-4 text-gray-700 leading-relaxed border-r-2 border-b-2 border-gray-300 pr-6 pb-6 max-w-3xl text-left">
+          <div className="space-y-4 text-gray-700 tracking-widest leading-relaxed border-r-2 border-b-2 border-gray-300 pr-6 pb-6 max-w-3xl text-left">
             <p>
               It is with great honor that we extend this official invitation to
               the <br /> 2025 Global Ownership Experience Forum, in sincere

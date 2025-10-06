@@ -114,33 +114,23 @@ export default function Dashboard({ onClose }: DashboardProps) {
         />
         <div className="w-full mt-10 pt-6 pb-10 px-4">
           <h1 className="text-3xl md:text-5xl text-gray-900 mb-2">
-            <strong> UPLOAD </strong> YOUR
+            <strong> Upload </strong> Your
           </h1>
-          <div className="w-[164px]  h-[4px] text-[#000] bg-[#000] absolute top-18 -rotate-57 left-67"></div>
-          <h2 className="text-3xl md:text-5xl ml-40">CONTENTS</h2>
+          <div className="w-[164px]  h-[4px] text-[#000] bg-[#000] absolute top-18 -rotate-57 left-57"></div>
+          <h2 className="text-3xl md:text-5xl ml-40">Contents</h2>
         </div>
 
         <div className="mt-10 text-gray-700 leading-relaxed w-[1108px] h-[300px]">
           <div className="mb-52">
             <p className="text-sm text-gray-700 mb-8 leading-relaxed">
-              Over the past year, we have all worked with dedication to provide
-              our customers with unforgettable <br />
-              ownership experiences. Now, we want to share the brilliant results
-              of these efforts. <br />
-              Please share your best practices, creative ideas, ownership
-              programs and differentiated <br />
-              customer experiences implemented in your region. We want to learn
-              from each and be inspired by your <br /> innovative ideas across
-              markets.
+              Thank you for your dedicated efforts to provide exceptional
+              ownership experiences over the <br /> past year. <br /> To continue building a
+              strong GOEF community, we invite you to share your best practices
+              and <br /> innovative success stories regarding ownership programs and 
+              differentiated customer <br /> experiences from your region. Your shared
+              experiences will be a valuable source of inspiration for us all.
               <br />
-              <br />
-              Your success is our collective achievement. Feel free to share
-              your experiences from the past year, <br />
-              including innovative concepts of unique campaigns, programs and
-              differentiated customer <br />
-              experiences. Your stories will be a great source of inspiration
-              for colleagues in other regions. <br /> Lets build a growing GOFF
-              community together..
+              
             </p>
           </div>
 
