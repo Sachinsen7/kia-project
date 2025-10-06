@@ -9,7 +9,7 @@ type HomeProps = {
 
 function Home({ onClose }: HomeProps) {
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6 md:p-12">
+    <div className="min-h-screen bg-white flex items-center justify-center p-6 md:p-12">
       {/* Floating Card */}
       <div className="relative bg-white shadow-2xl rounded-2xl w-full max-w-6xl m-6 p-8 md:p-14">
         {/* Cross Button */}
@@ -24,7 +24,7 @@ function Home({ onClose }: HomeProps) {
         )}
         {/* Heading */}
         <h1 className="text-3xl ml-10 md:text-5xl text-gray-900 mb-2">
-          WELCOME TO
+          Welcome to 
         </h1>
 
         {/* Underline + 2025 */}
