@@ -120,7 +120,7 @@ export default function Dashboard({ onClose }: DashboardProps) {
           <h2 className="text-3xl md:text-5xl ml-40">Contents</h2>
         </div>
 
-        <div className="mt-10 text-gray-700 leading-relaxed w-[1108px] h-[300px]">
+        <div className="mt-10 text-gray-700 leading-relaxed w-[1108px] h-[200px]">
           <div className="mb-52">
             <p className="text-sm text-gray-700 mb-8 leading-relaxed">
               Thank you for your dedicated efforts to provide exceptional
@@ -165,10 +165,10 @@ export default function Dashboard({ onClose }: DashboardProps) {
           </label>
         </section>
 
-        <div className="h-[2px] w-full bg-gray-300"></div>
+        <div className="h-[2px] w-full bg-gray-300 mt-5"></div>
 
-        <div className="mt-30 text-gray-700 leading-relaxed w-[1108px] h-[300px]">
-          <div className="mb-52">
+        <div className="mt-40 text-gray-700 leading-relaxed w-[1108px] h-[200px]">
+          <div className="mb-10">
             <p className="text-sm text-gray-700 leading-relaxed">
               We are creating a forum at GOEF and plan to edit the videos from
               all regions into a single-story <br /> video. Please send us a
@@ -185,12 +185,12 @@ export default function Dashboard({ onClose }: DashboardProps) {
             alt="2024 GOEF Highlight"
             width={600}
             height={600}
-            className="absolute bottom-107 left-0 object-cover"
+            className="absolute bottom-80 left-0 object-cover"
           />
         </div>
 
         <section className="mb-10">
-          <h2 className="text-lg mt-5 font-semibold mb-2 text-black">
+          <h2 className="text-lg font-semibold mb-2 text-black">
             Greeting Videos
           </h2>
 
