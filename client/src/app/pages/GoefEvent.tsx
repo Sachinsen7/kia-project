@@ -406,7 +406,13 @@ const GoefEvent: React.FC<GoefEventProps> = ({ onClose }) => {
             className="absolute top-3 right-3 z-10 p-2 rounded-full hover:bg-gray-100"
             aria-label="Close"
           >
-            <X size={22} className="text-gray-600" />
+            <Image
+              width={22}
+              height={22}
+              src="/askkia/cross.png"
+              alt="Close sidebar"
+              className="cursor-pointer"
+            />{" "}
           </button>
         )}
         <div className="w-full pt-6 pb-10 px-4">
