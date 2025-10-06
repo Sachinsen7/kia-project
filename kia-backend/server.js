@@ -14,9 +14,11 @@ app.use(cookieParser());
 // Track visits for all requests
 app.use(cookieTracker);
 
+
 const allowedOrigins = [
   "https://kia-project-eight.vercel.app",
   "http://localhost:3000",
+
 ];
 
 app.use(
