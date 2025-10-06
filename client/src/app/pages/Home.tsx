@@ -2,6 +2,7 @@
 
 import React from "react";
 import { X } from "lucide-react";
+import Image from "next/image";
 
 type HomeProps = {
   onClose?: () => void;
@@ -19,12 +20,18 @@ function Home({ onClose }: HomeProps) {
             className="absolute top-3 right-3 z-10 p-2 rounded-full hover:bg-gray-100"
             aria-label="Close"
           >
-            <X size={22} className="text-gray-600" />
+            <Image
+              width={22}
+              height={22}
+              src="/askkia/cross.png"
+              alt="Close sidebar"
+              className="cursor-pointer"
+            />{" "}
           </button>
         )}
         {/* Heading */}
         <h1 className="text-3xl ml-10 md:text-5xl text-gray-900 mb-2">
-          Welcome to 
+          Welcome to
         </h1>
 
         {/* Underline + 2025 */}
