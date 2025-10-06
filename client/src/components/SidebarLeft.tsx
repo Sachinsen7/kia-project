@@ -58,6 +58,13 @@ export default function SidebarLeft({ selectedId, onClose }: SidebarLeftProps) {
             className="p-2 hover:bg-gray-100 rounded-full transition-colors"
             aria-label="Close sidebar"
           >
+            <Image
+              width={22}
+              height={22}
+              src="/askkia/cross.png"
+              alt="Close sidebar"
+              className="cursor-pointer"
+            />
             <X size={22} className="text-gray-500" />
           </button>
         </div>
