@@ -49,7 +49,7 @@ export const cityDetails: Record<string, CityDetail> = {
   },
   help: {
     id: "help",
-    name: "Help and Support",
+    name: "Help & Support",
     description:
       "Assistance and resources available to participants for navigating GOEF.",
     features: ["Support desk", "FAQs", "Participant resources"],

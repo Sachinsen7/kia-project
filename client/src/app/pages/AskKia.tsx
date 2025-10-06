@@ -116,7 +116,8 @@ const AskKia: React.FC<AskKiaProps> = ({ onClose }) => {
         return data.map((c) => ({
           id: c._id,
           user: c.createdBy
-            ? `${c.createdBy.firstName || "Unknown"} ${c.createdBy.lastName || ""
+            ? `${c.createdBy.firstName || "Unknown"} ${
+                c.createdBy.lastName || ""
               }`.trim() || "Unknown"
             : "Unknown",
           userId: c.createdBy?._id || "",
@@ -151,7 +152,8 @@ const AskKia: React.FC<AskKiaProps> = ({ onClose }) => {
           return {
             id: q._id,
             user: q.createdBy
-              ? `${q.createdBy.firstName || "Unknown"} ${q.createdBy.lastName || ""
+              ? `${q.createdBy.firstName || "Unknown"} ${
+                  q.createdBy.lastName || ""
                 }`.trim() || "Unknown"
               : "Unknown",
             userId: q.createdBy?._id || "",
@@ -201,7 +203,8 @@ const AskKia: React.FC<AskKiaProps> = ({ onClose }) => {
       const newQ: Question = {
         id: response.qna._id,
         user: response.qna.createdBy
-          ? `${response.qna.createdBy.firstName || "Unknown"} ${response.qna.createdBy.lastName || ""
+          ? `${response.qna.createdBy.firstName || "Unknown"} ${
+              response.qna.createdBy.lastName || ""
             }`.trim() || "Unknown"
           : currentUserFullName,
         userId: response.qna.createdBy?._id || currentUserId,
@@ -246,7 +249,8 @@ const AskKia: React.FC<AskKiaProps> = ({ onClose }) => {
         token
       );
       const displayNameFromUser = response.comment.createdBy
-        ? `${response.comment.createdBy.firstName || "Unknown"} ${response.comment.createdBy.lastName || ""
+        ? `${response.comment.createdBy.firstName || "Unknown"} ${
+            response.comment.createdBy.lastName || ""
           }`.trim() || "Unknown"
         : undefined;
 
@@ -268,11 +272,11 @@ const AskKia: React.FC<AskKiaProps> = ({ onClose }) => {
         prev.map((q) =>
           q.id === id
             ? {
-              ...q,
-              comments: q.comments + 1,
-              commentList: [...q.commentList, newComment],
-              showCommentInput: false,
-            }
+                ...q,
+                comments: q.comments + 1,
+                commentList: [...q.commentList, newComment],
+                showCommentInput: false,
+              }
             : q
         )
       );
@@ -303,10 +307,10 @@ const AskKia: React.FC<AskKiaProps> = ({ onClose }) => {
         prev.map((q) =>
           q.id === id
             ? {
-              ...q,
-              likes: response.likesCount,
-              likedBy: response.likes,
-            }
+                ...q,
+                likes: response.likesCount,
+                likedBy: response.likes,
+              }
             : q
         )
       );
@@ -350,10 +354,10 @@ const AskKia: React.FC<AskKiaProps> = ({ onClose }) => {
         prev.map((q) =>
           q.id === questionId
             ? {
-              ...q,
-              comments: q.comments - 1,
-              commentList: q.commentList.filter((c) => c.id !== commentId),
-            }
+                ...q,
+                comments: q.comments - 1,
+                commentList: q.commentList.filter((c) => c.id !== commentId),
+              }
             : q
         )
       );
@@ -397,11 +401,10 @@ const AskKia: React.FC<AskKiaProps> = ({ onClose }) => {
         )}
         <div className="w-full pt-6 pb-10 px-4 mt-10">
           <h1 className="text-3xl mt-10 md:text-5xl text-gray-900 mb-2 inline-block">
-            <div className="w-[4px] h-[150px] text-[#000] bg-[#000] absolute -top-9 left-47.5"></div>
-
-            Questions on GOEF and our future
+            <div className="w-[4px] h-[175px] text-[#000] bg-[#000] absolute -top-0 left-47.5"></div>
+            Questions on GOEF and
           </h1>
-          <h2 className="text-3xl md:text-5xl ml-40 font-bold">Our Future</h2>
+          <h2 className="text-3xl md:text-5xl ml-85 font-bold">Our Future</h2>
         </div>
         <br />
         <div className="px-4 mt-20 w-[1108px] h-[312px] md:px-8 text-gray-700 leading-relaxed">
@@ -438,7 +441,7 @@ const AskKia: React.FC<AskKiaProps> = ({ onClose }) => {
 
             <div className="">
               <Image
-                className="absolute top-99 right-0 object-cover"
+                className="absolute top-97 right-0 object-cover"
                 width={600}
                 height={1000}
                 src="/askkia/border.png"
@@ -446,6 +449,64 @@ const AskKia: React.FC<AskKiaProps> = ({ onClose }) => {
               />
             </div>
           </div>
+        </div>
+
+        {/* Write Post Section */}
+        <div className="mb-8 mt-10 bg-white border border-gray-200 rounded-lg p-6">
+          {!showInput ? (
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-semibold text-gray-900">
+                Write Post
+              </h2>
+              <button
+                onClick={() => setShowInput(true)}
+                className="bg-gray-900 text-white px-6 py-2 rounded-md hover:bg-gray-800 transition-colors font-medium"
+              >
+                Create a question
+              </button>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">
+                Write Post
+              </h2>
+              <input
+                type="text"
+                placeholder="제목을 입력해 주세요."
+                value={newQuestionTitle}
+                onChange={(e) => setNewQuestionTitle(e.target.value)}
+                className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-400 transition-colors"
+              />
+              <div className="border border-gray-300 rounded-lg overflow-hidden">
+                <div className="min-h-[300px] p-4 bg-white">
+                  <EditorComponent
+                    onUpdate={setNewQuestionText}
+                    initialContent={newQuestionText}
+                  />
+                </div>
+              </div>
+              <div className="flex items-center justify-between pt-2">
+                <span className="text-sm text-gray-400">0/1500</span>
+                <div className="flex gap-3">
+                  <button
+                    onClick={handleCancelQuestion}
+                    className="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors font-medium"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleAddQuestion}
+                    className="px-6 py-2 bg-gray-900 text-white rounded-md hover:bg-gray-800 transition-colors font-medium"
+                    disabled={
+                      !newQuestionTitle.trim() || !newQuestionText.trim()
+                    }
+                  >
+                    Post
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Loading State */}
@@ -462,11 +523,17 @@ const AskKia: React.FC<AskKiaProps> = ({ onClose }) => {
               {/* User info */}
               <div className="flex items-center justify-between px-4 py-3">
                 <div className="flex items-center">
-                  <img
-                    src={"/user.png"}
-                    alt={q.user}
-                    className="w-10 h-10 rounded-full mr-3"
-                  />
+                  <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center text-gray-800 font-semibold mr-3">
+                    {(() => {
+                      const names = q.user.trim().split(" ");
+                      const initials =
+                        names.length >= 2
+                          ? `${names[0][0]}${names[1][0]}`
+                          : names[0][0];
+                      return initials.toUpperCase();
+                    })()}
+                  </div>
+
                   <div className="flex flex-col">
                     <div className="flex items-center gap-1 flex-wrap">
                       <span className="font-semibold text-gray-900 text-sm">
@@ -560,14 +627,14 @@ const AskKia: React.FC<AskKiaProps> = ({ onClose }) => {
                         </div>
                         {(c.userId === currentUserId ||
                           (localStorage.getItem("role") || "").toLowerCase() ===
-                          "admin") && (
-                            <button
-                              onClick={() => handleDeleteComment(q.id, c.id)}
-                              className="text-red-500 hover:text-red-700 border-2 border-blue-500 p-1"
-                            >
-                              <Trash2 size={14} />
-                            </button>
-                          )}
+                            "admin") && (
+                          <button
+                            onClick={() => handleDeleteComment(q.id, c.id)}
+                            className="text-red-500 hover:text-red-700 border-2 border-blue-500 p-1"
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        )}
                       </div>
                       <div
                         className="text-sm text-gray-700 ml-2"
@@ -580,65 +647,6 @@ const AskKia: React.FC<AskKiaProps> = ({ onClose }) => {
             </div>
           ))
         )}
-
-        {/* Write Post Section */}
-        <div className="mb-8 mt-10 bg-white border border-gray-200 rounded-lg p-6">
-          {!showInput ? (
-            <div className="flex items-center justify-between">
-              <h2 className="text-xl font-semibold text-gray-900">
-                Write Post
-              </h2>
-              <button
-                onClick={() => setShowInput(true)}
-                className="bg-gray-900 text-white px-6 py-2 rounded-md hover:bg-gray-800 transition-colors font-medium"
-              >
-                Create a question
-              </button>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                Write Post
-              </h2>
-              <input
-                type="text"
-                placeholder="제목을 입력해 주세요."
-                value={newQuestionTitle}
-                onChange={(e) => setNewQuestionTitle(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-400 transition-colors"
-              />
-              <div className="border border-gray-300 rounded-lg overflow-hidden">
-
-                <div className="min-h-[300px] p-4 bg-white">
-                  <EditorComponent
-                    onUpdate={setNewQuestionText}
-                    initialContent={newQuestionText}
-                  />
-                </div>
-              </div>
-              <div className="flex items-center justify-between pt-2">
-                <span className="text-sm text-gray-400">0/1500</span>
-                <div className="flex gap-3">
-                  <button
-                    onClick={handleCancelQuestion}
-                    className="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors font-medium"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    onClick={handleAddQuestion}
-                    className="px-6 py-2 bg-gray-900 text-white rounded-md hover:bg-gray-800 transition-colors font-medium"
-                    disabled={
-                      !newQuestionTitle.trim() || !newQuestionText.trim()
-                    }
-                  >
-                    Post
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
       </div>
     </div>
   );
