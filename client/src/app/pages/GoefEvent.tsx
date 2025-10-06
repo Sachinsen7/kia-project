@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import { Heart, MessageSquare, Trash2, X } from "lucide-react";
 import { apiFetch } from "@/config/api";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 // ----------- Types -----------
 type User = {
@@ -86,6 +87,7 @@ const GoefEvent: React.FC<GoefEventProps> = ({ onClose }) => {
     null
   );
   const [loadingQuestions, setLoadingQuestions] = useState(false);
+  const router = useRouter();
 
   const editorRef = useRef<HTMLDivElement>(null);
   const commentEditorRef = useRef<HTMLDivElement>(null);
@@ -251,6 +253,7 @@ const GoefEvent: React.FC<GoefEventProps> = ({ onClose }) => {
       setQuestions((prev) => [newQ, ...prev]);
       setShowInput(false);
       setNewQuestionText("");
+      router.reload();
     } catch (err) {
       console.error("Error adding question:", err);
     }
