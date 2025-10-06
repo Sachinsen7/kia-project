@@ -415,7 +415,7 @@ const GoefEvent: React.FC<GoefEventProps> = ({ onClose }) => {
           <h1 className="text-3xl md:text-5xl text-gray-900 mb-2">
             Share & <span className="font-semibold">Win!</span>
           </h1>
-          <h2 className="text-3xl md:text-5xl ml-40">(Event)</h2>
+          <h2 className="text-3xl md:text-5xl text-gray-900 ml-40">(Event)</h2>
         </div>
         <div className="px-4 w-[1098px] h-[126px] md:px-8 text-gray-700 leading-relaxed">
           <div className="mt-15">
