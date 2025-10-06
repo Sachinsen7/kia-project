@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const {
-  incrementVisit,
-  getVisitCount,
-  getTodayVisits,
-  getRecentDailyVisits,
-  getAllVisits,
+    incrementVisit,
+    getVisitCount,
+    getTodayVisits,
+    getRecentDailyVisits,
+    getAllVisits,
 } = require("./visit.controller");
 
 // Routes

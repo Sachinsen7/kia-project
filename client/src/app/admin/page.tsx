@@ -5,7 +5,7 @@ import { apiFetch } from "@/config/api";
 import { LogOut, CheckCircle, XCircle, Clock, Video } from "lucide-react";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import toast from "react-hot-toast";
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+// import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 
 type ApiUsersResponse = {
   success: boolean;
@@ -75,11 +75,19 @@ const AdminPage: React.FC = () => {
         setVisits(visitsResponse.count);
 
         // ✅ Fetch daily visits
-        const dailyResponse = await apiFetch<{ count: number }>(
-          "/api/visit/today",
+        const dailyResponse = await apiFetch<{ success: boolean; data: { date: string; count: number }[] }>(
+          "/api/visit/daily",
           "GET"
         );
-        setDailyVisits(dailyResponse.count);
+
+        if (dailyResponse.success && dailyResponse.data.length > 0) {
+          // Get count for today (or the most recent day)
+          const todayCount = dailyResponse.data[dailyResponse.data.length - 1].count;
+          setDailyVisits(todayCount);
+        } else {
+          setDailyVisits(0);
+        }
+
 
         const recentResponse = await apiFetch<{ data: { date: string; count: number }[] }>(
           "/api/visit/daily?limit=7",
@@ -226,7 +234,7 @@ const AdminPage: React.FC = () => {
           </div>
         </section>
 
-        <section className="mt-10 bg-white p-4 rounded-xl shadow-md">
+        {/* <section className="mt-10 bg-white p-4 rounded-xl shadow-md">
           <h3 className="text-lg font-semibold mb-3">Last 7 Days Visits</h3>
           <ResponsiveContainer width="100%" height={250}>
             <LineChart data={recentVisits}>
@@ -236,7 +244,7 @@ const AdminPage: React.FC = () => {
               <Line type="monotone" dataKey="count" stroke="#2563eb" strokeWidth={2} />
             </LineChart>
           </ResponsiveContainer>
-        </section>
+        </section> */}
 
         {/* Participants Management */}
         <section>
