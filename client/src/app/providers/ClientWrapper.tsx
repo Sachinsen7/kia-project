@@ -12,7 +12,7 @@ export default function ClientWrapper({
   useEffect(() => {
     const recordVisit = async () => {
       try {
-        await apiFetch("/api/visit/hit", "GET");
+        await apiFetch("/api/visit/hit", "POST");
       } catch (err) {
         console.error("Failed to record visit", err);
       }
