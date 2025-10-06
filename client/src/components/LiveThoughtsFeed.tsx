@@ -79,44 +79,54 @@ const LiveThoughtsFeed: React.FC = () => {
     if (questions.length <= 1) return;
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % questions.length);
-    }, 2500); // every 2.5s
+    }, 2500);
     return () => clearInterval(interval);
   }, [questions]);
 
   const currentQuestion = questions[currentIndex];
 
   const handleClick = () => {
-    router.push("/share-win"); // update this path
+    router.push("/share-win");
   };
 
-  // If not logged in — render nothing at all
   if (!token) return null;
 
   return (
     <div
-      className="w-[500px] max-w-md p-3 text-black font-sans cursor-pointer overflow-hidden bg-[#d6deeb] rounded-lg shadow-sm"
+      className="w-full max-w-lg md:max-w-md p-4 text-black font-sans cursor-pointer overflow-hidden  rounded-lg shadow-sm"
       onClick={handleClick}
     >
-      {/* Static heading (always visible after login) */}
       <h2 className="text-xl font-bold underline underline-offset-4 mb-1">
         Share & Win! (Event)
       </h2>
       <p className="text-sm font-semibold mb-2">Join us and win a prize</p>
 
       {/* Animated messages */}
-      <div className="relative h-[70px] overflow-hidden">
+      <div className="relative bg-[#d6deeb] flex h-[70px] overflow-hidden">
         {currentQuestion && (
           <div
             key={currentQuestion.id}
             className="absolute inset-0 animate-slideUp"
           >
-            <p
-              className="text-sm overflow-hidden text-ellipsis whitespace-nowrap"
-              dangerouslySetInnerHTML={{ __html: currentQuestion.description }}
-            />
-            <p className="text-xs font-medium text-gray-700 whitespace-nowrap mt-1">
-              / {currentQuestion.user}, {currentQuestion.country}
-            </p>
+            {/* Description: wrap max 2 lines */}
+            <div
+              key={currentQuestion.id}
+              className="absolute inset-0 animate-slideUp"
+            >
+              {/* Description: wrap normally or clamp lines */}
+              <p
+                className="text-sm text-gray-800 line-clamp-2 mb-1"
+                dangerouslySetInnerHTML={{
+                  __html: currentQuestion.description,
+                }}
+              />
+
+              {/* Name and country in one row */}
+              <div className="flex items-center gap-2 text-xs font-medium text-gray-700 overflow-hidden">
+                <span className="truncate">{currentQuestion.user}</span>
+                <span className="truncate">, {currentQuestion.country}</span>
+              </div>
+            </div>
           </div>
         )}
       </div>
