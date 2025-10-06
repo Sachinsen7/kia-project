@@ -203,7 +203,7 @@ exports.setPassword = async (req, res) => {
     }
 
     user.password = await bcrypt.hash(newPassword, 10);
-    user.isActive = true;
+    user.isActive = false;
     await user.save();
     await PasswordResetToken.deleteMany({ userId: user._id });
 
