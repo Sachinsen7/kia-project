@@ -12,7 +12,9 @@ export default function ClientWrapper({
   useEffect(() => {
     const recordVisit = async () => {
       try {
+        // POST request; cookies will be sent automatically
         await apiFetch("/api/visit/hit", "POST");
+
       } catch (err) {
         console.error("Failed to record visit", err);
       }

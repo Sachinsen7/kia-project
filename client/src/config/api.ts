@@ -6,7 +6,8 @@ export async function apiFetch<T>(
   endpoint: string,
   method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" = "GET",
   body?: Record<string, unknown>,
-  token?: string
+  token?: string,
+  options?: RequestInit // optional extra options
 ): Promise<T> {
   const res = await fetch(`${BASE_URL}${endpoint}`, {
     method,
@@ -15,6 +16,8 @@ export async function apiFetch<T>(
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
     },
     body: body ? JSON.stringify(body) : undefined,
+    credentials: "include", // ✅ send cookies automatically
+    ...options,
   });
 
   if (!res.ok) {
