@@ -9,12 +9,17 @@ const DailyVisit = require("./dailyVisit.model");
 exports.incrementVisit = async (req, res) => {
   try {
     const today = new Date().toISOString().split("T")[0];
+    
+    // Debug logging
+    console.log("Visit API called - Cookies:", req.cookies);
+    console.log("Already counted cookie:", req.cookies.ck_visit_ip_counted);
 
-    // 🛑 Skip if user already counted today
-    if (req.cookies.ck_visit_ip_counted || req.cookies.PHPSESSID) {
+    // 🛑Skip if user already counted today
+    if (req.cookies.ck_visit_ip_counted) {
       const visit = await Visit.findOne();
       const daily = await DailyVisit.findOne({ date: today });
 
+      console.log("Skipping - already counted today");
       return res.json({
         success: true,
         total: visit ? visit.count : 0,
@@ -42,11 +47,18 @@ exports.incrementVisit = async (req, res) => {
     await dailyVisit.save();
 
     // ✅ Set cookie to prevent re-count for 24 hours
+    // Use consistent cookie settings
+    const isProduction = process.env.NODE_ENV === "production";
     res.cookie("ck_visit_ip_counted", true, {
       httpOnly: false,
       maxAge: 24 * 60 * 60 * 1000, // 1 day
-      sameSite: "Lax",
+      sameSite: isProduction ? "None" : "Lax",
+      secure: isProduction,
+      path: "/",
     });
+
+    console.log("Visit counted - Setting cookie for 24 hours");
+    console.log("New counts - Total:", visit.count, "Today:", dailyVisit.count);
 
     return res.json({
       success: true,

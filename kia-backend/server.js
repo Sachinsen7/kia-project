@@ -17,10 +17,11 @@ app.use(cookieTracker);
 
 
 
-
+  
 
 const allowedOrigins = [
   "https://kia-project-eight.vercel.app",
+  "https://kia-project-hlrv.onrender.com",
   "http://localhost:3000"
 ];
 
