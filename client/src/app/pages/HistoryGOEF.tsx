@@ -44,7 +44,13 @@ function HistoryGOEF({ onClose }: HistoryGOEFProps) {
             className="absolute top-3 right-3 z-10 p-2 rounded-full hover:bg-gray-100"
             aria-label="Close"
           >
-            <X size={22} className="text-gray-600" />
+            <Image
+              width={22}
+              height={22}
+              src="/askkia/cross.png"
+              alt="Close sidebar"
+              className="cursor-pointer"
+            />{" "}
           </button>
         )}
         {/* Heading */}
@@ -110,8 +116,8 @@ function HistoryGOEF({ onClose }: HistoryGOEFProps) {
           {/* Carousel */}
           <div className="relative w-full max-w-4xl mx-auto">
             <div className="flex items-center h-[400px]">
-              <div 
-                className="relative w-[15%] h-full cursor-pointer" 
+              <div
+                className="relative w-[15%] h-full cursor-pointer"
                 onClick={handlePrev}
               >
                 <Image
@@ -129,8 +135,8 @@ function HistoryGOEF({ onClose }: HistoryGOEFProps) {
                   className="object-cover rounded-lg shadow-md"
                 />
               </div>
-              <div 
-                className="relative w-[15%] h-full cursor-pointer" 
+              <div
+                className="relative w-[15%] h-full cursor-pointer"
                 onClick={handleNext}
               >
                 <Image
@@ -145,7 +151,9 @@ function HistoryGOEF({ onClose }: HistoryGOEFProps) {
               {images.map((_, index) => (
                 <div
                   key={index}
-                  className={`w-3 h-3 rounded-full ${currentIndex === index ? 'bg-black' : 'bg-gray-300'}`}
+                  className={`w-3 h-3 rounded-full ${
+                    currentIndex === index ? "bg-black" : "bg-gray-300"
+                  }`}
                 />
               ))}
             </div>
