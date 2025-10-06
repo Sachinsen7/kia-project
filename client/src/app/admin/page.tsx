@@ -184,6 +184,12 @@ const AdminPage: React.FC = () => {
               GOEF Thoughts
             </button>
             <button
+              onClick={() => (window.location.href = "/admin/goef-questions")}
+              className="flex items-center gap-2 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800 text-sm sm:text-base font-bold transition-colors duration-200 w-full sm:w-auto"
+            >
+              Questions on GOEF
+            </button>
+            <button
               onClick={() => {
                 localStorage.removeItem("token");
                 localStorage.removeItem("role");

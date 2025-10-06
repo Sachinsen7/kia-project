@@ -20,9 +20,9 @@ type QuestionResponse = {
 
 type Question = {
   id: string;
+  description: string;
   user: string;
   country: string;
-  description: string;
 };
 
 const LiveThoughtsFeed: React.FC = () => {
@@ -52,16 +52,16 @@ const LiveThoughtsFeed: React.FC = () => {
       const formatted = data.map((q) => {
         const userName =
           q.createdBy?.firstName || q.createdBy?.lastName
-            ? `${q.createdBy?.firstName || ""} ${
-                q.createdBy?.lastName || ""
-              }`.trim()
+            ? `${q.createdBy?.firstName || ""} ${q.createdBy?.lastName || ""}`.trim()
             : q.createdByName || "Unknown";
+
+        const country = q.country || "Unknown";
 
         return {
           id: q._id,
-          user: userName,
-          country: q.country || "Unknown",
           description: q.description,
+          user: userName,
+          country,
         };
       });
 
@@ -100,31 +100,34 @@ const LiveThoughtsFeed: React.FC = () => {
   }
 
   return (
+
     <div
-      className="w-full p-4 text-black font-sans cursor-pointer rounded-lg"
+      className="w-full p-3 text-black font-sans cursor-pointer rounded-lg"
       onClick={handleClick}
     >
       <h2 className="text-xl font-bold underline underline-offset-4 mb-1">
         Share & Win! (Event)
       </h2>
-      <p className="text-sm font-semibold mb-2">Join us and win a prize</p>
+      <p className="text-sm font-semibold mb-4">Join us and win a prize</p>
 
-      {/* Animated message container */}
-      <div className="relative bg-[#d6deeb] w-full h-[70px] overflow-hidden rounded-lg p-3">
-        {currentQuestion ? (
-          <div className="absolute inset-0 animate-slideUp">
-            {/* Description */}
-            <p
-              className="text-sm text-gray-800 line-clamp-2 mb-1 overflow-hidden text-ellipsis"
-              style={{ display: "-webkit-box", WebkitBoxOrient: "vertical" }}
-              dangerouslySetInnerHTML={{ __html: currentQuestion.description }}
-            />
+      <div className="relative bg-[#d6deeb] w-[80%] h-[55px] overflow-hidden rounded-lg">
+        {questions.length > 0 ? (
+          <div
+            key={currentQuestion.id}
+            className="absolute inset-0 animate-slideUp flex items-center gap-2 px-2"
+          >
+            {/* Thought text */}
+            <span
+              className="text-sm text-gray-800 truncate flex-grow"
+              title={currentQuestion.description.replace(/<[^>]+>/g, "")} // optional tooltip
+            >
+              {currentQuestion.description.replace(/<[^>]+>/g, "")}
+            </span>
 
-            {/* Name and country in one row */}
-            <div className="flex items-center gap-2 text-xs font-medium text-gray-700 flex-nowrap">
-              <span className="truncate">{currentQuestion.user}</span>
-              <span className="truncate">, {currentQuestion.country}</span>
-            </div>
+            {/* User + Country */}
+            <span className="text-xs font-medium text-gray-700 flex-shrink-0">
+              {currentQuestion.user}, {currentQuestion.country}
+            </span>
           </div>
         ) : (
           <div className="flex items-center justify-center h-full text-sm text-gray-600">
@@ -134,41 +137,32 @@ const LiveThoughtsFeed: React.FC = () => {
       </div>
 
       <style jsx>{`
-        @keyframes slideUp {
-          0% {
-            transform: translateY(100%);
-            opacity: 0;
-          }
-          20% {
-            transform: translateY(0);
-            opacity: 1;
-          }
-          80% {
-            transform: translateY(0);
-            opacity: 1;
-          }
-          100% {
-            transform: translateY(-100%);
-            opacity: 0;
-          }
-        }
-        .animate-slideUp {
-          animation: slideUp 2.5s ease-in-out forwards;
-        }
-        .line-clamp-2 {
-          display: -webkit-box;
-          -webkit-line-clamp: 2;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
-        .truncate {
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-        }
-      `}</style>
+    @keyframes slideUp {
+      0% {
+        transform: translateY(100%);
+        opacity: 0;
+      }
+      20% {
+        transform: translateY(0);
+        opacity: 1;
+      }
+      80% {
+        transform: translateY(0);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100%);
+        opacity: 0;
+      }
+    }
+    .animate-slideUp {
+      animation: slideUp 2.5s ease-in-out forwards;
+    }
+  `}</style>
     </div>
+
+
+
   );
 };
 
