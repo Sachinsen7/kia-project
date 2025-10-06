@@ -192,12 +192,7 @@ export default function CityScene({ onSelect }: CitySceneProps) {
       </div> */}
 
       <div className="absolute bottom-25 left-4 w-80">
-        <LiveThoughtsFeed
-          onSelect={(id) => {
-            console.log("Jump to thought with id:", id);
-            router.push("/share-win");
-          }}
-        />
+        <LiveThoughtsFeed />
       </div>
 
       {/* {isEventOpen && (
