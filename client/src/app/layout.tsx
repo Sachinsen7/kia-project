@@ -36,3 +36,25 @@ export default function RootLayout({
     </html>
   );
 }
+
+// import DesktopOnly from "./DesktopOnly";
+
+// export default function RootLayout({
+//   children,
+// }: {
+//   children: React.ReactNode;
+// }) {
+//   return (
+//     <html lang="en">
+//       <body
+//         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+//       >
+//         <CityProvider>
+//           <DesktopOnly>
+//             <ClientWrapper>{children}</ClientWrapper>
+//           </DesktopOnly>
+//         </CityProvider>
+//       </body>
+//     </html>
+//   );
+// }
