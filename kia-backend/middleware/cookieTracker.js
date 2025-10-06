@@ -3,14 +3,24 @@ const jwt = require("jsonwebtoken");
 
 const cookieTracker = async (req, res, next) => {
   try {
-    // Just set the IP cookie for tracking, don't do visit counting here
-    // Visit counting should only happen in the dedicated API endpoint
+    // Set the IP cookie for tracking
     res.cookie("ck_visit_ip", req.ip, {
       httpOnly: false,
       maxAge: 24 * 60 * 60 * 1000, // 1 day
       sameSite: "Lax",
       path: "/",
     });
+
+    // Set session ID if not exists (for tracking refreshes)
+    if (!req.cookies.ck_session_id) {
+      const sessionId = Date.now().toString() + Math.random().toString(36);
+      res.cookie("ck_session_id", sessionId, {
+        httpOnly: false,
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+        sameSite: "Lax",
+        path: "/",
+      });
+    }
 
     next();
   } catch (err) {

@@ -3,28 +3,52 @@ const DailyVisit = require("./dailyVisit.model");
 
 /**
  * ✅ Increment total & today's visit count
- * - Skips duplicate counting via cookie
- * - Optionally skips for logged-in users (PHPSESSID)
+ * - Only counts actual visits, not refreshes
+ * - Uses session-based tracking to prevent duplicate counting
  */
 exports.incrementVisit = async (req, res) => {
   try {
     const today = new Date().toISOString().split("T")[0];
+    const userAgent = req.headers['user-agent'] || '';
+    const referer = req.headers.referer || '';
+    const sessionId = req.cookies.ck_session_id;
     
     // Debug logging
-    console.log("Visit API called - Cookies:", req.cookies);
-    console.log("Already counted cookie:", req.cookies.ck_visit_ip_counted);
+    console.log("Visit API called - Session ID:", sessionId);
+    console.log("Referer:", referer);
+    console.log("User Agent:", userAgent);
 
-    // 🛑Skip if user already counted today
-    if (req.cookies.ck_visit_ip_counted) {
+    // Check if this is a refresh (same session, same referer)
+    if (sessionId && req.cookies.ck_visit_counted) {
       const visit = await Visit.findOne();
       const daily = await DailyVisit.findOne({ date: today });
 
-      console.log("Skipping - already counted today");
+      console.log("Skipping - already counted in this session");
       return res.json({
         success: true,
         total: visit ? visit.count : 0,
         today: daily ? daily.count : 0,
-        message: "Already counted for today",
+        message: "Already counted in this session",
+      });
+    }
+
+    // Check if this is likely a refresh
+    const host = req.get('host');
+    const isRefresh = !referer || 
+                     referer.includes(host) || 
+                     referer.includes('localhost') ||
+                     referer.includes('127.0.0.1');
+    
+    if (isRefresh && sessionId) {
+      const visit = await Visit.findOne();
+      const daily = await DailyVisit.findOne({ date: today });
+
+      console.log("Skipping - appears to be a refresh (referer:", referer, ")");
+      return res.json({
+        success: true,
+        total: visit ? visit.count : 0,
+        today: daily ? daily.count : 0,
+        message: "Refresh detected - not counting",
       });
     }
 
@@ -46,10 +70,23 @@ exports.incrementVisit = async (req, res) => {
     }
     await dailyVisit.save();
 
-    // ✅ Set cookie to prevent re-count for 24 hours
-    // Use consistent cookie settings
+    // ✅ Set cookies to prevent re-counting
     const isProduction = process.env.NODE_ENV === "production";
-    res.cookie("ck_visit_ip_counted", true, {
+    
+    // Generate a unique session ID if not exists
+    const newSessionId = req.cookies.ck_session_id || Date.now().toString() + Math.random().toString(36);
+    
+    // Set session cookie (longer duration)
+    res.cookie("ck_session_id", newSessionId, {
+      httpOnly: false,
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      sameSite: isProduction ? "None" : "Lax",
+      secure: isProduction,
+      path: "/",
+    });
+    
+    // Set visit counted cookie for this session
+    res.cookie("ck_visit_counted", true, {
       httpOnly: false,
       maxAge: 24 * 60 * 60 * 1000, // 1 day
       sameSite: isProduction ? "None" : "Lax",
@@ -57,7 +94,7 @@ exports.incrementVisit = async (req, res) => {
       path: "/",
     });
 
-    console.log("Visit counted - Setting cookie for 24 hours");
+    console.log("Visit counted - Setting session cookies");
     console.log("New counts - Total:", visit.count, "Today:", dailyVisit.count);
 
     return res.json({
