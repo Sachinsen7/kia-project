@@ -191,7 +191,7 @@ export default function CityScene({ onSelect }: CitySceneProps) {
         </button>
       </div> */}
 
-      <div className="absolute bottom-25 left-4 w-80">
+      <div className="absolute bottom-25 left-4 w-100">
         <LiveThoughtsFeed />
       </div>
 
