@@ -40,33 +40,38 @@ function Home({ onClose }: HomeProps) {
           <div className="space-y-4 text-gray-700 leading-relaxed border-r-2 border-b-2 border-gray-300 pr-6 pb-6 max-w-3xl text-left">
             <p>
               It is with great honor that we extend this official invitation to
-              the 2025 Global Ownership Experience Forum, in sincere
-              appreciation of your exceptional performance and unwavering
+              the <br /> 2025 Global Ownership Experience Forum, in sincere
+              appreciation of <br /> your exceptional performance and unwavering
               dedication to Kia.
             </p>
             <p>
               This year, we have specially designed a virtual conference format
-              to enable richer exchanges without being restricted by time and
-              location. This forum will be a valuable opportunity to do more
-              than just share information; it will also be a time to
-              collectively envision Kia&apos;s future.
+              to <br /> enable richer exchanges without being restricted by time
+              and <br /> location. This forum will be a valuable opportunity to
+              do more than <br /> just share information; it will also be a time
+              to collectively envision <br /> Kia&apos;s future.
             </p>
             <p>
               We will share in-depth insights, from the core strategies of our
-              2026 business plans to new ownership programs designed to deliver
-              unforgettable customer experiences, as well as customer experience
-              strategies and retention initiatives for sustainable growth. Each
+              2026 <br /> business plans to new ownership programs designed to
+              deliver <br />
+              unforgettable customer experiences, as well as customer experience{" "}
+              <br />
+              strategies and retention initiatives for sustainable growth. Each{" "}
+              <br />
               session will provide practical solutions and new inspiration for
-              your business growth.
+              your <br /> business growth.
             </p>
             <p>
-              We look forward to reconnecting in the virtual space to exchange
+              We look forward to reconnecting in the virtual space to exchange{" "}
+              <br />
               valuable opinions, share wisdom for our mutual success, and
-              further strengthen our long-standing partnership.
+              further <br /> strengthen our long-standing partnership.
             </p>
             <p>
-              Thank you for your continued passion and partnership. We look
-              forward to your participation in the 2025 Global Ownership
+              Thank you for your continued passion and partnership. We look{" "}
+              <br />
+              forward to your participation in the 2025 Global Ownership <br />
               Experience Forum.
             </p>
           </div>
