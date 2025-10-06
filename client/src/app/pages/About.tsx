@@ -31,9 +31,9 @@ function About({ onClose }: AboutProps) {
         )}
         <div className="w-full pt-6 pb-10 px-4">
           <h1 className="text-3xl md:text-5xl text-gray-900 mb-2">
-            ABOUT 2025
+            About 2025
           </h1>
-          <div className="w-[590px] h-[4px] text-[#000] bg-[#000] absolute top-[86px] right-0"></div>
+          <div className="w-[590px] h-[4px] text-[#000] bg-[#000] absolute top-[86px] right-10"></div>
           <h2 className="text-3xl md:text-5xl ml-40 font-bold">GOEF</h2>
         </div>
 
