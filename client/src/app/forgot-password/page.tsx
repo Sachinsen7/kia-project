@@ -188,7 +188,7 @@ export default function ForgotPassword() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="bg-black text-white h-[40px] my-10 w-[10%] font-semibold hover:bg-gray-800 disabled:opacity-50"
+                  className="bg-black w-[30%] text-white h-[40px] my-10 font-semibold hover:bg-gray-800 disabled:opacity-50"
                 >
                   {loading
                     ? "Processing..."
