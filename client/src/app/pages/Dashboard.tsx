@@ -124,23 +124,23 @@ export default function Dashboard({ onClose }: DashboardProps) {
           <div className="mb-52">
             <p className="text-sm text-gray-700 mb-8 leading-relaxed">
               Thank you for your dedicated efforts to provide exceptional
-              ownership experiences over the <br /> past year. <br /> To continue building a
-              strong GOEF community, we invite you to share your best practices
-              and <br /> innovative success stories regarding ownership programs and 
-              differentiated customer <br /> experiences from your region. Your shared
-              experiences will be a valuable source of inspiration for us all.
+              ownership experiences over the <br /> past year. <br /> To
+              continue building a strong GOEF community, we invite you to share
+              your best practices and <br /> innovative success stories
+              regarding ownership programs and differentiated customer <br />{" "}
+              experiences from your region. Your shared experiences will be a
+              valuable source of inspiration for us all.
               <br />
-              
             </p>
           </div>
 
           {/* Big Highlight Image */}
           <Image
-            src="/uploadyourcontent/border.png"
+            src="/uploadyourcontent/first-image.png"
             alt="2024 GOEF Highlight"
             width={600}
             height={600}
-            className="absolute top-70 right-0 object-cover"
+            className="absolute top-66 right-0 object-cover"
           />
         </div>
 
@@ -170,30 +170,22 @@ export default function Dashboard({ onClose }: DashboardProps) {
         <div className="mt-30 text-gray-700 leading-relaxed w-[1108px] h-[300px]">
           <div className="mb-52">
             <p className="text-sm text-gray-700 leading-relaxed">
-              We are creating a forum with you at the GOEF, and to that end, we
-              plan to edit videos from each <br /> region to create a single
-              story video.
+              We are creating a forum at GOEF and plan to edit the videos from
+              all regions into a single-story <br /> video. Please send us a
+              horizontal, high-quality video message of encouragement to your{" "}
               <br />
-              Please send us a video with a message to your colleagues
-              worldwide, especially a message of <br /> encouragement.
-            </p>
-            <p className="text-sm">
-              {" "}
-              The video will be used as the GOEF ending video. It would be a
-              more meaningful video if all the <br /> members of each region
-              appear in it together. For editing purposes, please shoot the
-              video in <br /> horizontal format(Not Vertical) and send it to us,
-              and please make sure the video is of the highest <br /> possible
-              quality.
+              colleagues worldwide. It should feature all regional members for a
+              more meaningful impact, and it <br /> will be used as the
+              GOEF closing video.
             </p>
           </div>
 
           <Image
-            src="/uploadyourcontent/border-2.png"
+            src="/uploadyourcontent/second-image.png"
             alt="2024 GOEF Highlight"
             width={600}
             height={600}
-            className="absolute bottom-80 left-0 object-cover"
+            className="absolute bottom-107 left-0 object-cover"
           />
         </div>
 
