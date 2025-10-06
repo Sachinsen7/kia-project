@@ -4,25 +4,21 @@ const cors = require("cors");
 const connectDB = require("./config/db");
 const routes = require("./routes/index");
 const seedAdmin = require("./config/seedAdmin");
-const visitRouter = require("./modules/websiteVisit/visit.routes"); 
+const visitRouter = require("./modules/websiteVisit/visit.routes");
 const cookieParser = require("cookie-parser");
 const cookieTracker = require("./middleware/cookieTracker");
 
 const app = express();
 app.use(cookieParser());
 
-
 // Track visits for all requests
 app.use(cookieTracker);
 
 
-
-  
-
 const allowedOrigins = [
   "https://kia-project-eight.vercel.app",
-  "https://kia-project-hlrv.onrender.com",
-  "http://localhost:3000"
+  "http://localhost:3000",
+
 ];
 
 app.use(
