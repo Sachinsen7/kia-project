@@ -59,9 +59,9 @@ export default function SetPasswordClient() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-white px-4">
       <div className="w-full max-w-md bg-white border border-gray-200 rounded-lg shadow-md p-8">
-        <h2 className="text-2xl font-bold mb-4 text-center">
+        <h2 className="text-2xl font-bold mb-4 text-black text-center">
           Set Your Password
-        </h2>
+        </h2>  
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="password"
