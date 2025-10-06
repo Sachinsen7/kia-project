@@ -2,6 +2,7 @@
 
 import React from "react";
 import { X } from "lucide-react";
+import Image from "next/image";
 
 type OwnershipProps = {
   onClose?: () => void;
@@ -17,7 +18,13 @@ function Ownership({ onClose }: OwnershipProps) {
           className="absolute top-3 right-3 z-10 p-2 rounded-full hover:bg-gray-100"
           aria-label="Close"
         >
-          <X size={22} className="text-gray-600" />
+          <Image
+            width={22}
+            height={22}
+            src="/askkia/cross.png"
+            alt="Close sidebar"
+            className="cursor-pointer"
+          />{" "}
         </button>
       )}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
