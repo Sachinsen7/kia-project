@@ -148,6 +148,17 @@ const users = [
     country: "Abu Dhabi",
     nationality: "Arab",
     isActive: false,
+    password: "12345678", // No password yet
+  },
+  {
+    email: "srajalvishwakarma8@gmail.com",
+    title: "Mr.",
+    firstName: "mkhan",
+    lastName: "Doe",
+    region: "Asia",
+    country: "Abu Dhabi",
+    nationality: "Arab",
+    isActive: false,
     password: "", // No password yet
   },
 ];
