@@ -48,13 +48,24 @@ const users = [
     password: "",
   },
   {
-    email: "himank@learning-crew.com",  
+    email: "himank@learning-crew.com",
     title: "Mr.",
     firstName: "himankOO",
     lastName: "Doe",
     region: "Asia",
     country: "India",
     nationality: "Indian",
+    isActive: false,
+    password: "", // No password yet
+  },
+  {
+    email: "mkhan7@kia.com",
+    title: "Mr.",
+    firstName: "mkhan",
+    lastName: "Doe",
+    region: "Asia",
+    country: "Abu Dhabi",
+    nationality: "Arab",
     isActive: false,
     password: "", // No password yet
   },
