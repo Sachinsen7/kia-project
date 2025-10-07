@@ -52,7 +52,9 @@ const LiveThoughtsFeed: React.FC = () => {
       const formatted = data.map((q) => {
         const userName =
           q.createdBy?.firstName || q.createdBy?.lastName
-            ? `${q.createdBy?.firstName || ""} ${q.createdBy?.lastName || ""}`.trim()
+            ? `${q.createdBy?.firstName || ""} ${
+                q.createdBy?.lastName || ""
+              }`.trim()
             : q.createdByName || "Unknown";
 
         const country = q.country || "Unknown";
@@ -79,7 +81,7 @@ const LiveThoughtsFeed: React.FC = () => {
     if (questions.length <= 1) return;
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % questions.length);
-    }, 2500);
+    }, 4000);
     return () => clearInterval(interval);
   }, [questions]);
 
@@ -100,7 +102,6 @@ const LiveThoughtsFeed: React.FC = () => {
   }
 
   return (
-
     <div
       className="w-full p-3 text-black font-sans cursor-pointer rounded-lg"
       onClick={handleClick}
@@ -137,32 +138,29 @@ const LiveThoughtsFeed: React.FC = () => {
       </div>
 
       <style jsx>{`
-    @keyframes slideUp {
-      0% {
-        transform: translateY(100%);
-        opacity: 0;
-      }
-      20% {
-        transform: translateY(0);
-        opacity: 1;
-      }
-      80% {
-        transform: translateY(0);
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(-100%);
-        opacity: 0;
-      }
-    }
-    .animate-slideUp {
-      animation: slideUp 2.5s ease-in-out forwards;
-    }
-  `}</style>
+        @keyframes slideUp {
+          0% {
+            transform: translateY(100%);
+            opacity: 0;
+          }
+          20% {
+            transform: translateY(0);
+            opacity: 1;
+          }
+          80% {
+            transform: translateY(0);
+            opacity: 1;
+          }
+          100% {
+            transform: translateY(-100%);
+            opacity: 0;
+          }
+        }
+        .animate-slideUp {
+          animation: slideUp 2.5s ease-in-out forwards;
+        }
+      `}</style>
     </div>
-
-
-
   );
 };
 
