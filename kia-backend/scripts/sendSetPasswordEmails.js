@@ -6,28 +6,31 @@ const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
 require("dotenv").config({ path: ".env" });
 
-
 async function sendSetPasswordEmails() {
-    try {
-        // Connect to MongoDB first
-        await mongoose.connect(process.env.MONGO_URI);
-        console.log("✅ MongoDB connected");
+  try {
+    // Connect to MongoDB first
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log("✅ MongoDB connected");
 
-        // only send to inactive users
-        const users = await User.find({ isActive: false });
+    // only send to inactive users
+    const users = await User.find({ isActive: false });
 
-        for (const user of users) {
-            const token = crypto.randomBytes(32).toString("hex");
-            const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
+    for (const user of users) {
+      const token = crypto.randomBytes(32).toString("hex");
+      const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
 
-            await PasswordResetToken.deleteMany({ userId: user._id });
-            await PasswordResetToken.create({ userId: user._id, token, expiresAt });
+      console.log("Req token:", token);
 
-            const link = `https://kia-project-eight.vercel.app/set-password?email=${encodeURIComponent(user.email)}&token=${token}`;
-            await sendEmail({
-                to: user.email,
-                subject: "Set Your Password for KIA Platform",
-                html: `
+      await PasswordResetToken.deleteMany({ userId: user._id });
+      await PasswordResetToken.create({ userId: user._id, token, expiresAt });
+
+      const link = `https://kia-project-eight.vercel.app/set-password?email=${encodeURIComponent(
+        user.email
+      )}&token=${token}`;
+      await sendEmail({
+        to: user.email,
+        subject: "Set Your Password for KIA Platform",
+        html: `
     <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px;">
       <h2 style="color: #33658A; text-align: center;">Welcome to KIA Platform</h2>
       
@@ -52,17 +55,16 @@ async function sendSetPasswordEmails() {
         <b>KIA Platform Team</b>
       </p>
     </div>
-  `
-            });
-
-        }
-
-        console.log("Set password emails sent!");
-        process.exit();
-    } catch (err) {
-        console.error("xx Error sending set-password emails:", err);
-        process.exit(1);
+  `,
+      });
     }
+
+    console.log("Set password emails sent!");
+    process.exit();
+  } catch (err) {
+    console.error("xx Error sending set-password emails:", err);
+    process.exit(1);
+  }
 }
 
 // Run the function
