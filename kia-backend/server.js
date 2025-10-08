@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
+const multer = require("multer");
 const connectDB = require("./config/db");
 const routes = require("./routes/index");
 const seedAdmin = require("./config/seedAdmin");
@@ -33,8 +34,25 @@ app.use(
 );
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use("/api", routes);
 app.use("/api/visit", visitRouter);
+
+// Error handling middleware for multer
+app.use((error, req, res, next) => {
+  if (error instanceof multer.MulterError) {
+    if (error.code === 'LIMIT_FILE_SIZE') {
+      return res.status(400).json({ message: 'File too large. Maximum size is 100MB' });
+    }
+    if (error.code === 'LIMIT_FILE_COUNT') {
+      return res.status(400).json({ message: 'Too many files uploaded' });
+    }
+    if (error.code === 'LIMIT_UNEXPECTED_FILE') {
+      return res.status(400).json({ message: 'Unexpected file field' });
+    }
+  }
+  next(error);
+});
 
 const PORT = process.env.PORT || 5000;
 

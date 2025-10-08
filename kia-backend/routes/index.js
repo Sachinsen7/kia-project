@@ -7,6 +7,7 @@ const commentRoutes = require("../modules/comments/comment.routes")
 const uploadRoutes = require("../modules/uploads/upload.routes")
 const linkRoutes = require("../modules/links/link.routes")
 const adminRoutes = require("../modules/admin/admin.routes")
+const teaserRoutes = require("../modules/teaser/teaser.route")
 
 
 router.use("/auth", authRoutes);
@@ -15,6 +16,7 @@ router.use("/comment", commentRoutes);
 router.use('/uploads', uploadRoutes);
 router.use('/link', linkRoutes);
 router.use('/admin', adminRoutes );
+router.use('/teaser', teaserRoutes);
 
 
 

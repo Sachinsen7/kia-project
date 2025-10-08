@@ -4,8 +4,8 @@ import React from "react";
 
 const PrivacyPolicy: React.FC = () => {
   return (
-    <div className="min-h-screen bg-gray-100 text-black font-sans p-10">
-      <div className="max-w-6xl mx-auto py-12 px-6 lg:px-8 border border-gray-400">
+    <div className="min-h-screen bg-gray-100 text-black font-sans flex justify-center items-center p-4 sm:p-6 md:p-8 lg:p-10">
+      <div className="w-full max-w-6xl mx-auto py-8 px-4 sm:px-6 md:px-8 lg:px-10 border border-gray-400 bg-white rounded-lg shadow-sm">
         <h1 className="text-3xl font-bold mb-6">Privacy Policy</h1>
         <p className="mb-4">2025 Global Ownership Experience Forum</p>
 
@@ -646,7 +646,7 @@ const PrivacyPolicy: React.FC = () => {
           cookies to third parties if you have given your explicit consent to do
           so pursuant to Art. 6(1)(a) GDPR. You can change or withdraw your
           consent at any time. For more information about cookies, see our
-          Cookies Policy (링크 삽입).
+          Cookies Policy.
         </p>
         <p className="mb-4">
           <strong>Processors:</strong>

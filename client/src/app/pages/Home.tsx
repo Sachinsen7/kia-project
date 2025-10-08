@@ -1,14 +1,52 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { X } from "lucide-react";
 import Image from "next/image";
+import dynamic from "next/dynamic";
+import { apiFetch } from "../../config/api";
+
+// Dynamically import React Player to avoid SSR issues
+const ReactPlayer = dynamic(() => import("react-player/lazy"), { ssr: false });
 
 type HomeProps = {
   onClose?: () => void;
 };
 
 function Home({ onClose }: HomeProps) {
+  const [videoUrl, setVideoUrl] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string>("");
+
+  useEffect(() => {
+    const fetchTeaserVideo = async () => {
+      try {
+        setLoading(true);
+        setError("");
+
+        // Fetch teaser by name - you can change this name as needed
+        const response = await apiFetch<{ message: string; teaser: { name: string; videoUrl: string } }>(
+          "/api/teaser/video1"
+        );
+
+        if (response.teaser && response.teaser.videoUrl) {
+          setVideoUrl(response.teaser.videoUrl);
+        } else {
+          setError("No video URL found");
+        }
+      } catch (err) {
+        console.error("Error fetching teaser video:", err);
+        setError("Failed to load video");
+        // Fallback to a default video URL if the API fails
+        setVideoUrl("https://www.youtube.com/watch?v=q96KKjfwHEE");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTeaserVideo();
+  }, []);
+
   return (
     <div className="min-h-screen bg-white flex items-center justify-center p-6 md:p-12">
       {/* Floating Card */}
@@ -90,15 +128,33 @@ function Home({ onClose }: HomeProps) {
             2025 GOEF Official Teaser
           </h2>
           <div className="w-full overflow-hidden rounded-xl shadow-md relative aspect-video">
-            <iframe
-              className="w-full h-full"
-              src="https://www.youtube.com/embed/q96KKjfwHEE?controls=0&modestbranding=1&rel=0&showinfo=0&autohide=1"
-              title="YouTube video player"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerPolicy="strict-origin-when-cross-origin"
-              allowFullScreen
-            ></iframe>
+            {loading ? (
+              <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                <div className="text-lg text-gray-600">Loading video...</div>
+              </div>
+            ) : error ? (
+              <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                <div className="text-lg text-red-600">{error}</div>
+              </div>
+            ) : (
+              <ReactPlayer
+                url={videoUrl}
+                width="100%"
+                height="100%"
+                controls={true}
+                playing={false}
+                config={{
+                  youtube: {
+                    playerVars: {
+                      modestbranding: 1,
+                      rel: 0,
+                      showinfo: 0,
+                      autohide: 1,
+                    }
+                  }
+                }}
+              />
+            )}
           </div>
         </div>
       </div>

@@ -9,15 +9,15 @@ const CookiesPolicy: React.FC = () => {
         <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-black mb-4 sm:mb-6">
           Cookies Policy
         </h1>
-        <p className="text-xs sm:text-sm text-gray-600 mb-3 sm:mb-4">
+        <p className="mb-4">
           2025 Global Ownership Experience Forum
         </p>
-        <p className="text-xs sm:text-sm text-gray-600 mb-6 sm:mb-8">
+        <p className="text-xs sm:text-sm text-black mb-6 sm:mb-8">
           Effective Date: October 1<sup>st</sup>, 2025
         </p>
 
         <section className="mb-6 sm:mb-8">
-          <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
+          <p className="text-sm sm:text-base text-black leading-relaxed">
             This Cookies Policy (&quot;Policy&quot;) describes the different
             types of cookies that may be used in connection with Kia
             Corporation&apos;s (&quot;Kia,&quot; &quot;we,&quot; &quot;us,&quot;
@@ -32,11 +32,11 @@ const CookiesPolicy: React.FC = () => {
             website (collectively the &quot;Site&quot;). This Policy also
             describes how you can manage cookies.
           </p>
-          <p className="text-sm sm:text-base text-gray-700 leading-relaxed mt-3 sm:mt-4">
+          <p className="text-sm sm:text-base text-black leading-relaxed mt-3 sm:mt-4">
             This Policy only applies to the Site and not to any other website
             owned or operated by Kia.
           </p>
-          <p className="text-sm sm:text-base text-gray-700 leading-relaxed mt-3 sm:mt-4">
+          <p className="text-sm sm:text-base text-black leading-relaxed mt-3 sm:mt-4">
             It is important that you check back often for updates to the Policy
             as we may change it from time to time to reflect changes to our use
             of cookies. Please check the date at the top of this page to see
@@ -50,7 +50,7 @@ const CookiesPolicy: React.FC = () => {
           <h2 className="text-lg sm:text-xl md:text-2xl underline font-medium text-black mb-3 sm:mb-4">
             What are cookies?
           </h2>
-          <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
+          <p className="text-sm sm:text-base text-black leading-relaxed">
             A cookie is any kind of file or device that is downloaded to a
             user&apos;s system for the purpose of storing data that may be
             updated or retrieved by the company responsible for its
@@ -59,7 +59,7 @@ const CookiesPolicy: React.FC = () => {
             you, allowing information of interest or potentially of interest to
             be provided to you depending on your use and interests.
           </p>
-          <p className="text-sm sm:text-base text-gray-700 leading-relaxed mt-3 sm:mt-4">
+          <p className="text-sm sm:text-base text-black leading-relaxed mt-3 sm:mt-4">
             We use cookies on this Site in order to understand how you use our
             Site and to improve your experience. Cookies are text files which
             are stored on your computer. After you have finished your session
@@ -74,10 +74,10 @@ const CookiesPolicy: React.FC = () => {
           <h2 className="text-lg sm:text-xl md:text-2xl underline font-medium text-black mb-3 sm:mb-4">
             Types of Cookies
           </h2>
-          <p className="text-sm sm:text-base text-gray-700 leading-relaxed mb-3 sm:mb-4">
+          <p className="text-sm sm:text-base text-black leading-relaxed mb-3 sm:mb-4">
             Depending on the company managing them:
           </p>
-          <ul className="list-disc list-inside text-sm sm:text-base text-gray-700 leading-relaxed space-y-2">
+          <ul className="list-disc list-inside text-sm sm:text-base text-black leading-relaxed space-y-2">
             <li>
               <strong>Our own cookies:</strong> Cookies that are sent to your
               system from a system or domain managed by us.
@@ -89,10 +89,10 @@ const CookiesPolicy: React.FC = () => {
               cookies on our behalf (e.g. our service providers).
             </li>
           </ul>
-          <p className="text-sm sm:text-base text-gray-700 leading-relaxed mt-3 sm:mt-4 mb-3 sm:mb-4">
+          <p className="text-sm sm:text-base text-black leading-relaxed mt-3 sm:mt-4 mb-3 sm:mb-4">
             Depending on the period of time that they remain active:
           </p>
-          <ul className="list-disc list-inside text-sm sm:text-base text-gray-700 leading-relaxed space-y-2">
+          <ul className="list-disc list-inside text-sm sm:text-base text-black leading-relaxed space-y-2">
             <li>
               <strong>Session cookies:</strong> Cookies designed for gathering
               and storing data while you are using the Site. They are usually
@@ -106,10 +106,10 @@ const CookiesPolicy: React.FC = () => {
               cookie, which may range between several minutes and several years.
             </li>
           </ul>
-          <p className="text-sm sm:text-base text-gray-700 leading-relaxed mt-3 sm:mt-4 mb-3 sm:mb-4">
+          <p className="text-sm sm:text-base text-black leading-relaxed mt-3 sm:mt-4 mb-3 sm:mb-4">
             Depending on their purpose:
           </p>
-          <ul className="list-disc list-inside text-sm sm:text-base text-gray-700 leading-relaxed space-y-2">
+          <ul className="list-disc list-inside text-sm sm:text-base text-black leading-relaxed space-y-2">
             <li>
               <strong>Technical cookies:</strong> Cookies that allow the user to
               browse a website, platform or application, and use the different
@@ -154,7 +154,7 @@ const CookiesPolicy: React.FC = () => {
           <h2 className="text-lg sm:text-xl md:text-2xl underline font-medium text-black mb-3 sm:mb-4">
             How We Use Cookies and Related Technologies
           </h2>
-          <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
+          <p className="text-sm sm:text-base text-black leading-relaxed">
             Our Site uses a combination of our own and third-party technical and
             analytical cookies. The data processed by technical cookies is
             required for the purposes mentioned above in order to protect our
@@ -167,7 +167,7 @@ const CookiesPolicy: React.FC = () => {
             and/or behavioral advertising cookies if you gave us your prior
             consent.
           </p>
-          <p className="text-sm sm:text-base text-gray-700 leading-relaxed mt-3 sm:mt-4">
+          <p className="text-sm sm:text-base text-black leading-relaxed mt-3 sm:mt-4">
             If you are a resident of the European Union please note the
             following information: For the use of strictly necessary cookies
             such as technical cookies, your consent is not required. For all
@@ -177,7 +177,7 @@ const CookiesPolicy: React.FC = () => {
             revoke consent that has been given, you are only provided with those
             functionalities you can use without your consent.
           </p>
-          <p className="text-sm sm:text-base text-gray-700 leading-relaxed mt-3 sm:mt-4">
+          <p className="text-sm sm:text-base text-black leading-relaxed mt-3 sm:mt-4">
             Our Site may also use log files, web firewalls, and other mechanisms
             that automatically collect and record information about your
             browsing activities, and use of the Site. We may combine this data
@@ -188,13 +188,13 @@ const CookiesPolicy: React.FC = () => {
             personalize content and for analytics purposes. We provide
             additional information about tracking technologies below.
           </p>
-          <p className="text-sm sm:text-base text-gray-700 leading-relaxed mt-3 sm:mt-4">
+          <p className="text-sm sm:text-base text-black leading-relaxed mt-3 sm:mt-4">
             <strong>Log files.</strong> We collect log information to deliver
             Site content, analyze trends, administer our Site, track users&apos;
             movement around our Site, and gather demographic information for
             aggregate use in improving the Site and other services.
           </p>
-          <p className="text-sm sm:text-base text-gray-700 leading-relaxed mt-3 sm:mt-4">
+          <p className="text-sm sm:text-base text-black leading-relaxed mt-3 sm:mt-4">
             <strong>Do Not Track.</strong> Our Site does not support Do Not
             Track at this time. Do Not Track is a privacy preference that you
             can set in your web browser to indicate that you do not want certain
@@ -422,7 +422,7 @@ const CookiesPolicy: React.FC = () => {
           <h2 className="text-lg sm:text-xl md:text-2xl underline font-medium text-black mb-3 sm:mb-4">
             Managing Cookies and Tracking Preferences
           </h2>
-          <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
+          <p className="text-sm sm:text-base text-black leading-relaxed">
             All cookies collected are essential for the website to function.
             Therefore, you are not allowed to manage cookies and tracking
             preferences on this website.
@@ -433,7 +433,7 @@ const CookiesPolicy: React.FC = () => {
           <h2 className="text-lg sm:text-xl md:text-2xl underline font-medium text-black mb-3 sm:mb-4">
             How to Contact Us
           </h2>
-          <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
+          <p className="text-sm sm:text-base text-black leading-relaxed">
             Please contact us at{" "}
             <a
               href="mailto:kiagoef@kia.com"
