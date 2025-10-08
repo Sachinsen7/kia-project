@@ -6,10 +6,12 @@ import Image from "next/image";
 import dynamic from "next/dynamic";
 import { apiFetch } from "../../config/api";
 import VideoJSPlayer from "../../components/VideoJSPlayer";
-import PlyrPlayer from "../../components/PlyrPlayer";
 
 // Dynamically import React Player to avoid SSR issues
 const ReactPlayer = dynamic(() => import("react-player/lazy"), { ssr: false });
+
+// Dynamically import PlyrPlayer to avoid SSR issues
+const PlyrPlayer = dynamic(() => import("../../components/PlyrPlayer"), { ssr: false });
 
 type HomeProps = {
   onClose?: () => void;
