@@ -5,6 +5,8 @@ import { X } from "lucide-react";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 import { apiFetch } from "../../config/api";
+import VideoJSPlayer from "../../components/VideoJSPlayer";
+import PlyrPlayer from "../../components/PlyrPlayer";
 
 // Dynamically import React Player to avoid SSR issues
 const ReactPlayer = dynamic(() => import("react-player/lazy"), { ssr: false });
@@ -137,23 +139,7 @@ function Home({ onClose }: HomeProps) {
                 <div className="text-lg text-red-600">{error}</div>
               </div>
             ) : (
-              <ReactPlayer
-                url={videoUrl}
-                width="100%"
-                height="100%"
-                controls={true}
-                playing={false}
-                config={{
-                  youtube: {
-                    playerVars: {
-                      modestbranding: 1,
-                      rel: 0,
-                      showinfo: 0,
-                      autohide: 1,
-                    }
-                  }
-                }}
-              />
+              <PlyrPlayer src={videoUrl} />
             )}
           </div>
         </div>
