@@ -16,7 +16,7 @@ app.use(cookieParser());
 app.use(cookieTracker);
 
 const allowedOrigins = [
-  "https://kia-project-eight.vercel.app",
+  "https://kia-project-sigma.vercel.app",
   "http://localhost:3000",
 ];
 
@@ -41,14 +41,16 @@ app.use("/api/visit", visitRouter);
 // Error handling middleware for multer
 app.use((error, req, res, next) => {
   if (error instanceof multer.MulterError) {
-    if (error.code === 'LIMIT_FILE_SIZE') {
-      return res.status(400).json({ message: 'File too large. Maximum size is 100MB' });
+    if (error.code === "LIMIT_FILE_SIZE") {
+      return res
+        .status(400)
+        .json({ message: "File too large. Maximum size is 100MB" });
     }
-    if (error.code === 'LIMIT_FILE_COUNT') {
-      return res.status(400).json({ message: 'Too many files uploaded' });
+    if (error.code === "LIMIT_FILE_COUNT") {
+      return res.status(400).json({ message: "Too many files uploaded" });
     }
-    if (error.code === 'LIMIT_UNEXPECTED_FILE') {
-      return res.status(400).json({ message: 'Unexpected file field' });
+    if (error.code === "LIMIT_UNEXPECTED_FILE") {
+      return res.status(400).json({ message: "Unexpected file field" });
     }
   }
   next(error);
