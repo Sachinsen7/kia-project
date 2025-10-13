@@ -213,14 +213,12 @@ const LiveThoughtsFeed: React.FC = () => {
   }, []);
 
   const fetchQuestions = useCallback(async () => {
-    if (!token) return;
-
     try {
       const data = await apiFetch<QuestionResponse[]>(
         "/api/qna?type=goef_event",
         "GET",
         undefined,
-        token
+        token || undefined
       );
 
       const formatted = data.map((q) => {
@@ -247,8 +245,8 @@ const LiveThoughtsFeed: React.FC = () => {
   }, [token]);
 
   useEffect(() => {
-    if (token) fetchQuestions();
-  }, [fetchQuestions, token]);
+    fetchQuestions();
+  }, [fetchQuestions]);
 
   useEffect(() => {
     if (questions.length <= 1) return;
