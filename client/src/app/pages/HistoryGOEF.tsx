@@ -36,7 +36,7 @@ function HistoryGOEF({ onClose }: HistoryGOEFProps) {
   return (
     <div className="relative w-full min-h-screen bg-white px-6 md:px-16 py-12">
       {/* Border Wrapper */}
-      <div className="bg-white relative shadow-2xl rounded-2xl w-full max-w-6xl m-6 p-8 md:p-14">
+      <div className="bg-white relative shadow-2xl rounded-2xl w-full max-w-6xl mx-6 px-8 md:px-14">
         {/* Cross Button */}
         {onClose && (
           <button
@@ -54,13 +54,14 @@ function HistoryGOEF({ onClose }: HistoryGOEFProps) {
           </button>
         )}
         {/* Heading */}
-        <div className="w-full pt-6 pb-10 px-4 mt-10">
-          <h1 className="text-3xl mt-10 md:text-5xl text-gray-900 mb-2 inline-block">
-            History of
-            {/* Vertical black bar flush with top */}
-            <div className="w-[4px] h-[200px] text-[#000] bg-[#000] absolute top-0 left-19"></div>
-          </h1>
-          <h2 className="text-3xl md:text-5xl ml-40 font-bold">GOEF</h2>
+        <div className="w-full  pb-10 px-4 ">
+          <Image
+            width={500}
+            height={22}
+            src="/Group 107.png"
+            alt="Close sidebar"
+            className="cursor-pointer mb-6  "
+          />{" "}
         </div>
 
         {/* Content */}
@@ -151,9 +152,8 @@ function HistoryGOEF({ onClose }: HistoryGOEFProps) {
               {images.map((_, index) => (
                 <div
                   key={index}
-                  className={`w-3 h-3 rounded-full ${
-                    currentIndex === index ? "bg-black" : "bg-gray-300"
-                  }`}
+                  className={`w-3 h-3 rounded-full ${currentIndex === index ? "bg-black" : "bg-gray-300"
+                    }`}
                 />
               ))}
             </div>
