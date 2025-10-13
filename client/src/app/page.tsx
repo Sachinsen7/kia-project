@@ -33,7 +33,7 @@ export default function HomePage() {
     <div className="relative h-screen overflow-hidden bg-white">
       <main className="w-full h-full">
         <CityScene onSelect={setSelectedId} />
-      <Login />
+        <Login />
       </main>
 
       <div ref={sidebarRef}>

@@ -3,6 +3,10 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { CityProvider } from "./context/CityContext";
 import ClientWrapper from "./providers/ClientWrapper";
+import dynamic from "next/dynamic";
+
+// ✅ Dynamically import MobileNotice so it only renders on client
+const MobileNotice = dynamic(() => import("../components/MobileNotice"));
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,9 +30,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        {/* 👇 Only renders on client */}
+        <MobileNotice />
+
         <CityProvider>
           <ClientWrapper>{children}</ClientWrapper>
         </CityProvider>
@@ -36,25 +41,3 @@ export default function RootLayout({
     </html>
   );
 }
-
-// import DesktopOnly from "./DesktopOnly";
-
-// export default function RootLayout({
-//   children,
-// }: {
-//   children: React.ReactNode;
-// }) {
-//   return (
-//     <html lang="en">
-//       <body
-//         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-//       >
-//         <CityProvider>
-//           <DesktopOnly>
-//             <ClientWrapper>{children}</ClientWrapper>
-//           </DesktopOnly>
-//         </CityProvider>
-//       </body>
-//     </html>
-//   );
-// }
