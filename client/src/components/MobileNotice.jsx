@@ -36,17 +36,17 @@ export default function MobileNotice() {
   return (
     <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-white text-center p-6">
       <h2 className="text-2xl font-bold text-gray-800 mb-4">
-        Best Viewed on Desktop
+        Best viewed on desktop
       </h2>
       <p className="text-gray-600 max-w-sm mb-6">
-        This website is best experienced on a laptop or desktop device.
-        Please switch to a larger screen for the best viewing experience.
+        This website is best viewed on a desktop.
+        Please switch to a dekstop device for the best viewing experience.
       </p>
       <button
         onClick={handleDismiss}
         className="mt-4 px-6 py-2 bg-black text-white rounded-md hover:bg-gray-800 transition"
       >
-        Continue Anyway
+        Continue on mobile
       </button>
     </div>
   );
