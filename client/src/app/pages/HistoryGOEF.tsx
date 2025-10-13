@@ -2,13 +2,18 @@
 
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
-import { X } from "lucide-react";
+import dynamic from "next/dynamic";
+import { apiFetch } from "../../config/api";
+import Carousel from "../../components/Carousel";
+
+// Dynamically import Plyr to avoid SSR issues
+const PlyrPlayer = dynamic(() => import("../../components/PlyrPlayer"), { ssr: false });
 
 type HistoryGOEFProps = {
   onClose?: () => void;
 };
 
-function HistoryGOEF({ onClose }: HistoryGOEFProps) {
+export default function HistoryGOEF({ onClose }: HistoryGOEFProps) {
   const images = [
     "/history/DSC01188.JPG",
     "/history/DSC01511.JPG",
@@ -21,29 +26,42 @@ function HistoryGOEF({ onClose }: HistoryGOEFProps) {
     "/history/DSC03211.JPG",
   ];
 
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [videoUrl, setVideoUrl] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string>("");
 
-  // Auto slide
+  // Fetch video
   useEffect(() => {
-    const interval = setInterval(() => {
-      handleNext();
-    }, 3000);
-    return () => clearInterval(interval);
+    const fetchTeaserVideo = async () => {
+      try {
+        setLoading(true);
+        setError("");
+
+        const response = await apiFetch<{ message: string; teaser: { name: string; videoUrl: string } }>(
+          "/api/teaser/video2"
+        );
+
+        if (response.teaser && response.teaser.videoUrl) {
+          setVideoUrl(response.teaser.videoUrl);
+        } else {
+          setError("No video URL found");
+        }
+      } catch (err) {
+        console.error("Error fetching teaser video:", err);
+        setError("Failed to load video");
+        setVideoUrl("https://www.youtube.com/watch?v=q96KKjfwHEE");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTeaserVideo();
   }, []);
-
-  const handlePrev = () => {
-    setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
-  };
-
-  const handleNext = () => {
-    setCurrentIndex((prev) => (prev + 1) % images.length);
-  };
 
   return (
     <div className="relative w-full min-h-screen bg-white px-6 md:px-16 py-12">
-      {/* Border Wrapper */}
       <div className="bg-white relative shadow-2xl rounded-2xl w-full max-w-6xl mx-6 px-8 md:px-14">
-        {/* Cross Button */}
+        {/* Close Button */}
         {onClose && (
           <button
             onClick={onClose}
@@ -56,47 +74,45 @@ function HistoryGOEF({ onClose }: HistoryGOEFProps) {
               src="/askkia/cross.png"
               alt="Close sidebar"
               className="cursor-pointer"
-            />{" "}
+            />
           </button>
         )}
-        {/* Heading */}
-        <div className="w-full  pb-10 px-4 ">
+
+        {/* Header */}
+        <div className="w-full pb-10 px-4">
           <Image
             width={500}
             height={22}
             src="/Group 107.png"
-            alt="Close sidebar"
-            className="cursor-pointer mb-6  "
-          />{" "}
+            alt="GOEF Logo"
+            className="cursor-pointer mb-6"
+          />
         </div>
 
-        {/* Content */}
+        {/* Text Section */}
         <div className="relative px-6 md:px-12 text-gray-700 leading-relaxed border-l border-r border-b border-gray-600">
           <div className="mb-52">
             <p className="mb-4">
               GOEF is a global forum where ownership leaders from around the
-              world gather annually to share and discuss the business
-              strategies, plans, and valuable insights for the coming year.
+              world gather annually to share and discuss business strategies,
+              plans, and valuable insights for the coming year.
             </p>
             <p className="mb-4">
               After being held online due to the COVID-19 pandemic, the forum
-              returned to an in-person, three-day event in Seoul last year,
-              2024. Under the slogan{" "}
-              <span className="italic">“Vision to Reality”</span>, it was a
-              meaningful occasion where HQ and NSC ownership leaders came
-              together to strengthen their network.
+              returned to an in-person, three-day event in Seoul in 2024.
+              Under the slogan <span className="italic">“Vision to Reality”</span>,
+              it was a meaningful occasion where HQ and NSC ownership leaders
+              came together to strengthen their network.
             </p>
             <p className="mb-4">
-              Most importantly, it was a significant event that provided a
-              chance to reflect deeply on ownership experience and customer
-              value. This was achieved through special lectures on Kia’s brand
+              It was also a moment to reflect deeply on ownership experience
+              and customer value through special lectures on Kia’s brand
               strategy, core values, and customer experience, as well as an
               insightful field trip to key Kia sites and famous spots in Seoul.
             </p>
             <p>
               We look forward to meeting again in Seoul in the near future to
-              further strengthen our ownership capabilities and become united in
-              our vision.
+              further strengthen our ownership capabilities and unite in our vision.
             </p>
 
             <h2 className="text-center mt-5 text-[24px] mb-2 font-bold text-black">
@@ -104,70 +120,32 @@ function HistoryGOEF({ onClose }: HistoryGOEFProps) {
             </h2>
           </div>
 
-          {/* Big Highlight Image */}
-          <Image
-            src="/history/new-car.png"
-            alt="2024 GOEF Highlight"
-            width={1200}
-            height={600}
-            className="absolute  top-100 left-11 w-[90%] items-center mt-12 mb-20 h-auto object-cover"
-          />
+          {/* Highlight Video */}
+          <div className="absolute top-100 left-11 w-[90%] items-center mt-12 mb-20 h-auto">
+            {loading ? (
+              <div className="w-full h-[600px] flex items-center justify-center bg-gray-100 rounded-lg">
+                <div className="text-lg text-gray-600">Loading video...</div>
+              </div>
+            ) : error ? (
+              <div className="w-full h-[600px] flex items-center justify-center bg-gray-100 rounded-lg">
+                <div className="text-lg text-red-600">{error}</div>
+              </div>
+            ) : (
+              <div className="w-full h-[600px] overflow-hidden rounded-lg shadow-md">
+                <PlyrPlayer src={videoUrl} />
+              </div>
+            )}
+          </div>
         </div>
 
-        {/* Highlight Section */}
+        {/* Gallery Carousel */}
         <div className="text-center px-6 py-12 mt-30">
           <h2 className="text-3xl mt-10 md:text-5xl text-gray-900 mb-10">
             Gallery
           </h2>
-
-          {/* Carousel */}
-          <div className="relative w-full max-w-4xl mx-auto">
-            <div className="flex items-center h-[400px]">
-              <div
-                className="relative w-[15%] h-full cursor-pointer"
-                onClick={handlePrev}
-              >
-                <Image
-                  src="/history/gallery-left.png"
-                  alt="Left Panel"
-                  fill
-                  className="object-contain"
-                />
-              </div>
-              <div className="relative w-[70%] h-full mx-4">
-                <Image
-                  src={images[currentIndex]}
-                  alt={`GOEF Gallery ${currentIndex + 1}`}
-                  fill
-                  className="object-cover rounded-lg shadow-md"
-                />
-              </div>
-              <div
-                className="relative w-[15%] h-full cursor-pointer"
-                onClick={handleNext}
-              >
-                <Image
-                  src="/history/gallery-right.png"
-                  alt="Right Panel"
-                  fill
-                  className="object-contain"
-                />
-              </div>
-            </div>
-            <div className="flex justify-center mt-6 space-x-2">
-              {images.map((_, index) => (
-                <div
-                  key={index}
-                  className={`w-3 h-3 rounded-full ${currentIndex === index ? "bg-black" : "bg-gray-300"
-                    }`}
-                />
-              ))}
-            </div>
-          </div>
+          <Carousel images={images} interval={3000} />
         </div>
       </div>
     </div>
   );
 }
-
-export default HistoryGOEF;
