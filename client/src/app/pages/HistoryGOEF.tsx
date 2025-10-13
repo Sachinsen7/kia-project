@@ -10,9 +10,15 @@ type HistoryGOEFProps = {
 
 function HistoryGOEF({ onClose }: HistoryGOEFProps) {
   const images = [
-    "/history/gallery-left.png",
-    "/history/gallery-image.png",
-    "/history/gallery-right.png",
+    "/history/DSC01188.JPG",
+    "/history/DSC01511.JPG",
+    "/history/DSC01697.JPG",
+    "/history/DSC01790.JPG",
+    "/history/DSC01879.JPG",
+    "/history/DSC02154.JPG",
+    "/history/DSC02817.JPG",
+    "/history/DSC02889.JPG",
+    "/history/DSC03211.JPG",
   ];
 
   const [currentIndex, setCurrentIndex] = useState(0);
