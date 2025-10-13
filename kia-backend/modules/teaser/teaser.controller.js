@@ -29,12 +29,17 @@ const upload = multer({
     }
   },
   limits: {
-    fileSize: 100 * 1024 * 1024, // 100MB limit for videos
+    fileSize: 120 * 1024 * 1024, // 120MB limit for videos (accommodates 116MB files)
   }
 });
 
 exports.createTeaser = async (req, res) => {
     try {
+        // Check for multer errors first
+        if (req.fileValidationError) {
+            return res.status(400).json({ message: req.fileValidationError });
+        }
+
         // Check if file was uploaded by multer middleware
         if (!req.file) {
             return res.status(400).json({ message: "No video file provided" });

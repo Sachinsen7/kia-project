@@ -18,6 +18,11 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage });
+const upload = multer({
+  storage,
+  limits: {
+    fileSize: 120 * 1024 * 1024, // 120MB limit for videos (accommodates 116MB files)
+  }
+});
 
 module.exports = upload;
