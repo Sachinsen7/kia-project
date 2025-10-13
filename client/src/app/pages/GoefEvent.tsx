@@ -142,12 +142,11 @@ const GoefEvent: React.FC<GoefEventProps> = ({ onClose }) => {
           return {
             id: c._id,
             user: hasName
-              ? `${c.createdBy!.firstName || ""} ${
-                  c.createdBy!.lastName || ""
+              ? `${c.createdBy!.firstName || ""} ${c.createdBy!.lastName || ""
                 }`.trim()
               : c.createdBy
-              ? nameFromEmail || "Unknown"
-              : "Unknown",
+                ? nameFromEmail || "Unknown"
+                : "Unknown",
             userId: c.createdBy?._id || "",
             text: c.text,
             time: new Date(c.createdAt).toLocaleTimeString("en-US", {
@@ -185,12 +184,11 @@ const GoefEvent: React.FC<GoefEventProps> = ({ onClose }) => {
           return {
             id: q._id,
             user: hasName
-              ? `${q.createdBy!.firstName || ""} ${
-                  q.createdBy!.lastName || ""
+              ? `${q.createdBy!.firstName || ""} ${q.createdBy!.lastName || ""
                 }`.trim()
               : q.createdBy
-              ? nameFromEmail || "Unknown"
-              : "Unknown",
+                ? nameFromEmail || "Unknown"
+                : "Unknown",
             userId: q.createdBy?._id || "",
             dept: "KUS",
             date: new Date(q.createdAt).toISOString().slice(0, 10),
@@ -232,11 +230,10 @@ const GoefEvent: React.FC<GoefEventProps> = ({ onClose }) => {
       const newQ: Question = {
         id: response.qna._id,
         user: response.qna.createdBy
-          ? `${response.qna.createdBy.firstName || "Unknown"} ${
-              response.qna.createdBy.lastName || ""
+          ? `${response.qna.createdBy.firstName || "Unknown"} ${response.qna.createdBy.lastName || ""
             }`.trim() || "Unknown"
           : response.qna.createdByName ||
-            (isAdmin ? "Admin" : currentUserFullName),
+          (isAdmin ? "Admin" : currentUserFullName),
         userId: isAdmin ? "admin" : currentUserId,
         dept: "KUS",
         date: new Date(response.qna.createdAt).toISOString().slice(0, 10),
@@ -269,8 +266,7 @@ const GoefEvent: React.FC<GoefEventProps> = ({ onClose }) => {
         token
       );
       const displayNameFromUser = response.comment?.createdBy
-        ? `${response.comment.createdBy.firstName || "Unknown"} ${
-            response.comment.createdBy.lastName || ""
+        ? `${response.comment.createdBy.firstName || "Unknown"} ${response.comment.createdBy.lastName || ""
           }`.trim() || "Unknown"
         : undefined;
       const newComment: Comment = {
@@ -290,11 +286,11 @@ const GoefEvent: React.FC<GoefEventProps> = ({ onClose }) => {
         prev.map((q) =>
           q.id === id
             ? {
-                ...q,
-                comments: q.comments + 1,
-                commentList: [...q.commentList, newComment],
-                showCommentInput: false,
-              }
+              ...q,
+              comments: q.comments + 1,
+              commentList: [...q.commentList, newComment],
+              showCommentInput: false,
+            }
             : q
         )
       );
@@ -319,10 +315,10 @@ const GoefEvent: React.FC<GoefEventProps> = ({ onClose }) => {
         prev.map((q) =>
           q.id === id
             ? {
-                ...q,
-                likes: response.likesCount,
-                likedBy: response.likes,
-              }
+              ...q,
+              likes: response.likesCount,
+              likedBy: response.likes,
+            }
             : q
         )
       );
@@ -359,10 +355,10 @@ const GoefEvent: React.FC<GoefEventProps> = ({ onClose }) => {
         prev.map((q) =>
           q.id === questionId
             ? {
-                ...q,
-                comments: q.comments - 1,
-                commentList: q.commentList.filter((c) => c.id !== commentId),
-              }
+              ...q,
+              comments: q.comments - 1,
+              commentList: q.commentList.filter((c) => c.id !== commentId),
+            }
             : q
         )
       );
@@ -398,7 +394,7 @@ const GoefEvent: React.FC<GoefEventProps> = ({ onClose }) => {
 
   return (
     <div className="w-full min-h-screen bg-white px-6 md:px-16 py-12">
-      <div className="bg-white relative shadow-2xl rounded-2xl w-full max-w-6xl m-6 p-8 md:p-14">
+      <div className="bg-white relative shadow-2xl rounded-2xl w-full max-w-6xl mb-6 px-8 pb-6 md:px-14">
         {/* Cross Button */}
         {onClose && (
           <button
@@ -415,14 +411,13 @@ const GoefEvent: React.FC<GoefEventProps> = ({ onClose }) => {
             />{" "}
           </button>
         )}
-        <div className="w-full pt-6 pb-10 px-4">
-          <div className="w-[4px] h-[100px] text-[#000] bg-[#000] absolute -top-0 left-26.5"></div>
-
-          <h1 className="text-3xl md:text-5xl text-gray-900 mb-2">
-            Share & <span className="font-semibold">Win!</span>
-          </h1>
-          <h2 className="text-3xl md:text-5xl text-gray-900 ml-40">(Event)</h2>
-        </div>
+        <Image
+          width={500}
+          height={22}
+          src="/Group 109.png"
+          alt="Close sidebar"
+          className="cursor-pointer mb-8  "
+        />{" "}
         <div className="px-4 w-[1098px] h-[126px] md:px-8 text-gray-700 leading-relaxed">
           <div className="mt-15">
             <p className="text-gray-700 leading-relaxed mb-8">
@@ -441,7 +436,7 @@ const GoefEvent: React.FC<GoefEventProps> = ({ onClose }) => {
             </p>
 
             <Image
-              className="absolute top-63 right-0 object-cover"
+              className="absolute top-75 right-0 object-cover"
               width={670}
               height={200}
               src="/event/border.png"
@@ -517,8 +512,7 @@ const GoefEvent: React.FC<GoefEventProps> = ({ onClose }) => {
                 <div className="flex items-center">
                   <div className="w-10 h-10 rounded-full bg-gray-800 text-white flex items-center justify-center mr-3 font-semibold">
                     {q.user
-                      ? `${q.user.split(" ")[0][0] || ""}${
-                          q.user.split(" ")[1]?.[0] || ""
+                      ? `${q.user.split(" ")[0][0] || ""}${q.user.split(" ")[1]?.[0] || ""
                         }`.toUpperCase()
                       : "U"}
                   </div>
