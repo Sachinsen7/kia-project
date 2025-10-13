@@ -116,7 +116,7 @@ export default function HistoryGOEF({ onClose }: HistoryGOEFProps) {
             </p>
 
             <h2 className="text-center mt-5 text-[24px] mb-2 font-bold text-black">
-              2024 GOEF HIGHLIGHT
+              2024 GOEF Highlights​
             </h2>
           </div>
 
@@ -139,7 +139,7 @@ export default function HistoryGOEF({ onClose }: HistoryGOEFProps) {
         </div>
 
         {/* Gallery Carousel */}
-        <div className="text-center px-6 py-12 mt-30">
+        <div className="text-center px-6 py-12 mt-40">
           <h2 className="text-3xl mt-10 md:text-5xl text-gray-900 mb-10">
             Gallery
           </h2>
