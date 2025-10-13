@@ -129,63 +129,71 @@ function About({ onClose }: AboutProps) {
 
           <div className="overflow-x-auto">
             <table className="table-auto w-full border border-gray-300 text-left text-sm md:text-base">
-              <thead className="bg-gray-100">
+              <thead className="bg-gray-200">
                 <tr>
-                  <th className="border border-gray-300 px-4 py-2">Session</th>
-                  <th className="border border-gray-300 px-4 py-2">Contents</th>
-                  <th className="border border-gray-300 px-4 py-2">Time</th>
+                  <th className="border border-gray-500 px-4 py-2" colSpan={2}>Time</th>
+                  <th className="border border-gray-500 px-4 py-2">Title</th>
+                  <th className="border border-gray-500 px-4 py-2">Content</th>
+                </tr>
+                <tr>
+                  <th className="border border-gray-500 px-4 py-2">AM</th>
+                  <th className="border border-gray-500 px-4 py-2">PM</th>
+                  <th className="border border-gray-500 px-4 py-2"></th>
+                  <th className="border border-gray-500 px-4 py-2"></th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td className="border px-4 py-2">Welcome to Kia GOEF</td>
-                  <td className="border px-4 py-2">
-                    -2024 GOEF Greeting <br />
-                    -Official Opening Video <br />
-                    -Opening Speech
-                  </td>
-                  <td className="border px-4 py-2">09:00 - 09:30</td>
+                  <td className="border px-4 py-2 whitespace-nowrap">07:00 - 07:20</td>
+                  <td className="border px-4 py-2 whitespace-nowrap">16:00 - 16:20</td>
+                  <td className="border px-4 py-2">Opening</td>
+                  <td className="border px-4 py-2">• Opening Speech</td>
                 </tr>
                 <tr>
-                  <td className="border px-4 py-2">Kia Brand</td>
+                  <td className="border px-4 py-2 whitespace-nowrap">07:20 - 08:00</td>
+                  <td className="border px-4 py-2 whitespace-nowrap">16:20 - 17:00</td>
+                  <td className="border px-4 py-2">Kia HQ Key Projects</td>
                   <td className="border px-4 py-2">
-                    -Brand Strategy Overview <br />
-                    -Explanation of brand direction, brand strategy, and the
-                    role of ownership/dealers
+                    • Ownership Dealer Standard Renewal Project<br />
+                    • Advancing Global Service Retention Management<br />
+                    • Dealer Service Capacity Reinforcement
                   </td>
-                  <td className="border px-4 py-2">09:30 - 10:00</td>
                 </tr>
                 <tr>
-                  <td className="border px-4 py-2">
-                    Ownership Strategy & Core Initiatives
-                  </td>
-                  <td className="border px-4 py-2">
-                    - Ownership Strategy & Core Initiatives - Overseas
-                    Production Vehicle Ownership & Management Enhancement - A/S
-                    Parts Supply Enhancement Program - Data-Based Service
-                    Reinforcement - Digital Owners Manual
-                  </td>
-                  <td className="border px-4 py-2">10:00 - 11:20</td>
+                  <td className="border px-4 py-2 whitespace-nowrap">08:00 - 08:40</td>
+                  <td className="border px-4 py-2 whitespace-nowrap">17:00 - 17:40</td>
+                  <td className="border px-4 py-2">Kia HQ Business Plans</td>
+                  <td className="border px-4 py-2">• 2026 Key Business Plans on the Ownership Mission (BDDS)</td>
                 </tr>
                 <tr>
-                  <td className="border px-4 py-2">
-                    Digitalized & Faithful Customer Care
-                  </td>
-                  <td className="border px-4 py-2">
-                    - Digitalized & Faithful Customer Care <br />
-                    - Kia Connect Diagnosis <br />- Dealer Service Capacity
-                    Reinforcement
-                  </td>
-                  <td className="border px-4 py-2">11:20 - 12:00</td>
+                  <td className="border px-4 py-2 whitespace-nowrap">08:40 - 08:50</td>
+                  <td className="border px-4 py-2 whitespace-nowrap">17:40 - 17:50</td>
+                  <td className="border px-4 py-2"></td>
+                  <td className="border px-4 py-2">• Break Time</td>
                 </tr>
                 <tr>
-                  <td
-                    className="border px-4 py-6 text-center font-medium text-gray-500"
-                    colSpan={3}
-                  >
-                    Sample (TBD) – Schedule titles will be updated after final
-                    confirmation.
-                  </td>
+                  <td className="border px-4 py-2 whitespace-nowrap">08:50 - 09:10</td>
+                  <td className="border px-4 py-2 whitespace-nowrap">17:50 - 18:10</td>
+                  <td className="border px-4 py-2">Best Practice</td>
+                  <td className="border px-4 py-2">• RHQ/NSC Best Practices</td>
+                </tr>
+                <tr>
+                  <td className="border px-4 py-2 whitespace-nowrap">09:10 - 09:40</td>
+                  <td className="border px-4 py-2 whitespace-nowrap">18:10 - 18:40</td>
+                  <td className="border px-4 py-2">Panel Talk</td>
+                  <td className="border px-4 py-2">• Panel Q&A Session</td>
+                </tr>
+                <tr>
+                  <td className="border px-4 py-2 whitespace-nowrap">09:40 - 09:50</td>
+                  <td className="border px-4 py-2 whitespace-nowrap">18:40 - 18:50</td>
+                  <td className="border px-4 py-2">Awards</td>
+                  <td className="border px-4 py-2">• Awards Ceremony for Excellent RHQ / NSCs</td>
+                </tr>
+                <tr>
+                  <td className="border px-4 py-2 whitespace-nowrap">09:50 - 10:10</td>
+                  <td className="border px-4 py-2 whitespace-nowrap">18:50 - 19:10</td>
+                  <td className="border px-4 py-2">Closing</td>
+                  <td className="border px-4 py-2">• Closing Speech</td>
                 </tr>
               </tbody>
             </table>
