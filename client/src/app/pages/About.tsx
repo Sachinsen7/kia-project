@@ -10,8 +10,8 @@ type AboutProps = {
 
 function About({ onClose }: AboutProps) {
   return (
-    <div className="w-full min-h-screen bg-white px-6 md:px-16 py-12">
-      <div className="bg-white relative shadow-2xl rounded-2xl w-full max-w-6xl m-6 p-8 md:p-14">
+    <div className="w-full min-h-screen bg-white px-6 md:px-12 py-12">
+      <div className="bg-white relative shadow-2xl rounded-2xl w-full max-w-6xl m-6 p-8 md:p-12">
         {/* Cross Button */}
         {onClose && (
           <button
@@ -29,13 +29,13 @@ function About({ onClose }: AboutProps) {
             />
           </button>
         )}
-        <div className="w-full pt-6 pb-10 px-4">
-          <h1 className="text-3xl md:text-5xl text-gray-900 mb-2">
-            About 2025
-          </h1>
-          <div className="w-[590px] h-[4px] text-[#000] bg-[#000] absolute top-[86px] right-10"></div>
-          <h2 className="text-3xl md:text-5xl ml-40 font-bold">GOEF</h2>
-        </div>
+          <Image
+            width={800}
+            height={22}
+            src="/Group 106.png"
+            alt="Close sidebar"
+            className="cursor-pointer mb-6  "
+          />{" "}
 
         {/* Content */}
         <div className="relative px-6 md:px-12 text-gray-700 leading-relaxed border-l  border-r  border-gray-500">
