@@ -40,15 +40,34 @@ const baseLinks = [
   },
 ];
 
-export const links: CityLink[] = baseLinks.map((link, index) => ({
-  ...link,
-  svg: (
-    <KiaLogoSvg
-      key={index}
-      type={index + 1}
-      width={64}
-      height={26}
-      className="w-full h-full"
-    />
-  ),
-}));
+export const links: CityLink[] = baseLinks.map((link, index) => {
+  // Custom SVG for Help & Support
+  if (link.id === "help-support") {
+    return {
+      ...link,
+      svg: (
+        <div className="w-full h-full flex items-center justify-center">
+          <img
+            src="/helpsupport/help-support.svg"
+            alt="Help & Support"
+            className="w-full h-full object-contain"
+          />
+        </div>
+      ),
+    };
+  }
+  
+  // Default SVG for other elements
+  return {
+    ...link,
+    svg: (
+      <KiaLogoSvg
+        key={index}
+        type={index + 1}
+        width={64}
+        height={26}
+        className="w-full h-full"
+      />
+    ),
+  };
+});
