@@ -25,7 +25,7 @@ export default function Dashboard({ onClose }: DashboardProps) {
 
       const c = Number(localStorage.getItem("dashboard_content_views") || "0");
       setContentViews(c);
-    } catch {}
+    } catch { }
   }, []);
 
   const incrementContentViews = () => {
@@ -33,7 +33,7 @@ export default function Dashboard({ onClose }: DashboardProps) {
       const next = contentViews + 1;
       setContentViews(next);
       localStorage.setItem("dashboard_content_views", String(next));
-    } catch {}
+    } catch { }
   };
 
   const handleFileUpload = async (videos: File[], category: Category) => {
@@ -93,7 +93,7 @@ export default function Dashboard({ onClose }: DashboardProps) {
   return (
     <div className="relative w-full min-h-screen bg-white px-6 md:px-16 py-12">
       {/* Toaster */}
-      <div className="bg-white relative shadow-2xl rounded-2xl w-full max-w-6xl m-6 p-8 md:p-14">
+      <div className="bg-white relative shadow-2xl rounded-2xl w-full max-w-6xl mx-6 px-8 pb-6 md:px-14">
         {/* Cross Button */}
         {onClose && (
           <button
@@ -118,13 +118,13 @@ export default function Dashboard({ onClose }: DashboardProps) {
             style: { background: "#333", color: "#fff" },
           }}
         />
-        <div className="w-full mt-10 pt-6 pb-10 px-4">
-          <h1 className="text-3xl md:text-5xl text-gray-900 mb-2">
-            <strong> Upload </strong> Your
-          </h1>
-          <div className="w-[164px]  h-[4px] text-[#000] bg-[#000] absolute top-18 -rotate-57 left-57"></div>
-          <h2 className="text-3xl md:text-5xl ml-40">Contents</h2>
-        </div>
+        <Image
+          width={600}
+          height={22}
+          src="/Group 110.png"
+          alt="Close sidebar"
+          className="cursor-pointer pb-8"
+        />{" "}
 
         <div className="mt-10 text-gray-700 leading-relaxed w-[1108px] h-[200px]">
           <div className="mb-52">
@@ -146,7 +146,7 @@ export default function Dashboard({ onClose }: DashboardProps) {
             alt="2024 GOEF Highlight"
             width={600}
             height={600}
-            className="absolute top-66 right-0 object-cover"
+            className="absolute top-76 right-0 object-cover"
           />
         </div>
 
@@ -191,7 +191,7 @@ export default function Dashboard({ onClose }: DashboardProps) {
             alt="2024 GOEF Highlight"
             width={600}
             height={600}
-            className="absolute bottom-80 left-0 object-cover"
+            className="absolute bottom-68 left-0 object-cover"
           />
         </div>
 

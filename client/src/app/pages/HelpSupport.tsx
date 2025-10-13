@@ -43,7 +43,7 @@ function HelpSupport({ onClose }: HelpSupportProps) {
 
   return (
     <div className="relative w-full min-h-screen bg-white px-6 md:px-16 py-12">
-      <div className="bg-white relative shadow-2xl rounded-2xl w-full max-w-6xl m-6 p-8 md:p-14">
+      <div className="bg-white relative shadow-2xl rounded-2xl w-full max-w-6xl mx-6 px-8 pb-8 md:px-14">
         {/* Cross Button */}
         {onClose && (
           <button
@@ -61,13 +61,13 @@ function HelpSupport({ onClose }: HelpSupportProps) {
           </button>
         )}
         {/* Title */}
-        <div className="w-full pt-6 pb-10 px-4 mt-10">
-          <h1 className="text-3xl mt-10 md:text-5xl text-gray-900 mb-2 inline-block">
-            HELP
-            <div className="w-[4px] h-[200px] text-[#000] bg-[#000] absolute top-0 left-19"></div>
-          </h1>
-          <h2 className="text-3xl md:text-5xl ml-23">& SUPPORT</h2>
-        </div>
+        <Image
+          width={400}
+          height={22}
+          src="/Group 111.png"
+          alt="Close sidebar"
+          className="cursor-pointer pb-6  "
+        />{" "}
 
         {/* Intro */}
         <div className="px-4 w-[1098px] h-[126px] md:px-8 text-gray-700 leading-relaxed">
@@ -116,11 +116,10 @@ function HelpSupport({ onClose }: HelpSupportProps) {
 
               {/* Animated Answer */}
               <div
-                className={`overflow-hidden transition-all duration-500 ease-in-out ${
-                  openIndex === index
+                className={`overflow-hidden transition-all duration-500 ease-in-out ${openIndex === index
                     ? "max-h-96 opacity-100 mt-3"
                     : "max-h-0 opacity-0"
-                }`}
+                  }`}
               >
                 <p className="text-gray-600 text-sm leading-relaxed">
                   {faq.answer}

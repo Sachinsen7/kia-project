@@ -388,7 +388,7 @@ const AskKia: React.FC<AskKiaProps> = ({ onClose }) => {
 
   return (
     <div className="relative w-full min-h-screen bg-white px-6 md:px-16 py-12">
-      <div className="bg-white relative shadow-2xl rounded-2xl w-full max-w-6xl m-6 p-8 md:p-14">
+      <div className="bg-white relative shadow-2xl rounded-2xl w-full max-w-6xl mx-6 px-8 pb-6 md:px-14">
         {/* Cross Button */}
         {onClose && (
           <button
@@ -405,13 +405,13 @@ const AskKia: React.FC<AskKiaProps> = ({ onClose }) => {
             />
           </button>
         )}
-        <div className="w-full pt-6 pb-10 px-4 mt-10">
-          <h1 className="text-3xl mt-10 md:text-5xl text-gray-900 mb-2 inline-block">
-            <div className="w-[4px] h-[175px] text-[#000] bg-[#000] absolute -top-0 left-47.5"></div>
-            Questions on GOEF and
-          </h1>
-          <h2 className="text-3xl md:text-5xl ml-85 font-bold">Our Future</h2>
-        </div>
+        <Image
+                    width={900}
+                    height={22}
+                    src="/Group 108.png"
+                    alt="Close sidebar"
+                    className="cursor-pointer mb-6  "
+                  />{" "}
         <br />
         <div className="px-4 mt-20 w-[1108px] h-[312px] md:px-8 text-gray-700 leading-relaxed">
           <div>
@@ -447,7 +447,7 @@ const AskKia: React.FC<AskKiaProps> = ({ onClose }) => {
 
             <div className="">
               <Image
-                className="absolute top-97 right-0 object-cover"
+                className="absolute top-82 right-0 object-cover"
                 width={600}
                 height={1000}
                 src="/askkia/border.png"

@@ -52,10 +52,11 @@ function Home({ onClose }: HomeProps) {
   }, []);
 
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center p-6 md:p-12">
+    <div className="min-h-screen bg-white flex items-center justify-center p-6 md:p-6">
       {/* Floating Card */}
-      <div className="relative bg-white shadow-2xl rounded-2xl w-full max-w-6xl m-6 p-8 md:p-14">
+      <div className="relative bg-white shadow-2xl rounded-2xl w-full max-w-6xl m-6 p-8 md:p-0 md:py-10">
         {/* Cross Button */}
+
         {onClose && (
           <button
             onClick={onClose}
@@ -72,20 +73,27 @@ function Home({ onClose }: HomeProps) {
           </button>
         )}
         {/* Heading */}
-        <h1 className="text-3xl ml-10 md:text-5xl text-gray-900 mb-2">
+        {/* <h1 className="text-3xl ml-10 md:text-5xl text-gray-900 mb-2">
           Welcome to
         </h1>
 
-        {/* Underline + 2025 */}
         <div className="ml-40 flex items-center">
           <div className="left-0 w-[240px] h-[4px] text-[#000] bg-[#000] absolute top-37"></div>
           <h2 className="text-4xl md:text-5xl text-gray-900">
             2025 <span className="font-bold">GOEF</span>
           </h2>
-        </div>
+        </div> */}
+
+        <Image
+          width={700}
+          height={22}
+          src="/Group 105.png"
+          alt="Close sidebar"
+          className="cursor-pointer  "
+        />{" "}
 
         {/* Intro paragraphs - aligned end */}
-        <div className="mt-20 flex justify-end">
+        <div className="mt-20 flex justify-end md:p-20">
           <div className="space-y-4 text-gray-700 tracking-widest leading-relaxed border-r-2 border-b-2 border-gray-300 pr-6 pb-6 max-w-3xl text-left">
             <p>
               It is with great honor that we extend this official invitation to
@@ -127,7 +135,7 @@ function Home({ onClose }: HomeProps) {
         </div>
 
         {/* Video section */}
-        <div className="mt-20">
+        <div className="mt-20 md:p-12">
           <h2 className="text-lg  uppercase font-bold text-black-500 tracking-wide mb-4 text-center">
             2025 GOEF Official Teaser
           </h2>
