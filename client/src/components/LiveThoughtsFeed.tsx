@@ -176,6 +176,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { apiFetch } from "@/config/api";
 import { useRouter } from "next/navigation";
+import { log } from "console";
 
 type User = {
   firstName?: string;
@@ -225,8 +226,7 @@ const LiveThoughtsFeed: React.FC = () => {
       const formatted = data.map((q) => {
         const userName =
           q.createdBy?.firstName || q.createdBy?.lastName
-            ? `${q.createdBy?.firstName || ""} ${
-                q.createdBy?.lastName || ""
+            ? `${q.createdBy?.firstName || ""} ${q.createdBy?.lastName || ""
               }`.trim()
             : q.createdByName || "Unknown";
 
@@ -257,6 +257,7 @@ const LiveThoughtsFeed: React.FC = () => {
     }, 4000); // Keep interval at 4s to give enough time for fade effect
     return () => clearInterval(interval);
   }, [questions]);
+  console.log(questions);
 
   const currentQuestion = questions[currentIndex];
 
@@ -264,15 +265,15 @@ const LiveThoughtsFeed: React.FC = () => {
     router.push("/share-win");
   };
 
-  if (!token) {
-    return (
-      <div className="w-full p-4 text-black font-sans rounded-lg">
-        <p className="text-sm text-gray-600">
-          Please log in to view live thoughts.
-        </p>
-      </div>
-    );
-  }
+  // if (!token) {
+  //   return (
+  //     <div className="w-full p-4 text-black font-sans rounded-lg">
+  //       <p className="text-sm text-gray-600">
+  //         Please log in to view live thoughts.
+  //       </p>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div
