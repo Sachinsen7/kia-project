@@ -5,6 +5,8 @@ import dynamic from "next/dynamic";
 import { Heart, MessageSquare, Trash2, X } from "lucide-react";
 import { apiFetch } from "@/config/api";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { requireAuth } from "@/utils/auth";
 
 // ----------- Types -----------
 type User = {
@@ -77,7 +79,16 @@ type GoefEventProps = {
 };
 
 const GoefEvent: React.FC<GoefEventProps> = ({ onClose }) => {
+  const router = useRouter();
   const [mounted, setMounted] = useState(false);
+
+  // Check authentication on component mount
+  useEffect(() => {
+    if (!requireAuth(router)) {
+      return;
+    }
+    setMounted(true);
+  }, [router]);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [showInput, setShowInput] = useState(false);
   const [newQuestionText, setNewQuestionText] = useState("");
