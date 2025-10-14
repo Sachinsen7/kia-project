@@ -127,15 +127,15 @@ export default function HistoryGOEF({ onClose }: HistoryGOEFProps) {
           {/* Highlight Video */}
           <div className="w-full mb-12">
             {loading ? (
-              <div className="w-full h-[400px] md:h-[500px] lg:h-[600px] flex items-center justify-center bg-gray-100 rounded-lg">
+              <div className="w-full h-[400px] flex items-center justify-center bg-gray-100 rounded-lg">
                 <div className="text-lg text-gray-600">Loading video...</div>
               </div>
             ) : error ? (
-              <div className="w-full h-[400px] md:h-[500px] lg:h-[600px] flex items-center justify-center bg-gray-100 rounded-lg">
+              <div className="w-full h-[400px]  flex items-center justify-center bg-gray-100 rounded-lg">
                 <div className="text-lg text-red-600">{error}</div>
               </div>
             ) : (
-              <div className="w-full h-[400px] md:h-[500px] lg:h-[600px] overflow-hidden rounded-lg shadow-md">
+              <div className="w-full h-[400px] overflow-hidden rounded-lg shadow-md">
                 <PlyrPlayer src={videoUrl} />
               </div>
             )}
@@ -143,10 +143,10 @@ export default function HistoryGOEF({ onClose }: HistoryGOEFProps) {
         </div>
 
         {/* Bottom border */}
-        <div className="border-b border-gray-600"></div>
+        {/* <div className="border-b border-gray-600"></div> */}
 
         {/* Gallery Carousel */}
-        <div className="text-center px-6 py-12">
+        <div className="text-center">
           <h2 className="mt-10 text-[24px] text-gray-900 mb-10">Gallery</h2>
           <Carousel images={images} interval={3000} />
         </div>
