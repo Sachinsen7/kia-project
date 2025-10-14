@@ -6,6 +6,8 @@ import Image from "next/image";
 import dynamic from "next/dynamic";
 import { apiFetch } from "../../config/api";
 import VideoJSPlayer from "../../components/VideoJSPlayer";
+import { useRouter } from "next/navigation";
+import { requireAuth } from "@/utils/auth";
 
 const ReactPlayer = dynamic(() => import("react-player/lazy"), { ssr: false });
 
@@ -18,9 +20,17 @@ type HomeProps = {
 };
 
 function Home({ onClose }: HomeProps) {
+  const router = useRouter();
   const [videoUrl, setVideoUrl] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
+
+  // Check authentication on component mount
+  useEffect(() => {
+    if (!requireAuth(router)) {
+      return;
+    }
+  }, [router]);
 
   useEffect(() => {
     const fetchTeaserVideo = async () => {
