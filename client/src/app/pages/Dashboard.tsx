@@ -182,7 +182,7 @@ export default function Dashboard({ onClose }: DashboardProps) {
               <br />
               colleagues worldwide. It should feature all regional members for a
               more meaningful impact, and it <br /> will be used as the
-              GOEF closing video.
+              GOEF closing video.
             </p>
           </div>
 
