@@ -11,7 +11,9 @@ import VideoJSPlayer from "../../components/VideoJSPlayer";
 const ReactPlayer = dynamic(() => import("react-player/lazy"), { ssr: false });
 
 // Dynamically import PlyrPlayer to avoid SSR issues
-const PlyrPlayer = dynamic(() => import("../../components/PlyrPlayer"), { ssr: false });
+const PlyrPlayer = dynamic(() => import("../../components/PlyrPlayer"), {
+  ssr: false,
+});
 
 type HomeProps = {
   onClose?: () => void;
@@ -29,9 +31,10 @@ function Home({ onClose }: HomeProps) {
         setError("");
 
         // Fetch teaser by name - you can change this name as needed
-        const response = await apiFetch<{ message: string; teaser: { name: string; videoUrl: string } }>(
-          "/api/teaser/video1"
-        );
+        const response = await apiFetch<{
+          message: string;
+          teaser: { name: string; videoUrl: string };
+        }>("/api/teaser/video1");
 
         if (response.teaser && response.teaser.videoUrl) {
           setVideoUrl(response.teaser.videoUrl);
@@ -56,7 +59,6 @@ function Home({ onClose }: HomeProps) {
       {/* Floating Card */}
       <div className="relative bg-white shadow-2xl rounded-2xl w-full max-w-6xl m-6 p-8 md:p-0 md:py-10">
         {/* Cross Button */}
-
         {onClose && (
           <button
             onClick={onClose}
@@ -83,7 +85,6 @@ function Home({ onClose }: HomeProps) {
             2025 <span className="font-bold">GOEF</span>
           </h2>
         </div> */}
-
         <Image
           width={700}
           height={22}
@@ -91,7 +92,6 @@ function Home({ onClose }: HomeProps) {
           alt="Close sidebar"
           className="cursor-pointer  "
         />{" "}
-
         {/* Intro paragraphs - aligned end */}
         <div className="mt-20 flex justify-end md:p-20">
           <div className="space-y-4 text-gray-700 tracking-widest leading-relaxed border-r-2 border-b-2 border-gray-300 pr-6 pb-6 max-w-3xl text-left">
@@ -133,11 +133,10 @@ function Home({ onClose }: HomeProps) {
             </p>
           </div>
         </div>
-
         {/* Video section */}
         <div className="mt-20 md:p-12">
           <h2 className="text-lg font-bold text-black-500 tracking-wide mb-4 text-center">
-          2025 GOEF official teaser​
+            2025 GOEF official teaser​
           </h2>
           <div className="w-full overflow-hidden rounded-xl shadow-md relative aspect-video">
             {loading ? (
