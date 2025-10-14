@@ -19,7 +19,7 @@ const allowedOrigins = [
   "https://kia-project-sigma.vercel.app",
   "http://localhost:3000",
   "https://www.kiagoef.com",
-  "216.198.79.1"
+  "216.198.79.1",
 ];
 
 app.use(
