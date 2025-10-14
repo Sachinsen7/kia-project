@@ -6,9 +6,10 @@ import "plyr-react/plyr.css";
 type PlyrPlayerProps = {
   src: string;
   type?: string;
+  loop?: boolean;
 };
 
-export default function PlyrPlayer({ src, type = "video/mp4" }: PlyrPlayerProps) {
+export default function PlyrPlayer({ src, type = "video/mp4", loop = false }: PlyrPlayerProps) {
   const videoSource = {
     type: "video" as const,
     sources: [
@@ -37,6 +38,7 @@ export default function PlyrPlayer({ src, type = "video/mp4" }: PlyrPlayerProps)
           autoplay: false,
           clickToPlay: true,
           tooltips: { controls: true, seek: true },
+          loop: { active: loop },
         }}
       />
     </div>
