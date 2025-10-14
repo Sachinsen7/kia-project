@@ -131,29 +131,29 @@ function About({ onClose }: AboutProps) {
             <table className="table-auto w-full border border-gray-300 text-left text-sm md:text-base">
               <thead className="bg-gray-200">
                 <tr>
-                  <th className="border border-gray-500 px-4 py-2" colSpan={2}>Time</th>
-                  <th className="border border-gray-500 px-4 py-2">Title</th>
-                  <th className="border border-gray-500 px-4 py-2">Content</th>
+                  <th className="border-x border-t border-gray-500 px-4 py-2 text-center" colSpan={2}>Time</th>
+                  <th className="border-x border-t border-gray-500 px-4 py-2 text-center" colSpan={2}>Title & Content</th>
                 </tr>
                 <tr>
-                  <th className="border border-gray-500 px-4 py-2">AM</th>
-                  <th className="border border-gray-500 px-4 py-2">PM</th>
-                  <th className="border border-gray-500 px-4 py-2"></th>
-                  <th className="border border-gray-500 px-4 py-2"></th>
+                  <th className="border border-gray-500 px-4 py-2 text-center">AM</th>
+                  <th className="border border-gray-500 px-4 py-2 text-center">PM</th>
+                  <th className="border-r border-b border-gray-500 px-4 py-2 text-center"></th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td className="border px-4 py-2 whitespace-nowrap">07:00 - 07:20</td>
                   <td className="border px-4 py-2 whitespace-nowrap">16:00 - 16:20</td>
-                  <td className="border px-4 py-2">Opening</td>
-                  <td className="border px-4 py-2">• Opening Speech</td>
+                  <td className="border px-4 py-2" colSpan={2}>
+                    <strong>Opening</strong><br />
+                    • Opening Speech
+                  </td>
                 </tr>
                 <tr>
                   <td className="border px-4 py-2 whitespace-nowrap">07:20 - 08:00</td>
                   <td className="border px-4 py-2 whitespace-nowrap">16:20 - 17:00</td>
-                  <td className="border px-4 py-2">Kia HQ Key Projects</td>
-                  <td className="border px-4 py-2">
+                  <td className="border px-4 py-2" colSpan={2}>
+                    <strong>Kia HQ Key Projects</strong><br />
                     • Ownership Dealer Standard Renewal Project<br />
                     • Advancing Global Service Retention Management<br />
                     • Dealer Service Capacity Reinforcement
@@ -162,38 +162,49 @@ function About({ onClose }: AboutProps) {
                 <tr>
                   <td className="border px-4 py-2 whitespace-nowrap">08:00 - 08:40</td>
                   <td className="border px-4 py-2 whitespace-nowrap">17:00 - 17:40</td>
-                  <td className="border px-4 py-2">Kia HQ Business Plans</td>
-                  <td className="border px-4 py-2">• 2026 Key Business Plans on the Ownership Mission (BDDS)</td>
+                  <td className="border px-4 py-2" colSpan={2}>
+                    <strong>Kia HQ Business Plans</strong><br />
+                    • 2026 Key Business Plans on the Ownership Mission (BDDS)
+                  </td>
                 </tr>
                 <tr>
                   <td className="border px-4 py-2 whitespace-nowrap">08:40 - 08:50</td>
                   <td className="border px-4 py-2 whitespace-nowrap">17:40 - 17:50</td>
-                  <td className="border px-4 py-2"></td>
-                  <td className="border px-4 py-2">• Break Time</td>
+                  <td className="border px-4 py-2" colSpan={2}>
+                    • Break Time
+                  </td>
                 </tr>
                 <tr>
                   <td className="border px-4 py-2 whitespace-nowrap">08:50 - 09:10</td>
                   <td className="border px-4 py-2 whitespace-nowrap">17:50 - 18:10</td>
-                  <td className="border px-4 py-2">Best Practice</td>
-                  <td className="border px-4 py-2">• RHQ/NSC Best Practices</td>
+                  <td className="border px-4 py-2" colSpan={2}>
+                    <strong>Best Practice</strong><br />
+                    • RHQ/NSC Best Practices
+                  </td>
                 </tr>
                 <tr>
                   <td className="border px-4 py-2 whitespace-nowrap">09:10 - 09:40</td>
                   <td className="border px-4 py-2 whitespace-nowrap">18:10 - 18:40</td>
-                  <td className="border px-4 py-2">Panel Talk</td>
-                  <td className="border px-4 py-2">• Panel Q&A Session</td>
+                  <td className="border px-4 py-2" colSpan={2}>
+                    <strong>Panel Talk</strong><br />
+                    • Panel Q&A Session
+                  </td>
                 </tr>
                 <tr>
                   <td className="border px-4 py-2 whitespace-nowrap">09:40 - 09:50</td>
                   <td className="border px-4 py-2 whitespace-nowrap">18:40 - 18:50</td>
-                  <td className="border px-4 py-2">Awards</td>
-                  <td className="border px-4 py-2">• Awards Ceremony for Excellent RHQ / NSCs</td>
+                  <td className="border px-4 py-2" colSpan={2}>
+                    <strong>Awards</strong><br />
+                    • Awards Ceremony for Excellent RHQ / NSCs
+                  </td>
                 </tr>
                 <tr>
                   <td className="border px-4 py-2 whitespace-nowrap">09:50 - 10:10</td>
                   <td className="border px-4 py-2 whitespace-nowrap">18:50 - 19:10</td>
-                  <td className="border px-4 py-2">Closing</td>
-                  <td className="border px-4 py-2">• Closing Speech</td>
+                  <td className="border px-4 py-2" colSpan={2}>
+                    <strong>Closing</strong><br />
+                    • Closing Speech
+                  </td>
                 </tr>
               </tbody>
             </table>
