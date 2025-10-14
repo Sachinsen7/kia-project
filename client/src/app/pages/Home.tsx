@@ -7,10 +7,8 @@ import dynamic from "next/dynamic";
 import { apiFetch } from "../../config/api";
 import VideoJSPlayer from "../../components/VideoJSPlayer";
 
-// Dynamically import React Player to avoid SSR issues
 const ReactPlayer = dynamic(() => import("react-player/lazy"), { ssr: false });
 
-// Dynamically import PlyrPlayer to avoid SSR issues
 const PlyrPlayer = dynamic(() => import("../../components/PlyrPlayer"), {
   ssr: false,
 });
@@ -30,7 +28,6 @@ function Home({ onClose }: HomeProps) {
         setLoading(true);
         setError("");
 
-        // Fetch teaser by name - you can change this name as needed
         const response = await apiFetch<{
           message: string;
           teaser: { name: string; videoUrl: string };
@@ -44,7 +41,6 @@ function Home({ onClose }: HomeProps) {
       } catch (err) {
         console.error("Error fetching teaser video:", err);
         setError("Failed to load video");
-        // Fallback to a default video URL if the API fails
         setVideoUrl("https://www.youtube.com/watch?v=q96KKjfwHEE");
       } finally {
         setLoading(false);
@@ -74,17 +70,6 @@ function Home({ onClose }: HomeProps) {
             />{" "}
           </button>
         )}
-        {/* Heading */}
-        {/* <h1 className="text-3xl ml-10 md:text-5xl text-gray-900 mb-2">
-          Welcome to
-        </h1>
-
-        <div className="ml-40 flex items-center">
-          <div className="left-0 w-[240px] h-[4px] text-[#000] bg-[#000] absolute top-37"></div>
-          <h2 className="text-4xl md:text-5xl text-gray-900">
-            2025 <span className="font-bold">GOEF</span>
-          </h2>
-        </div> */}
         <Image
           width={700}
           height={22}
@@ -92,7 +77,6 @@ function Home({ onClose }: HomeProps) {
           alt="Close sidebar"
           className="cursor-pointer  "
         />{" "}
-        {/* Intro paragraphs - aligned end */}
         <div className="mt-20 flex justify-end md:p-20">
           <div className="space-y-4 text-gray-700 tracking-widest leading-relaxed border-r-2 border-b-2 border-gray-300 pr-6 pb-6 max-w-3xl text-left">
             <p>

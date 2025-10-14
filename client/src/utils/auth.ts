@@ -9,7 +9,7 @@ export const getAuthToken = (): string | null => {
     return localStorage.getItem("token");
 };
 
-export const requireAuth = (router: any): boolean => {
+export const requireAuth = (router: { push: (path: string) => void }): boolean => {
     if (!isAuthenticated()) {
         alert("Please log in to access this feature.");
         router.push("/login");
