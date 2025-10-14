@@ -412,9 +412,9 @@ const AskKia: React.FC<AskKiaProps> = ({ onClose }) => {
         <div className="px-4 mt-20 w-[1108px] h-[312px] md:px-8 text-gray-700 leading-relaxed">
           <div>
             <p className="text-gray-700 text-[14px]">
-              GOEF is not just an event. It is a special journey where we build Kia's future together. <br />Your
+              GOEF is not just an event. It is a special journey where we build Kia&apos;s future together. <br />Your
               insightful questions and keen perspectives are the most crucial driving force behind <br /> our innovation.
-              Join us in shaping our future and feel free to share your curiosity about <br /> Kia's vision. Every single
+              Join us in shaping our future and feel free to share your curiosity about <br /> Kia&apos;s vision. Every single
               one of your voices becomes a valuable seed for the future.
             </p>
 
