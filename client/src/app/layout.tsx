@@ -21,6 +21,11 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Kia",
   description: "3D city project with sidebars",
+  icons: {
+    icon: "/opt/goef_파비콘 48x48 px.svg",
+    shortcut: "/opt/goef_파비콘 48x48 px.svg",
+    apple: "/opt/goef_파비콘 48x48 px.svg",
+  },
 };
 
 export default function RootLayout({
