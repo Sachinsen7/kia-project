@@ -39,6 +39,12 @@ export default function Dashboard({ onClose }: DashboardProps) {
   const handleFileUpload = async (videos: File[], category: Category) => {
     if (!videos.length) return;
 
+    // Check if user has token for upload
+    if (!token) {
+      alert("Please log in to upload files.");
+      return;
+    }
+
     setIsUploading(true);
     try {
       const uploadedFiles: string[] = [];
