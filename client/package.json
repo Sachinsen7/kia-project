@@ -24,7 +24,7 @@
     "react-player": "^2.16.1",
     "recharts": "^3.2.1",
     "uuid": "^13.0.0",
-    "video.js": "^8.23.4"
+    "video.js": "^4.12.15"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
