@@ -73,10 +73,10 @@ function HelpSupport({ onClose }: HelpSupportProps) {
         {/* Intro */}
         <div className="px-4 w-[1098px] h-[126px] md:px-8 text-gray-700 leading-relaxed">
           <div className="mt-15">
-            <p className="text-gray-700 leading-relaxed mb-8 ml-20">
-              We are committed to making sure you enjoy this event. If you cant
-              find the answer <br /> you&apos;re looking for, or if you need
-              personalized help, please contact us via email. <br />
+            <p className="text-gray-700 text-[14px] leading-relaxed mb-8 ml-20">
+              We are committed to making sure you enjoy this event. If you cant <br />
+              find the answer you&apos;re looking for, or if you need
+              personalized help, <br /> please contact us via email. <br />
               Contact email:{" "}
               <a
                 className="underline text-blue-500"
@@ -86,7 +86,7 @@ function HelpSupport({ onClose }: HelpSupportProps) {
               </a>
             </p>
             <Image
-              className="absolute top-84 right-0 object-cover"
+              className="absolute top-86 right-0 object-cover"
               width={600}
               height={500}
               src="/new border.png"
@@ -95,7 +95,7 @@ function HelpSupport({ onClose }: HelpSupportProps) {
           </div>
         </div>
         {/* FAQs */}
-        <div className="space-y-6">
+        <div className="space-y-6 mt-20">
           {faqs.map((faq, index) => (
             <div
               key={index}
@@ -116,11 +116,10 @@ function HelpSupport({ onClose }: HelpSupportProps) {
 
               {/* Animated Answer */}
               <div
-                className={`overflow-hidden transition-all duration-500 ease-in-out ${
-                  openIndex === index
-                    ? "max-h-96 opacity-100 mt-3"
-                    : "max-h-0 opacity-0"
-                }`}
+                className={`overflow-hidden transition-all duration-500 ease-in-out ${openIndex === index
+                  ? "max-h-96 opacity-100 mt-3"
+                  : "max-h-0 opacity-0"
+                  }`}
               >
                 <p className="text-gray-600 text-sm leading-relaxed">
                   {faq.answer}
