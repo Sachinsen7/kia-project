@@ -5,6 +5,8 @@ import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { apiFetch } from "../../config/api";
 import Carousel from "../../components/Carousel";
+import { useRouter } from "next/navigation";
+import { requireAuth } from "@/utils/auth";
 
 // Dynamically import Plyr to avoid SSR issues
 const PlyrPlayer = dynamic(() => import("../../components/PlyrPlayer"), {
@@ -16,6 +18,15 @@ type HistoryGOEFProps = {
 };
 
 export default function HistoryGOEF({ onClose }: HistoryGOEFProps) {
+  const router = useRouter();
+
+  // Check authentication on component mount
+  useEffect(() => {
+    if (!requireAuth(router)) {
+      return;
+    }
+  }, [router]);
+
   const images = [
     "/history/DSC01188.JPG",
     "/history/DSC01511.JPG",
