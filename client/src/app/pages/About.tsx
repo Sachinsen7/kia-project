@@ -29,14 +29,13 @@ function About({ onClose }: AboutProps) {
             />
           </button>
         )}
-          <Image
-            width={800}
-            height={22}
-            src="/Group 106.png"
-            alt="Close sidebar"
-            className="cursor-pointer mb-6  "
-          />{" "}
-
+        <Image
+          width={800}
+          height={22}
+          src="/Group 106.png"
+          alt="Close sidebar"
+          className="cursor-pointer mb-6  "
+        />{" "}
         {/* Content */}
         <div className="relative px-6 md:px-12 text-gray-700 leading-relaxed border-l  border-r  border-gray-500">
           <div className="mb-32">
@@ -120,7 +119,6 @@ function About({ onClose }: AboutProps) {
             />
           </div>
         </div>
-
         {/* Table Section */}
         <div className="mt-20">
           <h2 className="text-2xl md:text-3xl underline font-bold mb-6 text-gray-900">
@@ -131,79 +129,128 @@ function About({ onClose }: AboutProps) {
             <table className="table-auto w-full border border-gray-300 text-left text-sm md:text-base">
               <thead className="bg-gray-200">
                 <tr>
-                  <th className="border-x border-t border-gray-500 px-4 py-2 text-center" colSpan={2}>Time</th>
-                  <th className="border-x border-t border-gray-500 px-4 py-2 text-center" colSpan={2}>Title & Content</th>
+                  <th
+                    className="border-x border-t border-gray-500 px-4 py-2 text-center"
+                    colSpan={2}
+                  >
+                    Time
+                  </th>
+                  <th
+                    className="border-x border-t border-gray-500 px-4 py-2 text-center"
+                    colSpan={2}
+                  >
+                    Title & Content
+                  </th>
                 </tr>
                 <tr>
-                  <th className="border border-gray-500 px-4 py-2 text-center">AM</th>
-                  <th className="border border-gray-500 px-4 py-2 text-center">PM</th>
+                  <th className="border border-gray-500 px-4 py-2 text-center">
+                    AM
+                  </th>
+                  <th className="border border-gray-500 px-4 py-2 text-center">
+                    PM
+                  </th>
                   <th className="border-r border-b border-gray-500 px-4 py-2 text-center"></th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td className="border px-4 py-2 whitespace-nowrap">07:00 - 07:20</td>
-                  <td className="border px-4 py-2 whitespace-nowrap">16:00 - 16:20</td>
+                  <td className="border px-4 py-2 whitespace-nowrap">
+                    07:00 - 07:20
+                  </td>
+                  <td className="border px-4 py-2 whitespace-nowrap">
+                    16:00 - 16:20
+                  </td>
                   <td className="border px-4 py-2" colSpan={2}>
-                    <strong>Opening</strong><br />
-                    • Opening Speech
+                    <strong>Opening</strong>
+                    <br />• Opening Speech
                   </td>
                 </tr>
                 <tr>
-                  <td className="border px-4 py-2 whitespace-nowrap">07:20 - 08:00</td>
-                  <td className="border px-4 py-2 whitespace-nowrap">16:20 - 17:00</td>
+                  <td className="border px-4 py-2 whitespace-nowrap">
+                    07:20 - 08:00
+                  </td>
+                  <td className="border px-4 py-2 whitespace-nowrap">
+                    16:20 - 17:00
+                  </td>
                   <td className="border px-4 py-2" colSpan={2}>
-                    <strong>Kia HQ Key Projects</strong><br />
-                    • Ownership Dealer Standard Renewal Project<br />
-                    • Advancing Global Service Retention Management<br />
-                    • Dealer Service Capacity Reinforcement
+                    <strong>Kia HQ Key Projects</strong>
+                    <br />
+                    • Ownership Dealer Standard Renewal Project
+                    <br />
+                    • Advancing Global Service Retention Management
+                    <br />• Dealer Service Capacity Reinforcement
                   </td>
                 </tr>
                 <tr>
-                  <td className="border px-4 py-2 whitespace-nowrap">08:00 - 08:40</td>
-                  <td className="border px-4 py-2 whitespace-nowrap">17:00 - 17:40</td>
+                  <td className="border px-4 py-2 whitespace-nowrap">
+                    08:00 - 08:40
+                  </td>
+                  <td className="border px-4 py-2 whitespace-nowrap">
+                    17:00 - 17:40
+                  </td>
                   <td className="border px-4 py-2" colSpan={2}>
-                    <strong>Kia HQ Business Plans</strong><br />
-                    • 2026 Key Business Plans on the Ownership Mission (BDDS)
+                    <strong>Kia HQ Business Plans</strong>
+                    <br />• 2026 Key Business Plans on the Ownership Mission
+                    (BDDS)
                   </td>
                 </tr>
                 <tr>
-                  <td className="border px-4 py-2 whitespace-nowrap">08:40 - 08:50</td>
-                  <td className="border px-4 py-2 whitespace-nowrap">17:40 - 17:50</td>
+                  <td className="border px-4 py-2 whitespace-nowrap">
+                    08:40 - 08:50
+                  </td>
+                  <td className="border px-4 py-2 whitespace-nowrap">
+                    17:40 - 17:50
+                  </td>
                   <td className="border px-4 py-2" colSpan={2}>
                     • Break Time
                   </td>
                 </tr>
                 <tr>
-                  <td className="border px-4 py-2 whitespace-nowrap">08:50 - 09:10</td>
-                  <td className="border px-4 py-2 whitespace-nowrap">17:50 - 18:10</td>
+                  <td className="border px-4 py-2 whitespace-nowrap">
+                    08:50 - 09:10
+                  </td>
+                  <td className="border px-4 py-2 whitespace-nowrap">
+                    17:50 - 18:10
+                  </td>
                   <td className="border px-4 py-2" colSpan={2}>
-                    <strong>Best Practice</strong><br />
-                    • RHQ/NSC Best Practices
+                    <strong>Best Practice</strong>
+                    <br />• RHQ/NSC Best Practices
                   </td>
                 </tr>
                 <tr>
-                  <td className="border px-4 py-2 whitespace-nowrap">09:10 - 09:40</td>
-                  <td className="border px-4 py-2 whitespace-nowrap">18:10 - 18:40</td>
+                  <td className="border px-4 py-2 whitespace-nowrap">
+                    09:10 - 09:40
+                  </td>
+                  <td className="border px-4 py-2 whitespace-nowrap">
+                    18:10 - 18:40
+                  </td>
                   <td className="border px-4 py-2" colSpan={2}>
-                    <strong>Panel Talk</strong><br />
-                    • Panel Q&A Session
+                    <strong>Panel Talk</strong>
+                    <br />• Panel Q&A Session
                   </td>
                 </tr>
                 <tr>
-                  <td className="border px-4 py-2 whitespace-nowrap">09:40 - 09:50</td>
-                  <td className="border px-4 py-2 whitespace-nowrap">18:40 - 18:50</td>
+                  <td className="border px-4 py-2 whitespace-nowrap">
+                    09:40 - 09:50
+                  </td>
+                  <td className="border px-4 py-2 whitespace-nowrap">
+                    18:40 - 18:50
+                  </td>
                   <td className="border px-4 py-2" colSpan={2}>
-                    <strong>Awards</strong><br />
-                    • Awards Ceremony for Excellent RHQ / NSCs
+                    <strong>Awards</strong>
+                    <br />• Awards Ceremony for Excellent RHQ / NSCs
                   </td>
                 </tr>
                 <tr>
-                  <td className="border px-4 py-2 whitespace-nowrap">09:50 - 10:10</td>
-                  <td className="border px-4 py-2 whitespace-nowrap">18:50 - 19:10</td>
+                  <td className="border px-4 py-2 whitespace-nowrap">
+                    09:50 - 10:10
+                  </td>
+                  <td className="border px-4 py-2 whitespace-nowrap">
+                    18:50 - 19:10
+                  </td>
                   <td className="border px-4 py-2" colSpan={2}>
-                    <strong>Closing</strong><br />
-                    • Closing Speech
+                    <strong>Closing</strong>
+                    <br />• Closing Speech
                   </td>
                 </tr>
               </tbody>
