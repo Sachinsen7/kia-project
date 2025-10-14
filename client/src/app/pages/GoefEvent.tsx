@@ -420,23 +420,23 @@ const GoefEvent: React.FC<GoefEventProps> = ({ onClose }) => {
         />{" "}
         <div className="px-4 w-[1098px] h-[126px] md:px-8 text-gray-700 leading-relaxed">
           <div className="mt-15">
-            <p className="text-gray-700 leading-relaxed mb-8">
+            <p className="text-gray-700 leading-relaxed mb-3">
               We&apos;re hosting a forum with your active participation at this
-              year&apos;s GOEF, and we have <br />a special event planned.
+              year&apos;s GOEF, and  <br /> we have a special event planned.
               Please share your thoughts on
               <strong>
-                &nbsp;&quot;What does ownership mean to you?&quot;
+                &nbsp;&quot;What does <br /> ownership mean to you?&quot;
               </strong>{" "}
             </p>
 
             <p className="text-gray-700 leading-relaxed mb-8">
               We&apos;ll select the best submissions and award them with a prize
-              during the live stream <br /> on the day of the GOEF. We look
+              during the live <br /> stream <br /> on the day of the GOEF. We look
               forward to your active participation.
             </p>
 
             <Image
-              className="absolute top-75 right-0 object-cover"
+              className="absolute top-77 right-0 object-cover"
               width={670}
               height={200}
               src="/event/border.png"

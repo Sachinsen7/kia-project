@@ -116,8 +116,7 @@ const AskKia: React.FC<AskKiaProps> = ({ onClose }) => {
         return data.map((c) => ({
           id: c._id,
           user: c.createdBy
-            ? `${c.createdBy.firstName || "Unknown"} ${
-                c.createdBy.lastName || ""
+            ? `${c.createdBy.firstName || "Unknown"} ${c.createdBy.lastName || ""
               }`.trim() || "Unknown"
             : "Unknown",
           userId: c.createdBy?._id || "",
@@ -152,8 +151,7 @@ const AskKia: React.FC<AskKiaProps> = ({ onClose }) => {
           return {
             id: q._id,
             user: q.createdBy
-              ? `${q.createdBy.firstName || "Unknown"} ${
-                  q.createdBy.lastName || ""
+              ? `${q.createdBy.firstName || "Unknown"} ${q.createdBy.lastName || ""
                 }`.trim() || "Unknown"
               : "Unknown",
             userId: q.createdBy?._id || "",
@@ -203,8 +201,7 @@ const AskKia: React.FC<AskKiaProps> = ({ onClose }) => {
       const newQ: Question = {
         id: response.qna._id,
         user: response.qna.createdBy
-          ? `${response.qna.createdBy.firstName || "Unknown"} ${
-              response.qna.createdBy.lastName || ""
+          ? `${response.qna.createdBy.firstName || "Unknown"} ${response.qna.createdBy.lastName || ""
             }`.trim() || "Unknown"
           : currentUserFullName,
         userId: response.qna.createdBy?._id || currentUserId,
@@ -249,8 +246,7 @@ const AskKia: React.FC<AskKiaProps> = ({ onClose }) => {
         token
       );
       const displayNameFromUser = response.comment.createdBy
-        ? `${response.comment.createdBy.firstName || "Unknown"} ${
-            response.comment.createdBy.lastName || ""
+        ? `${response.comment.createdBy.firstName || "Unknown"} ${response.comment.createdBy.lastName || ""
           }`.trim() || "Unknown"
         : undefined;
 
@@ -272,11 +268,11 @@ const AskKia: React.FC<AskKiaProps> = ({ onClose }) => {
         prev.map((q) =>
           q.id === id
             ? {
-                ...q,
-                comments: q.comments + 1,
-                commentList: [...q.commentList, newComment],
-                showCommentInput: false,
-              }
+              ...q,
+              comments: q.comments + 1,
+              commentList: [...q.commentList, newComment],
+              showCommentInput: false,
+            }
             : q
         )
       );
@@ -307,10 +303,10 @@ const AskKia: React.FC<AskKiaProps> = ({ onClose }) => {
         prev.map((q) =>
           q.id === id
             ? {
-                ...q,
-                likes: response.likesCount,
-                likedBy: response.likes,
-              }
+              ...q,
+              likes: response.likesCount,
+              likedBy: response.likes,
+            }
             : q
         )
       );
@@ -354,10 +350,10 @@ const AskKia: React.FC<AskKiaProps> = ({ onClose }) => {
         prev.map((q) =>
           q.id === questionId
             ? {
-                ...q,
-                comments: q.comments - 1,
-                commentList: q.commentList.filter((c) => c.id !== commentId),
-              }
+              ...q,
+              comments: q.comments - 1,
+              commentList: q.commentList.filter((c) => c.id !== commentId),
+            }
             : q
         )
       );
@@ -406,51 +402,52 @@ const AskKia: React.FC<AskKiaProps> = ({ onClose }) => {
           </button>
         )}
         <Image
-                    width={900}
-                    height={22}
-                    src="/Group 108.png"
-                    alt="Close sidebar"
-                    className="cursor-pointer mb-6  "
-                  />{" "}
+          width={900}
+          height={22}
+          src="/Group 108.png"
+          alt="Close sidebar"
+          className="cursor-pointer mb-6  "
+        />{" "}
         <br />
         <div className="px-4 mt-20 w-[1108px] h-[312px] md:px-8 text-gray-700 leading-relaxed">
           <div>
-            <p className="text-gray-700 text-[15px]">
-              The GOEF event is where the future of Kia takes shape, and we want
-              your voice to be a part of it. <br /> Feel free to ask any
-              questions you&apos;ve been curious about regarding Kia HQ. We are
-              always listening <br /> to your valuable input.
+            <p className="text-gray-700 text-[14px]">
+              GOEF is not just an event. It is a special journey where we build Kia&apos;s future together. <br />Your
+              insightful questions and keen perspectives are the most crucial driving force behind <br /> our innovation.
+              Join us in shaping our future and feel free to share your curiosity about <br /> Kia&apos;s vision. Every single
+              one of your voices becomes a valuable seed for the future.
             </p>
 
-            <h2 className="font-bold text-gray-800 text-[15px] mt-1">
+            <h2 className="font-bold text-gray-800 text-[14px] mt-1">
               How to Participate
             </h2>
-            <p className="text-gray-700 text-[15px]">
-              Submit Your Question: Please leave your questions in the comments
-              below.
+            <p className="text-gray-700 text-[14px]">
+              - <span className="font-bold">Submit your question</span>: Feel free to share your questions about a wide range of topics <br /> to be
+              discussed at GOEF, including our strategy, business plans, and insights into our <br /> customers and
+              the market.
             </p>
-            <p className="text-gray-700 text-[15px]">
-              Get Your Answer: We will select questions to be answered directly
-              on-site during the GOEF event.
+            <p className="text-gray-700 text-[14px]">
+              - <span className="font-bold"> Get Your Answer</span>: We will select questions to be answered directly
+              on-site <br /> during the GOEF event.
             </p>
 
-            <h2 className="font-bold text-[15px] mt-2 text-gray-800">
+            <h2 className="font-bold text-[14px] mt-2 text-gray-800">
               For Unanswered Questions
             </h2>
-            <p className="text-gray-700 text-[15px]">
+            <p className="text-gray-700 text-[14px]">
               We appreciate your understanding that we may not be able to answer
-              all questions immediately due <br /> to the nature of the live
-              event. If your question isn&apos;t answered on the spot, a
-              dedicated team <br /> member will review it after the event and
-              provide a thorough response.
+              all questions <br /> immediately due to the nature of the live
+              event. If your question isn&apos;t answered on the <br /> spot, a
+              dedicated team member will review it after the event and
+              provide a thorough <br /> response.
             </p>
 
             <div className="">
               <Image
-                className="absolute top-82 right-0 object-cover"
+                className="absolute top-[284px] right-0 object-cover"
                 width={600}
                 height={1000}
-                src="/askkia/border.png"
+                src="/askkia/border-2.png"
                 alt=""
               />
             </div>
@@ -458,7 +455,7 @@ const AskKia: React.FC<AskKiaProps> = ({ onClose }) => {
         </div>
 
         {/* Write Post Section */}
-        <div className="mb-8 mt-10 bg-white border border-gray-200 rounded-lg p-6">
+        <div className="mb-8 mt-24 bg-white border border-gray-200 rounded-lg p-6">
           {!showInput ? (
             <div className="flex items-center justify-between">
               <h2 className="text-xl font-semibold text-gray-900">
@@ -633,14 +630,14 @@ const AskKia: React.FC<AskKiaProps> = ({ onClose }) => {
                         </div>
                         {(c.userId === currentUserId ||
                           (localStorage.getItem("role") || "").toLowerCase() ===
-                            "admin") && (
-                          <button
-                            onClick={() => handleDeleteComment(q.id, c.id)}
-                            className="text-red-500 hover:text-red-700 border-2 border-blue-500 p-1"
-                          >
-                            <Trash2 size={14} />
-                          </button>
-                        )}
+                          "admin") && (
+                            <button
+                              onClick={() => handleDeleteComment(q.id, c.id)}
+                              className="text-red-500 hover:text-red-700 border-2 border-blue-500 p-1"
+                            >
+                              <Trash2 size={14} />
+                            </button>
+                          )}
                       </div>
                       <div
                         className="text-sm text-gray-700 ml-2"

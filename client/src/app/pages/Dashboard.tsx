@@ -25,7 +25,7 @@ export default function Dashboard({ onClose }: DashboardProps) {
 
       const c = Number(localStorage.getItem("dashboard_content_views") || "0");
       setContentViews(c);
-    } catch {}
+    } catch { }
   }, []);
 
   const incrementContentViews = () => {
@@ -33,11 +33,17 @@ export default function Dashboard({ onClose }: DashboardProps) {
       const next = contentViews + 1;
       setContentViews(next);
       localStorage.setItem("dashboard_content_views", String(next));
-    } catch {}
+    } catch { }
   };
 
   const handleFileUpload = async (videos: File[], category: Category) => {
     if (!videos.length) return;
+
+    // Check if user has token for upload
+    if (!token) {
+      alert("Please log in to upload files.");
+      return;
+    }
 
     setIsUploading(true);
     try {
@@ -187,7 +193,7 @@ export default function Dashboard({ onClose }: DashboardProps) {
             alt="2024 GOEF Highlight"
             width={600}
             height={600}
-            className="absolute bottom-68 left-0 object-cover"
+            className="absolute bottom-64 left-0 object-cover"
           />
         </div>
         <section className="mb-10">

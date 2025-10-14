@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import Image from "next/image";
+import { useState, useMemo, useEffect } from "react";
 import { links } from "@/app/data/Links";
 import { useRouter } from "next/navigation";
 import LiveThoughtsFeed from "./LiveThoughtsFeed";
@@ -52,16 +51,13 @@ async function fetchLiveData(token: string): Promise<{ url?: string } | null> {
 }
 
 export default function CityScene({ onSelect }: CitySceneProps) {
-  const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const [isImageLoaded, setIsImageLoaded] = useState(true); // Set to true by default so icons always show
   const [isLoadingLive, setIsLoadingLive] = useState(false);
-  const [isEventOpen, setIsEventOpen] = useState(false);
-  const [eventPosts, setEventPosts] = useState<string[]>([
-    "To me, ownership is key... – John, USA",
-    "I love my Kia for reliability... – Anna, Germany",
-    "Driving Kia makes me proud... – Raj, India",
-  ]);
 
-  const router = useRouter();
+  // Ensure icons are visible after component mounts
+  useEffect(() => {
+    setIsImageLoaded(true);
+  }, []);
 
   const memoizedIcons = useMemo(() => {
     return links.map((link: CityLink) => {
@@ -118,11 +114,10 @@ export default function CityScene({ onSelect }: CitySceneProps) {
           key={link.id}
           onClick={handleClick}
           disabled={link.id === "live-link" && isLoadingLive}
-          className={`absolute transform -translate-x-1/2 -translate-y-1/2 group ${
-            isLoadingLive && link.id === "live-link"
-              ? "opacity-50 cursor-wait"
-              : ""
-          }`}
+          className={`absolute transform -translate-x-1/2 -translate-y-1/2 group ${isLoadingLive && link.id === "live-link"
+            ? "opacity-50 cursor-wait"
+            : ""
+            }`}
           style={{
             left: `${link.x}%`,
             top: `${link.y}%`,
@@ -152,19 +147,23 @@ export default function CityScene({ onSelect }: CitySceneProps) {
     });
   }, [onSelect]);
 
-  // overlapping landing page image
   return (
     <div className="relative w-full h-full bg-white overflow-hidden flex flex-col">
-      {/* Background Image */}
-      <Image
-        src="/landing-page.png"
-        alt="City Scene"
-        fill
-        priority
-        className="object-fill transition-opacity duration-500"
-        onLoadingComplete={() => {
-          console.timeEnd("imageLoadToIcons");
+      {/* Background Video */}
+      <video
+        src="/new_video_landing_page.mp4"
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover"
+        onLoadedData={() => {
+          console.log("Video loaded successfully");
           setIsImageLoaded(true);
+        }}
+        onError={(e) => {
+          console.error("Video failed to load:", e);
+          setIsImageLoaded(true); // Still show icons even if video fails
         }}
       />
 
@@ -176,10 +175,8 @@ export default function CityScene({ onSelect }: CitySceneProps) {
         })}
       </div>
 
-      {/* Icons overlay after image is loaded */}
-      {isImageLoaded && (
-        <div className="absolute inset-0 w-full h-full">{memoizedIcons}</div>
-      )}
+      {/* Icons overlay - always visible */}
+      <div className="absolute inset-0 w-full h-full z-10">{memoizedIcons}</div>
 
       {/* Event Page Interface (Bottom Left) */}
       {/* <div className="absolute bottom-24 left-4">
