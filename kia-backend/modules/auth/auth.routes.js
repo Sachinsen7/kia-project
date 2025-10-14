@@ -6,7 +6,7 @@ const {
   resetPassword,
   verifyResetCode,
   setPassword,
-} = require("../PasswordReset/PasswordReset.controller");
+} = require("../PasswordReset/PasswordReset.controller copy");
 
 router.post("/signup", signUp);
 router.post("/login", login);
