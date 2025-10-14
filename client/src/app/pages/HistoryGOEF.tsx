@@ -158,7 +158,7 @@ export default function HistoryGOEF({ onClose }: HistoryGOEFProps) {
 
         {/* Gallery Carousel */}
         <div className="text-center px-6 py-12">
-          <h2 className="mt-10 text-[24px] text-gray-900 mb-10">Gallery</h2>
+          <h2 className="mt-10 text-[24px] font-bold text-gray-900 mb-10">Gallery</h2>
           <Carousel images={images} interval={3000} />
         </div>
       </div>

@@ -18,10 +18,6 @@ const Carousel = memo(({ images, interval = 3000 }: CarouselProps) => {
     setCurrentIndex((prev) => (prev + 1) % images.length);
   };
 
-  useEffect(() => {
-    const autoSlide = setInterval(handleNext, interval);
-    return () => clearInterval(autoSlide);
-  }, []);
 
   return (
     <div className="relative w-full max-w-4xl mx-auto">
