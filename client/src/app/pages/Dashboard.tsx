@@ -25,7 +25,7 @@ export default function Dashboard({ onClose }: DashboardProps) {
 
       const c = Number(localStorage.getItem("dashboard_content_views") || "0");
       setContentViews(c);
-    } catch { }
+    } catch {}
   }, []);
 
   const incrementContentViews = () => {
@@ -33,7 +33,7 @@ export default function Dashboard({ onClose }: DashboardProps) {
       const next = contentViews + 1;
       setContentViews(next);
       localStorage.setItem("dashboard_content_views", String(next));
-    } catch { }
+    } catch {}
   };
 
   const handleFileUpload = async (videos: File[], category: Category) => {
@@ -125,17 +125,16 @@ export default function Dashboard({ onClose }: DashboardProps) {
           alt="Close sidebar"
           className="cursor-pointer pb-8"
         />{" "}
-
         <div className="mt-10 text-gray-700 leading-relaxed w-[1108px] h-[200px]">
           <div className="mb-52">
             <p className="text-sm text-gray-700 mb-8 leading-relaxed">
               Thank you for your dedicated efforts to provide exceptional
               ownership experiences over the <br /> past year. <br /> To
               continue building a strong GOEF community, we invite you to share
-              your best practices and <br /> innovative success stories
+              your best practices <br /> and innovative success stories
               regarding ownership programs and differentiated customer <br />{" "}
               experiences from your region. Your shared experiences will be a
-              valuable source of inspiration for us all.
+              valuable source of <br /> inspiration for us all.
               <br />
             </p>
           </div>
@@ -149,7 +148,6 @@ export default function Dashboard({ onClose }: DashboardProps) {
             className="absolute top-76 right-0 object-cover"
           />
         </div>
-
         {/* Best Practices */}
         <section className="mb-15">
           <h2 className="text-lg font-semibold mb-2 text-black">
@@ -170,18 +168,16 @@ export default function Dashboard({ onClose }: DashboardProps) {
             />
           </label>
         </section>
-
         <div className="h-[2px] w-full bg-gray-300 mt-5"></div>
-
         <div className="mt-40 text-gray-700 leading-relaxed w-[1108px] h-[200px]">
           <div className="mb-10">
             <p className="text-sm text-gray-700 leading-relaxed">
               We are creating a forum at GOEF and plan to edit the videos from
-              all regions into a single-story <br /> video. Please send us a
-              horizontal, high-quality video message of encouragement to your{" "}
-              <br />
+              all regions into a <br /> single-story <br /> video. Please send
+              us a horizontal, high-quality video message of encouragement to
+              your <br />
               colleagues worldwide. It should feature all regional members for a
-              more meaningful impact, and it <br /> will be used as the
+              more meaningful impact, <br /> and it <br /> will be used as the
               GOEF closing video.
             </p>
           </div>
@@ -194,7 +190,6 @@ export default function Dashboard({ onClose }: DashboardProps) {
             className="absolute bottom-68 left-0 object-cover"
           />
         </div>
-
         <section className="mb-10">
           <h2 className="text-lg font-semibold mb-2 text-black">
             Greeting Videos
