@@ -1,15 +1,25 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ChevronDown, ChevronUp, X } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { requireAuth } from "@/utils/auth";
 
 type HelpSupportProps = {
   onClose?: () => void;
 };
 
 function HelpSupport({ onClose }: HelpSupportProps) {
+  const router = useRouter();
   const [openIndex, setOpenIndex] = useState<number | null>(0);
+
+  // Check authentication on component mount
+  useEffect(() => {
+    if (!requireAuth(router)) {
+      return;
+    }
+  }, [router]);
 
   const faqs = [
     {
