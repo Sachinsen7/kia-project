@@ -7,7 +7,9 @@ import { apiFetch } from "../../config/api";
 import Carousel from "../../components/Carousel";
 
 // Dynamically import Plyr to avoid SSR issues
-const PlyrPlayer = dynamic(() => import("../../components/PlyrPlayer"), { ssr: false });
+const PlyrPlayer = dynamic(() => import("../../components/PlyrPlayer"), {
+  ssr: false,
+});
 
 type HistoryGOEFProps = {
   onClose?: () => void;
@@ -37,9 +39,10 @@ export default function HistoryGOEF({ onClose }: HistoryGOEFProps) {
         setLoading(true);
         setError("");
 
-        const response = await apiFetch<{ message: string; teaser: { name: string; videoUrl: string } }>(
-          "/api/teaser/video2"
-        );
+        const response = await apiFetch<{
+          message: string;
+          teaser: { name: string; videoUrl: string };
+        }>("/api/teaser/video2");
 
         if (response.teaser && response.teaser.videoUrl) {
           setVideoUrl(response.teaser.videoUrl);
@@ -99,20 +102,21 @@ export default function HistoryGOEF({ onClose }: HistoryGOEFProps) {
             </p>
             <p className="mb-4">
               After being held online due to the COVID-19 pandemic, the forum
-              returned to an in-person, three-day event in Seoul in 2024.
-              Under the slogan <span className="italic">“Vision to Reality”</span>,
-              it was a meaningful occasion where HQ and NSC ownership leaders
-              came together to strengthen their network.
+              returned to an in-person, three-day event in Seoul in 2024. Under
+              the slogan <span className="italic">“Vision to Reality”</span>, it
+              was a meaningful occasion where HQ and NSC ownership leaders came
+              together to strengthen their network.
             </p>
             <p className="mb-4">
-              It was also a moment to reflect deeply on ownership experience
-              and customer value through special lectures on Kia’s brand
-              strategy, core values, and customer experience, as well as an
-              insightful field trip to key Kia sites and famous spots in Seoul.
+              It was also a moment to reflect deeply on ownership experience and
+              customer value through special lectures on Kia’s brand strategy,
+              core values, and customer experience, as well as an insightful
+              field trip to key Kia sites and famous spots in Seoul.
             </p>
             <p>
               We look forward to meeting again in Seoul in the near future to
-              further strengthen our ownership capabilities and unite in our vision.
+              further strengthen our ownership capabilities and unite in our
+              vision.
             </p>
 
             <h2 className="text-center mt-5 text-[24px] mb-2 font-bold text-black">
@@ -140,9 +144,7 @@ export default function HistoryGOEF({ onClose }: HistoryGOEFProps) {
 
         {/* Gallery Carousel */}
         <div className="text-center px-6 py-12 mt-40">
-          <h2 className="text-3xl mt-10 md:text-5xl text-gray-900 mb-10">
-            Gallery
-          </h2>
+          <h2 className="mt-10 text-[24px] text-gray-900 mb-10">Gallery</h2>
           <Carousel images={images} interval={3000} />
         </div>
       </div>
