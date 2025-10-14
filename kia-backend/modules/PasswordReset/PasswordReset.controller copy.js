@@ -2,6 +2,7 @@ const crypto = require("crypto");
 const User = require("../users/user.model");
 const PasswordResetToken = require("./PasswordResetToken.model");
 const { sendMail } = require("../../utils/Mail"); // import the helper
+const bcrypt = require("bcrypt");
 
 // POST /api/auth/forgot-password
 
