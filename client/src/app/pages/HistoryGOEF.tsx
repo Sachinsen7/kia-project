@@ -93,8 +93,8 @@ export default function HistoryGOEF({ onClose }: HistoryGOEFProps) {
         </div>
 
         {/* Text Section */}
-        <div className="relative px-6 md:px-12 text-gray-700 leading-relaxed border-l border-r border-b border-gray-600">
-          <div className="mb-52">
+        <div className="px-6 md:px-12 text-gray-700 leading-relaxed border-l border-r border-gray-600">
+          <div className="mb-8">
             <p className="mb-4">
               GOEF is a global forum where ownership leaders from around the
               world gather annually to share and discuss business strategies,
@@ -119,31 +119,34 @@ export default function HistoryGOEF({ onClose }: HistoryGOEFProps) {
               vision.
             </p>
 
-            <h2 className="text-center mt-5 text-[24px] mb-2 font-bold text-black">
-              2024 GOEF Highlights​
+            <h2 className="text-center text-[24px] mb-8 font-bold text-black">
+              2024 GOEF Highlights
             </h2>
           </div>
 
           {/* Highlight Video */}
-          <div className="absolute top-100 left-11 w-[90%] items-center mt-12 mb-20 h-auto">
+          <div className="w-full mb-12">
             {loading ? (
-              <div className="w-full h-[600px] flex items-center justify-center bg-gray-100 rounded-lg">
+              <div className="w-full h-[400px] md:h-[500px] lg:h-[600px] flex items-center justify-center bg-gray-100 rounded-lg">
                 <div className="text-lg text-gray-600">Loading video...</div>
               </div>
             ) : error ? (
-              <div className="w-full h-[600px] flex items-center justify-center bg-gray-100 rounded-lg">
+              <div className="w-full h-[400px] md:h-[500px] lg:h-[600px] flex items-center justify-center bg-gray-100 rounded-lg">
                 <div className="text-lg text-red-600">{error}</div>
               </div>
             ) : (
-              <div className="w-full h-[600px] overflow-hidden rounded-lg shadow-md">
+              <div className="w-full h-[400px] md:h-[500px] lg:h-[600px] overflow-hidden rounded-lg shadow-md">
                 <PlyrPlayer src={videoUrl} />
               </div>
             )}
           </div>
         </div>
 
+        {/* Bottom border */}
+        <div className="border-b border-gray-600"></div>
+
         {/* Gallery Carousel */}
-        <div className="text-center px-6 py-12 mt-40">
+        <div className="text-center px-6 py-12">
           <h2 className="mt-10 text-[24px] text-gray-900 mb-10">Gallery</h2>
           <Carousel images={images} interval={3000} />
         </div>
