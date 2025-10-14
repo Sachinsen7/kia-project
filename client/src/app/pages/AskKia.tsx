@@ -486,7 +486,7 @@ const AskKia: React.FC<AskKiaProps> = ({ onClose }) => {
               </h2>
               <input
                 type="text"
-                placeholder="제목을 입력해 주세요."
+                placeholder="Please enter a title."
                 value={newQuestionTitle}
                 onChange={(e) => setNewQuestionTitle(e.target.value)}
                 className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-400 transition-colors"
