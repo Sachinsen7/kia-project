@@ -16,9 +16,11 @@ function HelpSupport({ onClose }: HelpSupportProps) {
       question: "Where can I watch the live session?",
       answer: (
         <>
-          You can watch it by clicking the Live Show stage on the main page, and
-          you can also access it via the link below. <br />
-          <span className="font-medium">MS Teams Link: The access link will be announced soon.</span>
+          You can watch it by clicking the Live Event on the main page, and you
+          can also access it via the link below. <br />
+          <span className="font-medium">
+            MS Teams Link: The access link will be announced soon.
+          </span>
         </>
       ),
     },
@@ -33,7 +35,7 @@ function HelpSupport({ onClose }: HelpSupportProps) {
       question:
         "I have a question regarding the GOEF topics. Where should I direct my inquiry?",
       answer:
-        "You can submit your questions on the Ask Kia page, or post them in the real-time Teams chat room. The relevant department representatives will respond accordingly.",
+        "You can submit your questions on the Questions on GOEF and Our Future page, or post them in the real-time Teams chat room. The relevant department representatives will respond accordingly.",
     },
   ];
 
@@ -68,7 +70,6 @@ function HelpSupport({ onClose }: HelpSupportProps) {
           alt="Close sidebar"
           className="cursor-pointer pb-6  "
         />{" "}
-
         {/* Intro */}
         <div className="px-4 w-[1098px] h-[126px] md:px-8 text-gray-700 leading-relaxed">
           <div className="mt-15">
@@ -93,7 +94,6 @@ function HelpSupport({ onClose }: HelpSupportProps) {
             />
           </div>
         </div>
-
         {/* FAQs */}
         <div className="space-y-6">
           {faqs.map((faq, index) => (
@@ -116,10 +116,11 @@ function HelpSupport({ onClose }: HelpSupportProps) {
 
               {/* Animated Answer */}
               <div
-                className={`overflow-hidden transition-all duration-500 ease-in-out ${openIndex === index
+                className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                  openIndex === index
                     ? "max-h-96 opacity-100 mt-3"
                     : "max-h-0 opacity-0"
-                  }`}
+                }`}
               >
                 <p className="text-gray-600 text-sm leading-relaxed">
                   {faq.answer}
