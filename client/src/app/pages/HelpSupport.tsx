@@ -18,7 +18,7 @@ function HelpSupport({ onClose }: HelpSupportProps) {
         <>
           You can watch it by clicking the Live Show stage on the main page, and
           you can also access it via the link below. <br />
-          <span className="font-medium">MS Teams Link: xxxxxxxxxx</span>
+          <span className="font-medium">MS Teams Link: The access link will be announced soon.</span>
         </>
       ),
     },
