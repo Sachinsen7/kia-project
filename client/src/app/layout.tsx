@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Kia",
+  title: "Kia GOEF",
   description: "3D city project with sidebars",
   icons: {
     icon: "/opt/goef_파비콘 48x48 px.svg",
