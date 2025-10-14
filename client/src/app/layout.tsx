@@ -20,11 +20,33 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Kia GOEF",
-  description: "3D city project with sidebars",
+  description: "The 2025 GOEF focuses on establishing a sustainable ownership ecosystem, aligning with the goal of Vision to Reality.",
   icons: {
-    icon: "/opt/goef_파비콘 48x48 px.svg",
-    shortcut: "/opt/goef_파비콘 48x48 px.svg",
-    apple: "/opt/goef_파비콘 48x48 px.svg",
+    icon: "/opt/this.svg",
+    shortcut: "/opt/this.svg",
+    apple: "/opt/this.svg",
+  },
+  openGraph: {
+    title: "Kia GOEF",
+    description: "The 2025 GOEF focuses on establishing a sustainable ownership ecosystem, aligning with the goal of Vision to Reality.",
+    url: "https://www.kiagoef.com/",
+    siteName: "Kia GOEF",
+    images: [
+      {
+        url: "/opt/this.svg",
+        width: 1200,
+        height: 630,
+        alt: "Kia GOEF Logo",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Kia GOEF",
+    description: "The 2025 GOEF focuses on establishing a sustainable ownership ecosystem, aligning with the goal of Vision to Reality.",
+    images: ["/opt/this.svg"],
   },
 };
 
