@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { toast, Toaster } from "react-hot-toast";
 import Image from "next/image";
 import { X } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { requireAuth } from "@/utils/auth";
 
 type DashboardProps = {
   onClose?: () => void;
@@ -12,11 +14,19 @@ type DashboardProps = {
 type Category = "Best Practices" | "Greeting Videos";
 
 export default function Dashboard({ onClose }: DashboardProps) {
+  const router = useRouter();
   const [contentViews, setContentViews] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
 
   const token =
     typeof window !== "undefined" ? localStorage.getItem("token") || "" : "";
+
+  // Check authentication on component mount
+  useEffect(() => {
+    if (!requireAuth(router)) {
+      return;
+    }
+  }, [router]);
 
   useEffect(() => {
     try {
