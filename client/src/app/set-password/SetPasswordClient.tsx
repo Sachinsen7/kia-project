@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { BASE_URL } from "@/config/api";
+import { Shield } from "lucide-react";
 
 export default function SetPasswordClient() {
   const searchParams = useSearchParams();
@@ -57,38 +58,75 @@ export default function SetPasswordClient() {
     }
   };
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-white px-4">
-      <div className="w-full max-w-md bg-white border border-gray-200 rounded-lg shadow-md p-8">
-        <h2 className="text-2xl font-bold mb-4 text-black text-center">
-          Set Your Password
-        </h2>  
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            type="password"
-            placeholder="New Password"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            className="w-full border text-black border-gray-300 rounded px-4 py-2"
-            required
-          />
-          <input
-            type="password"
-            placeholder="Confirm Password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            className="w-full border text-black border-gray-300 rounded px-4 py-2"
-            required
-          />
+    <div className="h-screen flex items-center justify-center bg-gray-100">
+      <div
+        className="w-full max-w-md bg-white shadow-2xl rounded-lg p-12 border border-gray-200
+                  flex flex-col justify-center min-h-[400px] max-h-[90%] overflow-hidden"
+      >
+        {/* Title */}
+        <div className="text-center mb-5">
+          <Shield className="mx-auto mb-3 text-gray-700" size={48} />
+          <h2 className="text-3xl font-bold text-gray-900 mb-2">Set Your Password</h2>
+        </div>
+
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="space-y-4 flex-grow">
+          {/* New Password */}
+          <div>
+            <label className="block text-sm font-medium text-gray-900 mb-1 mt-4">
+              New Password
+            </label>
+            <input
+              type="password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              required
+              placeholder="Enter your new password"
+              className="w-full text-black placeholder-gray-500 border border-gray-300 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+            />
+          </div>
+
+          {/* Confirm Password */}
+          <div>
+            <label className="block text-sm font-medium text-gray-900 mb-1">
+              Confirm Password
+            </label>
+            <input
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+              placeholder="Confirm your new password"
+              className="w-full text-black border placeholder-gray-500 border-gray-300 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+            />
+          </div>
+
+          {/* Set Password Button */}
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-[#0a1b23] text-white py-2 rounded font-semibold hover:bg-black transition-colors"
+            className="w-full mt-4 bg-black text-white py-2 rounded-md font-semibold hover:bg-gray-800 disabled:opacity-50 transition-colors duration-200"
           >
-            {loading ? "Setting..." : "Set Password"}
+            {loading ? "Setting Password..." : "Set Password"}
           </button>
-          {error && <div className="text-red-600 text-sm">{error}</div>}
-          {success && <div className="text-green-600 text-sm">{success}</div>}
+
+          {/* Error and Success Messages */}
+          {error && <div className="text-red-600 text-sm text-center">{error}</div>}
+          {success && <div className="text-green-600 text-sm text-center">{success}</div>}
         </form>
+
+        {/* Back to Login */}
+        <div className="text-center text-sm text-gray-600 mt-4">
+          <p>
+            Remember your password?{" "}
+            <a
+              href="/login"
+              className="text-black underline hover:text-gray-700"
+            >
+              Sign In
+            </a>
+          </p>
+        </div>
       </div>
     </div>
   );
