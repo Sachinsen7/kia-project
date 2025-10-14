@@ -120,7 +120,7 @@ function Home({ onClose }: HomeProps) {
         {/* Video section */}
         <div className="mt-20 md:p-12">
           <h2 className="text-lg font-bold text-black-500 tracking-wide mb-4 text-center">
-            2025 GOEF official teaser​
+            2025 GOEF official teaser
           </h2>
           <div className="w-full overflow-hidden rounded-xl shadow-md relative aspect-video">
             {loading ? (
@@ -132,7 +132,7 @@ function Home({ onClose }: HomeProps) {
                 <div className="text-lg text-red-600">{error}</div>
               </div>
             ) : (
-              <PlyrPlayer src={videoUrl} />
+              <PlyrPlayer src={videoUrl} loop={true} />
             )}
           </div>
         </div>
