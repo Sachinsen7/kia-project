@@ -6,6 +6,8 @@ import { Heart, MessageSquare, Trash2, X } from "lucide-react";
 import { apiFetch } from "@/config/api";
 import Image from "next/image";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import { requireAuth } from "@/utils/auth";
 
 // ----------- Types -----------
 type User = {
@@ -71,7 +73,16 @@ type AskKiaProps = {
 };
 
 const AskKia: React.FC<AskKiaProps> = ({ onClose }) => {
+  const router = useRouter();
   const [mounted, setMounted] = useState(false);
+
+  // Check authentication on component mount
+  useEffect(() => {
+    if (!requireAuth(router)) {
+      return;
+    }
+    setMounted(true);
+  }, [router]);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [showInput, setShowInput] = useState(false);
   const [newQuestionTitle, setNewQuestionTitle] = useState("");
