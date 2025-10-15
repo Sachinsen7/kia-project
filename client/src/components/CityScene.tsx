@@ -5,6 +5,7 @@ import { links } from "@/app/data/Links";
 import { useRouter } from "next/navigation";
 import LiveThoughtsFeed from "./LiveThoughtsFeed";
 import Image from "next/image";
+import Link from "next/link";
 
 export type CityLink = {
   id: string;
@@ -233,12 +234,12 @@ export default function CityScene({ onSelect }: CitySceneProps) {
       <footer className="absolute bottom-0 w-full bg-white border-t border-gray-200 py-4 px-4 md:px-20 text-center text-sm text-gray-700">
         <div className="flex flex-col md:flex-row items-center justify-between gap-2 md:gap-0">
           <div className="flex flex-wrap justify-center md:justify-start items-center">
-            <a href="/privacy-policy" className="hover:underline mx-2">
+            <Link href="/privacy-policy" className="hover:underline mx-2">
               Privacy Policy
-            </a>
-            <a href="/cookies-policy" className="hover:underline mx-2">
+            </Link>
+            <Link href="/cookies-policy" className="hover:underline mx-2">
               Cookies Policy
-            </a>
+            </Link>
           </div>
           <div className="mt-2 md:mt-0 flex items-center gap-3">
             © Kia Corporation

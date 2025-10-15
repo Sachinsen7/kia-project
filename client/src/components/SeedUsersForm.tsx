@@ -14,7 +14,7 @@ interface SeedResponse {
   };
   errors?: Array<{
     row: number;
-    data: any;
+    data: Record<string, unknown>;
     error: string;
   }>;
   moreErrors?: number;
@@ -145,7 +145,7 @@ export default function SeedUsersForm() {
       {result && (
         <div className="mt-6 p-4 bg-gray-50 rounded-md">
           <h3 className="text-lg font-semibold text-gray-900 mb-3">Import Results</h3>
-          
+
           <div className="grid grid-cols-2 gap-4 mb-4">
             <div className="text-center">
               <div className="text-2xl font-bold text-green-600">{result.summary.successfullyImported}</div>
