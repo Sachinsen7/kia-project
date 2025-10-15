@@ -35,7 +35,7 @@ const baseLinks = [
     id: "help-support",
     name: "Help & Support",
     x: 83,
-    y: 52,
+    y: 50,
     icon: LifeBuoy,
   },
 ];
@@ -56,7 +56,7 @@ export const links: CityLink[] = baseLinks.map((link, index) => {
       ),
     };
   }
-  
+
   // Default SVG for other elements
   return {
     ...link,
