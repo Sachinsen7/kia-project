@@ -19,24 +19,36 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Kia GOEF",
-  description: "The 2025 GOEF focuses on establishing a sustainable ownership ecosystem, aligning with the goal of Vision to Reality.",
+  title: "Kia GOEF - 2025 Global Ownership Experience Forum",
+  description: "Join the 2025 Global Ownership Experience Forum. A virtual conference designed to enable richer exchanges and collectively envision Kia's future with sustainable ownership ecosystem strategies.",
+  keywords: "Kia, GOEF, Global Ownership Experience Forum, 2025, virtual conference, ownership ecosystem, Vision to Reality",
+  authors: [{ name: "Kia Corporation" }],
+  creator: "Kia Corporation",
+  publisher: "Kia Corporation",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+    },
+  },
   icons: {
     icon: "/opt/this.svg",
     shortcut: "/opt/this.svg",
     apple: "/opt/this.svg",
   },
   openGraph: {
-    title: "Kia GOEF",
-    description: "The 2025 GOEF focuses on establishing a sustainable ownership ecosystem, aligning with the goal of Vision to Reality.",
-    url: "https://www.kiagoef.com/?v=2",
+    title: "Kia GOEF - 2025 Global Ownership Experience Forum",
+    description: "Join the 2025 Global Ownership Experience Forum. A virtual conference designed to enable richer exchanges and collectively envision Kia's future with sustainable ownership ecosystem strategies.",
+    url: "https://www.kiagoef.com",
     siteName: "Kia GOEF",
     images: [
       {
-        url: "/opt/this.svg?v=2",
+        url: "https://www.kiagoef.com/opt/this.svg",
         width: 1200,
         height: 630,
-        alt: "Kia GOEF Logo",
+        alt: "Kia GOEF - 2025 Global Ownership Experience Forum",
       },
     ],
     locale: "en_US",
@@ -44,9 +56,13 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Kia GOEF",
-    description: "The 2025 GOEF focuses on establishing a sustainable ownership ecosystem, aligning with the goal of Vision to Reality.",
-    images: ["/opt/this.svg?v=2"],
+    title: "Kia GOEF - 2025 Global Ownership Experience Forum",
+    description: "Join the 2025 Global Ownership Experience Forum. A virtual conference designed to enable richer exchanges and collectively envision Kia's future with sustainable ownership ecosystem strategies.",
+    images: ["https://www.kiagoef.com/opt/this.svg"],
+    creator: "@KiaWorldwide",
+  },
+  alternates: {
+    canonical: "https://www.kiagoef.com",
   },
 };
 
