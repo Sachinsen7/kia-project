@@ -19,6 +19,7 @@
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
+    "csv-parser": "^3.2.0",
     "dns": "^0.1.2",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
@@ -30,6 +31,7 @@
     "multer": "^2.0.2",
     "nodemailer": "^7.0.6",
     "nodemon": "^3.1.10",
-    "resend": "^6.1.2"
+    "resend": "^6.1.2",
+    "xlsx": "^0.18.5"
   }
 }
