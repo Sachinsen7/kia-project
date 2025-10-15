@@ -35,7 +35,7 @@ const baseLinks = [
     id: "help-support",
     name: "Help & Support",
     x: 83,
-    y: 47,
+    y: 52,
     icon: LifeBuoy,
   },
 ];
