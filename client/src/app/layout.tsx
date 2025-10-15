@@ -29,11 +29,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Kia GOEF",
     description: "The 2025 GOEF focuses on establishing a sustainable ownership ecosystem, aligning with the goal of Vision to Reality.",
-    url: "https://www.kiagoef.com/",
+    url: "https://www.kiagoef.com/?v=2",
     siteName: "Kia GOEF",
     images: [
       {
-        url: "/opt/this.svg",
+        url: "/opt/this.svg?v=2",
         width: 1200,
         height: 630,
         alt: "Kia GOEF Logo",
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Kia GOEF",
     description: "The 2025 GOEF focuses on establishing a sustainable ownership ecosystem, aligning with the goal of Vision to Reality.",
-    images: ["/opt/this.svg"],
+    images: ["/opt/this.svg?v=2"],
   },
 };
 
