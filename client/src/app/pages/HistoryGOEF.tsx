@@ -28,15 +28,15 @@ export default function HistoryGOEF({ onClose }: HistoryGOEFProps) {
   }, [router]);
 
   const images = [
-    "/history/DSC01188.JPG",
-    "/history/DSC01511.JPG",
-    "/history/DSC01697.JPG",
-    "/history/DSC01790.JPG",
-    "/history/DSC01879.JPG",
-    "/history/DSC02154.JPG",
-    "/history/DSC02817.JPG",
-    "/history/DSC02889.JPG",
-    "/history/DSC03211.JPG",
+    "/Gallery/one.png",
+    "/Gallery/two.png",
+    "/Gallery/three.png",
+    "/Gallery/four.png",
+    "/Gallery/five.png",
+    "/Gallery/six.png",
+    "/Gallery/seven.png",
+    "/Gallery/eight.png",
+    "/Gallery/nine.png",
   ];
 
   const [videoUrl, setVideoUrl] = useState<string>("");

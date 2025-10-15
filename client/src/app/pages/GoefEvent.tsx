@@ -7,6 +7,7 @@ import { apiFetch } from "@/config/api";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { requireAuth } from "@/utils/auth";
+import toast from "react-hot-toast";
 
 // ----------- Types -----------
 type User = {
@@ -81,14 +82,6 @@ type GoefEventProps = {
 const GoefEvent: React.FC<GoefEventProps> = ({ onClose }) => {
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
-
-  // Check authentication on component mount
-  useEffect(() => {
-    if (!requireAuth(router)) {
-      return;
-    }
-    setMounted(true);
-  }, [router]);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [showInput, setShowInput] = useState(false);
   const [newQuestionText, setNewQuestionText] = useState("");
@@ -98,41 +91,84 @@ const GoefEvent: React.FC<GoefEventProps> = ({ onClose }) => {
   );
   const [loadingQuestions, setLoadingQuestions] = useState(false);
 
+  // User data state
+  const [currentUserId, setCurrentUserId] = useState("");
+  const [currentUserFullName, setCurrentUserFullName] = useState("Unknown");
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [token, setToken] = useState("");
+
   const editorRef = useRef<HTMLDivElement>(null);
   const commentEditorRef = useRef<HTMLDivElement>(null);
-  const token =
-    typeof window !== "undefined" ? localStorage.getItem("token") || "" : "";
-  let currentUserId = "";
-  let currentUserFullName = "Unknown";
-  let isAdmin = false;
-  if (typeof window !== "undefined") {
-    const userData = localStorage.getItem("user");
-    if (userData) {
-      try {
-        const parsed = JSON.parse(userData);
-        currentUserId =
-          typeof parsed === "string" ? parsed : parsed._id || parsed.id || "";
-        const firstName = (parsed as { firstName?: string })?.firstName || "";
-        const lastName = (parsed as { lastName?: string })?.lastName || "";
-        currentUserFullName = `${firstName} ${lastName}`.trim() || "Unknown";
-        const roleFromUser = (parsed as { role?: string })?.role || "";
-        const roleFromStorage = localStorage.getItem("role") || "";
-        const effectiveRole = (
-          roleFromUser ||
-          roleFromStorage ||
-          ""
-        ).toLowerCase();
-        isAdmin = effectiveRole === "admin";
-      } catch (err) {
-        console.error("Error parsing user data from localStorage:", err);
-      }
-    } else {
-      // fallback to older storage key if present
-      currentUserId = localStorage.getItem("userId") || "";
-      const role = (localStorage.getItem("role") || "").toLowerCase();
-      isAdmin = role === "admin";
+
+  // Check authentication and load user data
+  useEffect(() => {
+    if (!requireAuth(router)) {
+      return;
     }
-  }
+
+    // Load user data from localStorage
+    if (typeof window !== "undefined") {
+      const tokenFromStorage = localStorage.getItem("token") || "";
+      setToken(tokenFromStorage);
+      console.log("GoefEvent - Token loaded:", tokenFromStorage ? "✓" : "✗");
+
+      const userData = localStorage.getItem("user");
+      console.log("GoefEvent - Raw user data:", userData);
+
+      if (userData) {
+        try {
+          const parsed = JSON.parse(userData);
+          console.log("GoefEvent - Parsed user data:", parsed);
+
+          // Handle different possible user object structures
+          let userId = "";
+          let firstName = "";
+          let lastName = "";
+
+          if (typeof parsed === "string") {
+            userId = parsed;
+          } else if (parsed && typeof parsed === "object") {
+            // Try different possible ID fields
+            userId = parsed._id || parsed.id || parsed.userId || "";
+
+            // Try different possible name fields
+            firstName = parsed.firstName || parsed.first_name || parsed.name?.split(" ")[0] || "";
+            lastName = parsed.lastName || parsed.last_name || parsed.name?.split(" ")[1] || "";
+
+            // If no firstName/lastName, try to extract from email
+            if (!firstName && !lastName && parsed.email) {
+              const emailName = parsed.email.split("@")[0];
+              firstName = emailName;
+            }
+          }
+
+          const fullName = `${firstName} ${lastName}`.trim() || firstName || "Unknown";
+          const roleFromUser = (parsed as { role?: string })?.role || "";
+          const roleFromStorage = localStorage.getItem("role") || "";
+          const effectiveRole = (roleFromUser || roleFromStorage || "").toLowerCase();
+          const adminStatus = effectiveRole === "admin";
+
+          console.log("GoefEvent - Extracted data:", { userId, firstName, lastName, fullName, adminStatus });
+
+          setCurrentUserId(userId);
+          setCurrentUserFullName(fullName);
+          setIsAdmin(adminStatus);
+        } catch (err) {
+          console.error("Error parsing user data from localStorage:", err);
+        }
+      } else {
+        console.log("GoefEvent - No user data found, trying fallback");
+        // fallback to older storage key if present
+        const fallbackUserId = localStorage.getItem("userId") || "";
+        const role = (localStorage.getItem("role") || "").toLowerCase();
+        console.log("GoefEvent - Fallback data:", { fallbackUserId, role });
+        setCurrentUserId(fallbackUserId);
+        setIsAdmin(role === "admin");
+      }
+    }
+
+    setMounted(true);
+  }, [router]);
 
   // Fetch comments
   const fetchComments = useCallback(
@@ -221,15 +257,37 @@ const GoefEvent: React.FC<GoefEventProps> = ({ onClose }) => {
     }
   }, [token, fetchComments]);
 
+  // Fetch questions only after user data is loaded
   useEffect(() => {
-    setMounted(true);
-    fetchQuestions();
-  }, [fetchQuestions]);
+    if (mounted && token && currentUserId) {
+      fetchQuestions();
+    }
+  }, [mounted, token, currentUserId, fetchQuestions]);
 
   // Add question
   const handleAddQuestion = async () => {
     const description = newQuestionText.trim();
     if (!description) return;
+
+    // Debug current user data
+    console.log("GoefEvent - handleAddQuestion - Current user data:", {
+      currentUserId,
+      currentUserFullName,
+      isAdmin,
+      token: token ? "✓" : "✗"
+    });
+
+    // Ensure user data is loaded
+    if (!currentUserId || !currentUserFullName || currentUserFullName === "Unknown") {
+      console.error("GoefEvent - User data validation failed:", {
+        currentUserId,
+        currentUserFullName,
+        isAdmin,
+        hasToken: !!token
+      });
+      toast.error("User data not loaded. Please refresh the page.");
+      return;
+    }
 
     try {
       const response = await apiFetch<AddQuestionResponse>(
@@ -268,6 +326,12 @@ const GoefEvent: React.FC<GoefEventProps> = ({ onClose }) => {
   const handleAddComment = async (id: string) => {
     const commentText = commentEditorContent.trim();
     if (!commentText) return;
+
+    // Ensure user data is loaded
+    if (!currentUserId || !currentUserFullName || currentUserFullName === "Unknown") {
+      toast.error("User data not loaded. Please refresh the page.");
+      return;
+    }
 
     try {
       const response = await apiFetch<AddCommentResponse>(

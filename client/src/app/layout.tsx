@@ -5,7 +5,6 @@ import { CityProvider } from "./context/CityContext";
 import ClientWrapper from "./providers/ClientWrapper";
 import dynamic from "next/dynamic";
 
-// ✅ Dynamically import MobileNotice so it only renders on client
 const MobileNotice = dynamic(() => import("../components/MobileNotice"));
 
 const geistSans = Geist({

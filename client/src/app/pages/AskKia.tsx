@@ -75,14 +75,6 @@ type AskKiaProps = {
 const AskKia: React.FC<AskKiaProps> = ({ onClose }) => {
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
-
-  // Check authentication on component mount
-  useEffect(() => {
-    if (!requireAuth(router)) {
-      return;
-    }
-    setMounted(true);
-  }, [router]);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [showInput, setShowInput] = useState(false);
   const [newQuestionTitle, setNewQuestionTitle] = useState("");
@@ -90,29 +82,74 @@ const AskKia: React.FC<AskKiaProps> = ({ onClose }) => {
   const [commentEditorContent, setCommentEditorContent] = useState("");
   const [loadingQuestions, setLoadingQuestions] = useState(false);
 
+  // User data state
+  const [currentUserId, setCurrentUserId] = useState("");
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [currentUserFullName, setCurrentUserFullName] = useState("Unknown");
+  const [token, setToken] = useState("");
+
   const editorRef = useRef<HTMLDivElement>(null);
   const commentEditorRef = useRef<HTMLDivElement>(null);
-  const token =
-    typeof window !== "undefined" ? localStorage.getItem("token") || "" : "";
-  let currentUserId = "";
-  let currentUser: User | null = null;
-  let currentUserFullName = "Unknown";
-  if (typeof window !== "undefined") {
-    const userData = localStorage.getItem("user");
-    if (userData) {
-      try {
-        const parsed = JSON.parse(userData);
-        currentUserId =
-          typeof parsed === "string" ? parsed : parsed._id || parsed.id || "";
-        currentUser = typeof parsed === "object" ? (parsed as User) : null;
-        const firstName = currentUser?.firstName || "";
-        const lastName = currentUser?.lastName || "";
-        currentUserFullName = `${firstName} ${lastName}`.trim() || "Unknown";
-      } catch (err) {
-        console.error("Error parsing user data from localStorage:", err);
+
+  // Check authentication and load user data
+  useEffect(() => {
+    if (!requireAuth(router)) {
+      return;
+    }
+
+    // Load user data from localStorage
+    if (typeof window !== "undefined") {
+      const tokenFromStorage = localStorage.getItem("token") || "";
+      setToken(tokenFromStorage);
+      console.log("AskKia - Token loaded:", tokenFromStorage ? "✓" : "✗");
+
+      const userData = localStorage.getItem("user");
+      console.log("AskKia - Raw user data:", userData);
+
+      if (userData) {
+        try {
+          const parsed = JSON.parse(userData);
+          console.log("AskKia - Parsed user data:", parsed);
+
+          // Handle different possible user object structures
+          let userId = "";
+          let firstName = "";
+          let lastName = "";
+
+          if (typeof parsed === "string") {
+            userId = parsed;
+          } else if (parsed && typeof parsed === "object") {
+            // Try different possible ID fields
+            userId = parsed._id || parsed.id || parsed.userId || "";
+
+            // Try different possible name fields
+            firstName = parsed.firstName || parsed.first_name || parsed.name?.split(" ")[0] || "";
+            lastName = parsed.lastName || parsed.last_name || parsed.name?.split(" ")[1] || "";
+
+            // If no firstName/lastName, try to extract from email
+            if (!firstName && !lastName && parsed.email) {
+              const emailName = parsed.email.split("@")[0];
+              firstName = emailName;
+            }
+          }
+
+          const fullName = `${firstName} ${lastName}`.trim() || firstName || "Unknown";
+
+          console.log("AskKia - Extracted data:", { userId, firstName, lastName, fullName });
+
+          setCurrentUserId(userId);
+          setCurrentUser(parsed);
+          setCurrentUserFullName(fullName);
+        } catch (err) {
+          console.error("Error parsing user data from localStorage:", err);
+        }
+      } else {
+        console.log("AskKia - No user data found in localStorage");
       }
     }
-  }
+
+    setMounted(true);
+  }, [router]);
 
   // Fetch comments
   const fetchComments = useCallback(
@@ -188,10 +225,12 @@ const AskKia: React.FC<AskKiaProps> = ({ onClose }) => {
     }
   }, [token, fetchComments]);
 
+  // Fetch questions only after user data is loaded
   useEffect(() => {
-    setMounted(true);
-    fetchQuestions();
-  }, [fetchQuestions]);
+    if (mounted && token && currentUserId) {
+      fetchQuestions();
+    }
+  }, [mounted, token, currentUserId, fetchQuestions]);
 
   // Add question
   const handleAddQuestion = async () => {
@@ -199,6 +238,24 @@ const AskKia: React.FC<AskKiaProps> = ({ onClose }) => {
     const description = newQuestionText.trim();
     if (!title || !description) {
       toast.error("Please fill all fields");
+      return;
+    }
+
+    // Debug current user data
+    console.log("AskKia - handleAddQuestion - Current user data:", {
+      currentUserId,
+      currentUserFullName,
+      token: token ? "✓" : "✗"
+    });
+
+    // Ensure user data is loaded
+    if (!currentUserId || !currentUserFullName || currentUserFullName === "Unknown") {
+      console.error("AskKia - User data validation failed:", {
+        currentUserId,
+        currentUserFullName,
+        hasToken: !!token
+      });
+      toast.error("User data not loaded. Please refresh the page.");
       return;
     }
 
@@ -246,6 +303,12 @@ const AskKia: React.FC<AskKiaProps> = ({ onClose }) => {
     const commentText = commentEditorContent.trim();
     if (!commentText) {
       toast.error("Comment cannot be empty");
+      return;
+    }
+
+    // Ensure user data is loaded
+    if (!currentUserId || !currentUserFullName || currentUserFullName === "Unknown") {
+      toast.error("User data not loaded. Please refresh the page.");
       return;
     }
 
